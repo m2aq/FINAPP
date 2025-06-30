@@ -22,39 +22,35 @@
   <div id="app-container" class="contenedor oculto">
     <h1>Sanas Finanzas</h1>
 
-    <div id="balance-grande" style="font-size: 2.5em; font-weight: 700; margin-bottom: 20px; color: #28a745;">
-      $0.00
+    <div class="flex-row balance-monto">
+      <div id="balance-grande">$0.00</div>
+      <input id="monto" type="number" placeholder="Monto" />
     </div>
 
-    <button onclick="logout()">Cerrar sesión</button>
-
-    <div class="resumen">
-      <div class="resumen-item resumen-ingresos">Ingresos: <span id="total-ingresos">$0.00</span></div>
-      <div class="resumen-item resumen-gastos">Gastos: <span id="total-gastos">$0.00</span></div>
-      <!-- balance pequeño eliminado para no duplicar -->
+    <div class="tipo-btn-group">
+      <button id="btnIngreso" class="tipo-btn ingreso">Ingreso</button>
+      <button id="btnGasto" class="tipo-btn gasto inactivo">Gasto</button>
     </div>
 
     <div class="formulario">
-      <div class="flex-row">
-        <button id="tipoToggleBtn" class="tipo-toggle-btn tipo-ingreso" onclick="toggleTipo()">Ingreso</button>
-        <input id="descripcion" class="flex-grow" type="text" placeholder="Descripción" />
-      </div>
-      <div class="flex-row">
-        <input id="monto" type="number" placeholder="Monto" />
-        <select id="categoria">
-          <option>General</option>
-          <option>Comida</option>
-          <option>Transporte</option>
-          <option>Hogar</option>
-          <option>Salud</option>
-          <option>Ocio</option>
-        </select>
-      </div>
+      <input id="descripcion" type="text" placeholder="Descripción" />
+
+      <select id="categoria">
+        <option>General</option>
+        <option>Comida</option>
+        <option>Transporte</option>
+        <option>Hogar</option>
+        <option>Salud</option>
+        <option>Ocio</option>
+      </select>
+
       <button onclick="agregarTransaccion()">Agregar</button>
       <p id="error-transaccion" class="error-msg"></p>
     </div>
 
     <ul id="lista"></ul>
+
+    <button id="logoutBtn" onclick="logout()">Cerrar sesión</button>
   </div>
 
   <script src="script.js"></script>
