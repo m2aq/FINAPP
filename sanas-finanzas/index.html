@@ -8,7 +8,6 @@
   <meta name="theme-color" content="#28a745" />
   <link rel="icon" type="image/png" href="icono192.png" />
   <link rel="stylesheet" href="estilos.css" />
-  <!-- Firebase SDKs Compatibles -->
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
@@ -20,55 +19,31 @@
     <input type="password" id="password" placeholder="Contraseña" />
     <button onclick="login()">Iniciar sesión</button>
     <button onclick="register()">Registrarse</button>
-    <p id="error-login" class="error-msg"></p>
-  </div>
+    <div id="notification" class="notification ocultar"></div> </div>
 
-  <!-- Contenedor principal de la App -->
-  <div class="contenedor app-container oculto" id="app-container">
-    <header class="app-header">
-      <h1>Balance General</h1>
-      <span id="balance" class="balance-principal">$0</span>
-    </header>
+  <div class="contenedor oculto" id="app-container">
+    <h1>Balance: <span id="balance">$0</span></h1>
+    <button onclick="logout()">Cerrar sesión</button>
+    <div class="flex-row" style="align-items:center; margin-top: 15px;">
+      <input type="text" id="descripcion" placeholder="Descripción" class="flex-grow" />
+      <input type="number" id="monto" placeholder="Monto" min="0" />
+      <button id="tipoToggleBtn" class="tipo-toggle-btn tipo-ingreso" onclick="toggleTipo()">Ingreso</button>
+    </div>
+    <select id="categoria">
+      <option value="General">General</option>
+      <option value="Comida">Comida</option>
+      <option value="Transporte">Transporte</option>
+      <option value="Salud">Salud</option>
+      <option value="Otros">Otros</option>
+    </select>
+    <button onclick="agregarTransaccion()">Agregar</button>
+    <div id="notification" class="notification ocultar"></div> <div class="resumen" style="margin-top:20px;">
+      <div class="resumen-item resumen-ingresos">Ingresos: <span id="total-ingresos">$0</span></div>
+      <div class="resumen-item resumen-gastos">Gastos: <span id="total-gastos">$0</span></div>
+      <div class="resumen-item">Balance: <span id="balance-det">$0</span></div>
+    </div>
 
-    <section class="form-section">
-        <h2>Agregar Nuevo Movimiento</h2>
-        <div class="input-group">
-            <input type="text" id="descripcion" placeholder="Descripción" />
-        </div>
-        <div class="input-group flex-row">
-          <input type="number" id="monto" placeholder="Monto" min="0" class="flex-grow" />
-          <button id="tipoToggleBtn" class="tipo-toggle-btn tipo-ingreso" onclick="toggleTipo()">Ingreso</button>
-        </div>
-        <div class="input-group">
-          <select id="categoria">
-            <option value="General">General</option>
-            <option value="Comida">Comida</option>
-            <option value="Transporte">Transporte</option>
-            <option value="Salud">Salud</option>
-            <option value="Otros">Otros</option>
-          </select>
-        </div>
-        <button onclick="agregarTransaccion()" class="btn-agregar-transaccion">Agregar Movimiento</button>
-        <p id="error-transaccion" class="error-msg"></p>
-    </section>
-
-    <section class="resumen-section">
-      <h2>Resumen del Mes</h2>
-      <div class="resumen">
-        <div class="resumen-item resumen-ingresos">Ingresos: <span id="total-ingresos">$0</span></div>
-        <div class="resumen-item resumen-gastos">Gastos: <span id="total-gastos">$0</span></div>
-        <div class="resumen-item">Balance: <span id="balance-det">$0</span></div>
-      </div>
-    </section>
-
-    <section class="transacciones-section">
-        <h2>Movimientos Recientes</h2>
-        <ul id="lista"></ul>
-        <p id="lista-vacia-msg" class="mensaje-vacio oculto">Aún no has agregado ningún movimiento.</p>
-    </section>
-
-    <!-- Botón de Cerrar Sesión movido al final -->
-    <button onclick="logout()" class="btn-logout">Cerrar sesión</button>
+    <ul id="lista"></ul>
   </div>
 
   <script src="script.js"></script>
