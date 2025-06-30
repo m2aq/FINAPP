@@ -98,11 +98,12 @@ button:hover {
 /* Nuevos estilos para notificaciones */
 .notification {
   padding: 10px 15px;
-  margin: 10px 0;
+  margin: 10px auto; /* Centrar la notificación */
   border-radius: 8px;
   font-weight: 600;
   text-align: center;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
+  transition: opacity 0.3s ease, visibility 0.3s ease, height 0.3s ease, padding 0.3s ease, margin 0.3s ease;
+  max-width: 400px; /* Ancho máximo para la notificación */
 }
 
 .notification.error {
@@ -122,9 +123,17 @@ button:hover {
   visibility: hidden;
   height: 0;
   padding: 0;
-  margin: 0;
+  margin: 0 auto; /* Mantener el centrado al ocultar */
 }
 /* Fin de nuevos estilos para notificaciones */
+
+/* Esta regla ya no es necesaria si eliminas los <p class="error-msg"> */
+/* .error-msg {
+  color: #dc3545;
+  font-weight: 600;
+  margin: 5px 0 0 0;
+  font-size: 0.9em;
+} */
 
 .movimiento-item {
   display: flex;
