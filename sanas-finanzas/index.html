@@ -25,6 +25,7 @@
 
   <div class="contenedor oculto" id="app-container">
     <h1>Balance: <span id="balance">$0</span></h1>
+    <div class="flex-row" style="align-items:center; margin-top: 15px;">
       <input type="text" id="descripcion" placeholder="Descripción" class="flex-grow" />
       <input type="number" id="monto" placeholder="Monto" min="0" />
       <button id="tipoToggleBtn" class="tipo-toggle-btn tipo-ingreso" onclick="toggleTipo()">Ingreso</button>
@@ -46,9 +47,10 @@
     </div>
 
     <ul id="lista"></ul>
-<!-- Mover el botón al final -->
-  <button onclick="logout()" style="margin-top: 30px; background-color:#dc3545;">Cerrar sesión</button>
-</div>
+
+    <button onclick="logout()" style="margin-top: 30px; background-color:#dc3545; width: 100%;">Cerrar sesión</button>
+  </div>
+
   <script src="script.js"></script>
   <script>
     if ('serviceWorker' in navigator) {
