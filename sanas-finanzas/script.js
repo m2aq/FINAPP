@@ -1,15 +1,4 @@
 
-const montoInput = document.getElementById('monto');
-const descripcionInput = document.getElementById('descripcion');
-const categoriaSelect = document.getElementById('categoria');
-const errorTransaccion = document.getElementById('error-transaccion');
-const lista = document.getElementById('lista');
-
-let tipo = 'ingreso';
-let transacciones = [];
-let editandoId = null;
-
-btnIngreso.onclick = () => {
   tipo = 'ingreso';
   btnIngreso.classList.remove('inactivo');
   btnGasto.classList.add('inactivo');
