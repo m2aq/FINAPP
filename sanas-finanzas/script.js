@@ -1,3 +1,4 @@
+// Configuración Firebase (pon aquí tu propia configuración)
 const firebaseConfig = {
   apiKey: "AIzaSyAvReIBNYy-RQ67hyTEPwTX-4lnvhlo8T0",
   authDomain: "sanas-finanzas-450a6.firebaseapp.com",
@@ -7,163 +8,257 @@ const firebaseConfig = {
   appId: "1:585032859960:web:1d7594cf4c3d58214e01cd"
 };
 
+// Inicializa Firebase
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
 
-const loginContainer = document.getElementById("login-container");
-const appContainer = document.getElementById("app-container");
-const errorLogin = document.getElementById("error-login");
-const errorTransaccion = document.getElementById("error-transaccion");
-const tipoToggleBtn = document.getElementById("tipoToggleBtn");
-const descripcionInput = document.getElementById("descripcion");
-const montoInput = document.getElementById("monto");
-const categoriaSelect = document.getElementById("categoria");
-const lista = document.getElementById("lista");
-const balanceElem = document.getElementById("balance");
-const totalIngresosElem = document.getElementById("total-ingresos");
-const totalGastosElem = document.getElementById("total-gastos");
+const loginContainer = document.getElementById('login-container');
+const appContainer = document.getElementById('app-container');
 
-let tipo = "ingreso";
-let movimientoEditandoId = null;
+const emailInput = document.getElementById('email');
+const passwordInput = document.getElementById('password');
+const errorLogin = document.getElementById('error-login');
 
-const formatDinero = n => `$${n.toLocaleString("es-MX", { minimumFractionDigits: 2 })}`;
+const tipoToggleBtn = document.getElementById('tipoToggleBtn');
+const descripcionInput = document.getElementById('descripcion');
+const montoInput = document.getElementById('monto');
+const categoriaSelect = document.getElementById('categoria');
+const errorTransaccion = document.getElementById('error-transaccion');
+const lista = document.getElementById('lista');
 
-auth.onAuthStateChanged(user => {
-  if (user) {
-    loginContainer.classList.add("oculto");
-    appContainer.classList.remove("oculto");
-    cargarDatos();
-  } else {
-    loginContainer.classList.remove("oculto");
-    appContainer.classList.add("oculto");
-    limpiarCampos();
-  }
-});
+const totalIngresosEl = document.getElementById('total-ingresos');
+const totalGastosEl = document.getElementById('total-gastos');
+const balanceEl = document.getElementById('balance');
 
-function login() {
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value.trim();
-  auth.signInWithEmailAndPassword(email, password).catch(e => errorLogin.textContent = e.message);
-}
+let tipo = 'ingreso'; // ingreso o gasto
+let transacciones = [];
+let editandoId = null;
 
-function register() {
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value.trim();
-  auth.createUserWithEmailAndPassword(email, password).catch(e => errorLogin.textContent = e.message);
-}
-
-function logout() {
-  auth.signOut();
-}
-
+// Cambia el tipo ingreso/gasto
 function toggleTipo() {
-  if (tipo === "ingreso") {
-    tipo = "gasto";
-    tipoToggleBtn.textContent = "Gasto";
-    tipoToggleBtn.classList.remove("tipo-ingreso");
-    tipoToggleBtn.classList.add("tipo-gasto");
-    montoInput.style.borderColor = "#dc3545";
+  if (tipo === 'ingreso') {
+    tipo = 'gasto';
+    tipoToggleBtn.textContent = 'Gasto';
+    tipoToggleBtn.classList.remove('tipo-ingreso');
+    tipoToggleBtn.classList.add('tipo-gasto');
   } else {
-    tipo = "ingreso";
-    tipoToggleBtn.textContent = "Ingreso";
-    tipoToggleBtn.classList.remove("tipo-gasto");
-    tipoToggleBtn.classList.add("tipo-ingreso");
-    montoInput.style.borderColor = "#28a745";
+    tipo = 'ingreso';
+    tipoToggleBtn.textContent = 'Ingreso';
+    tipoToggleBtn.classList.remove('tipo-gasto');
+    tipoToggleBtn.classList.add('tipo-ingreso');
   }
 }
 
-function agregarTransaccion() {
-  const descripcion = descripcionInput.value.trim();
-  const monto = parseFloat(montoInput.value);
-  const categoria = categoriaSelect.value;
-  const user = auth.currentUser;
-  if (!descripcion || isNaN(monto) || monto <= 0 || !user) {
-    errorTransaccion.textContent = "Datos inválidos.";
-    return;
-  }
-
-  const transaccion = { descripcion, monto, tipo, categoria, fecha: new Date().toISOString() };
-  const ref = db.collection("usuarios").doc(user.uid).collection("movimientos");
-
-  if (movimientoEditandoId) {
-    ref.doc(movimientoEditandoId).update(transaccion).then(() => {
-      limpiarCampos();
-      cargarDatos();
-      movimientoEditandoId = null;
-      document.querySelector("button[onclick='agregarTransaccion()']").textContent = "Agregar";
-    });
-  } else {
-    ref.add(transaccion).then(() => {
-      limpiarCampos();
-      cargarDatos();
-    });
-  }
-}
-
-function cargarDatos() {
-  const user = auth.currentUser;
-  if (!user) return;
-
-  db.collection("usuarios").doc(user.uid).collection("movimientos").orderBy("fecha", "desc").onSnapshot(snapshot => {
-    lista.innerHTML = "";
-    let ingresos = 0, gastos = 0;
-
-    snapshot.forEach(doc => {
-      const t = doc.data();
-      const li = document.createElement("li");
-      li.className = "movimiento-item";
-
-      const texto = `${t.descripcion} - ${formatDinero(t.monto)} (${t.categoria})`;
-      const spanTexto = document.createElement("span");
-      spanTexto.className = "movimiento-text";
-      spanTexto.textContent = texto;
-
-      const btnEditar = document.createElement("button");
-      btnEditar.className = "boton-burbuja boton-editar";
-      btnEditar.textContent = "✏️";
-      btnEditar.onclick = () => {
-        descripcionInput.value = t.descripcion;
-        montoInput.value = t.monto;
-        categoriaSelect.value = t.categoria;
-        tipo = t.tipo;
-        tipoToggleBtn.textContent = tipo === "gasto" ? "Gasto" : "Ingreso";
-        tipoToggleBtn.className = tipo === "gasto" ? "tipo-gasto" : "tipo-ingreso";
-        movimientoEditandoId = doc.id;
-        document.querySelector("button[onclick='agregarTransaccion()']").textContent = "Actualizar";
-      };
-
-      const btnEliminar = document.createElement("button");
-      btnEliminar.className = "boton-burbuja boton-eliminar";
-      btnEliminar.textContent = "✖";
-      btnEliminar.onclick = () => {
-        if (confirm("¿Eliminar este movimiento?")) {
-          db.collection("usuarios").doc(user.uid).collection("movimientos").doc(doc.id).delete();
-        }
-      };
-
-      li.appendChild(spanTexto);
-      li.appendChild(btnEditar);
-      li.appendChild(btnEliminar);
-      lista.appendChild(li);
-
-      t.tipo === "ingreso" ? ingresos += t.monto : gastos += t.monto;
-    });
-
-    const balance = ingresos - gastos;
-    balanceElem.textContent = formatDinero(balance);
-    balanceElem.className = balance >= 0 ? "balance-positivo" : "balance-negativo";
-    totalIngresosElem.textContent = formatDinero(ingresos);
-    totalGastosElem.textContent = formatDinero(gastos);
+// Formatea números a moneda MXN con miles y decimales
+function formatearMoneda(num) {
+  return num.toLocaleString('es-MX', {
+    style: 'currency',
+    currency: 'MXN',
+    minimumFractionDigits: 2
   });
 }
 
-function limpiarCampos() {
-  descripcionInput.value = "";
-  montoInput.value = "";
-  categoriaSelect.value = "General";
-  tipo = "ingreso";
-  tipoToggleBtn.textContent = "Ingreso";
-  tipoToggleBtn.className = "tipo-ingreso";
-  movimientoEditandoId = null;
+// Dibuja las transacciones en la lista
+function mostrarTransacciones() {
+  lista.innerHTML = '';
+  transacciones.forEach(tx => {
+    const li = document.createElement('li');
+    li.className = 'movimiento-item';
+
+    const texto = document.createElement('div');
+    texto.className = 'movimiento-text';
+    texto.textContent = `[${tx.categoria}] ${tx.descripcion} - ${formatearMoneda(tx.monto)} (${tx.tipo})`;
+
+    // Botón editar
+    const btnEditar = document.createElement('button');
+    btnEditar.className = 'eliminar-btn';
+    btnEditar.style.color = '#17a2b8';
+    btnEditar.textContent = '✏️';
+    btnEditar.title = 'Editar';
+    btnEditar.onclick = () => editarTransaccion(tx.id);
+
+    // Botón eliminar
+    const btnEliminar = document.createElement('button');
+    btnEliminar.className = 'eliminar-btn';
+    btnEliminar.textContent = '❌';
+    btnEliminar.title = 'Eliminar';
+    btnEliminar.onclick = () => eliminarTransaccion(tx.id);
+
+    li.appendChild(texto);
+    li.appendChild(btnEditar);
+    li.appendChild(btnEliminar);
+
+    lista.appendChild(li);
+  });
+  actualizarResumen();
 }
+
+// Actualiza el resumen de ingresos, gastos y balance con color
+function actualizarResumen() {
+  const ingresos = transacciones
+    .filter(tx => tx.tipo === 'ingreso')
+    .reduce((acc, tx) => acc + tx.monto, 0);
+  const gastos = transacciones
+    .filter(tx => tx.tipo === 'gasto')
+    .reduce((acc, tx) => acc + tx.monto, 0);
+  const balance = ingresos - gastos;
+
+  totalIngresosEl.textContent = formatearMoneda(ingresos);
+  totalGastosEl.textContent = formatearMoneda(gastos);
+
+  balanceEl.textContent = `Balance: ${formatearMoneda(balance)}`;
+  if (balance >= 0) {
+    balanceEl.style.color = '#28a745';
+  } else {
+    balanceEl.style.color = '#dc3545';
+  }
+}
+
+// Agrega o actualiza una transacción
+async function agregarTransaccion() {
+  errorTransaccion.textContent = '';
+
+  const descripcion = descripcionInput.value.trim();
+  const monto = parseFloat(montoInput.value);
+  const categoria = categoriaSelect.value;
+
+  if (!descripcion || isNaN(monto) || monto <= 0) {
+    errorTransaccion.textContent = 'Por favor ingresa descripción y monto válido.';
+    return;
+  }
+
+  const uid = auth.currentUser.uid;
+  const transaccion = {
+    descripcion,
+    monto,
+    categoria,
+    tipo,
+    fecha: new Date()
+  };
+
+  try {
+    if (editandoId) {
+      // Actualizar documento
+      await db.collection('usuarios').doc(uid)
+        .collection('transacciones').doc(editandoId).update(transaccion);
+      editandoId = null;
+      tipoToggleBtn.disabled = false;
+    } else {
+      // Agregar nuevo documento
+      await db.collection('usuarios').doc(uid)
+        .collection('transacciones').add(transaccion);
+    }
+
+    descripcionInput.value = '';
+    montoInput.value = '';
+    categoriaSelect.value = 'General';
+    tipo = 'ingreso';
+    tipoToggleBtn.textContent = 'Ingreso';
+    tipoToggleBtn.classList.remove('tipo-gasto');
+    tipoToggleBtn.classList.add('tipo-ingreso');
+  } catch (error) {
+    errorTransaccion.textContent = 'Error guardando datos: ' + error.message;
+  }
+}
+
+// Cargar transacciones en tiempo real para el usuario actual
+function cargarTransacciones() {
+  const uid = auth.currentUser.uid;
+  db.collection('usuarios').doc(uid)
+    .collection('transacciones')
+    .orderBy('fecha', 'desc')
+    .onSnapshot(snapshot => {
+      transacciones = [];
+      snapshot.forEach(doc => {
+        transacciones.push({ id: doc.id, ...doc.data() });
+      });
+      mostrarTransacciones();
+    });
+}
+
+// Editar una transacción (carga valores en el formulario)
+function editarTransaccion(id) {
+  const tx = transacciones.find(t => t.id === id);
+  if (!tx) return;
+
+  descripcionInput.value = tx.descripcion;
+  montoInput.value = tx.monto;
+  categoriaSelect.value = tx.categoria;
+  tipo = tx.tipo;
+
+  tipoToggleBtn.textContent = tipo === 'ingreso' ? 'Ingreso' : 'Gasto';
+  tipoToggleBtn.classList.toggle('tipo-ingreso', tipo === 'ingreso');
+  tipoToggleBtn.classList.toggle('tipo-gasto', tipo === 'gasto');
+
+  editandoId = id;
+  tipoToggleBtn.disabled = true;
+}
+
+// Eliminar una transacción
+async function eliminarTransaccion(id) {
+  if (!confirm('¿Eliminar esta transacción?')) return;
+
+  const uid = auth.currentUser.uid;
+  try {
+    await db.collection('usuarios').doc(uid)
+      .collection('transacciones').doc(id).delete();
+  } catch (error) {
+    alert('Error al eliminar: ' + error.message);
+  }
+}
+
+// Login con Firebase
+async function login() {
+  errorLogin.textContent = '';
+  const email = emailInput.value.trim();
+  const password = passwordInput.value.trim();
+
+  if (!email || !password) {
+    errorLogin.textContent = 'Ingresa correo y contraseña.';
+    return;
+  }
+
+  try {
+    await auth.signInWithEmailAndPassword(email, password);
+  } catch (error) {
+    errorLogin.textContent = error.message;
+  }
+}
+
+// Registro con Firebase
+async function register() {
+  errorLogin.textContent = '';
+  const email = emailInput.value.trim();
+  const password = passwordInput.value.trim();
+
+  if (!email || !password) {
+    errorLogin.textContent = 'Ingresa correo y contraseña.';
+    return;
+  }
+
+  try {
+    await auth.createUserWithEmailAndPassword(email, password);
+  } catch (error) {
+    errorLogin.textContent = error.message;
+  }
+}
+
+// Logout
+async function logout() {
+  await auth.signOut();
+}
+
+// Detecta cambios en el estado de autenticación
+auth.onAuthStateChanged(user => {
+  if (user) {
+    loginContainer.classList.add('oculto');
+    appContainer.classList.remove('oculto');
+    cargarTransacciones();
+  } else {
+    loginContainer.classList.remove('oculto');
+    appContainer.classList.add('oculto');
+    transacciones = [];
+    mostrarTransacciones();
+  }
+});
