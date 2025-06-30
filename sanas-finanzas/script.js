@@ -126,15 +126,15 @@ function toggleTipo() {
     tipoToggleBtn.textContent = "Gasto";
     tipoToggleBtn.classList.remove("tipo-ingreso");
     tipoToggleBtn.classList.add("tipo-gasto");
-    montoInput.style.borderColor = "#dc3545";
-    montoInput.style.boxShadow = "0 0 6px #dc3545aa";
+    montoInput.style.borderColor = "#e74c3c"; // Color del nuevo diseño para gasto
+    montoInput.style.boxShadow = "0 0 6px #e74c3caa";
   } else {
     tipo = "ingreso";
     tipoToggleBtn.textContent = "Ingreso";
     tipoToggleBtn.classList.remove("tipo-gasto");
     tipoToggleBtn.classList.add("tipo-ingreso");
-    montoInput.style.borderColor = "#28a745";
-    montoInput.style.boxShadow = "0 0 6px #28a745aa";
+    montoInput.style.borderColor = "#2ecc71"; // Color del nuevo diseño para ingreso
+    montoInput.style.boxShadow = "0 0 6px #2ecc71aa";
   }
 }
 
