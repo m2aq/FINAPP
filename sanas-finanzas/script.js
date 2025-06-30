@@ -1,75 +1,90 @@
-
-  tipo = 'ingreso';
-  btnIngreso.classList.remove('inactivo');
-  btnGasto.classList.add('inactivo');
-  montoInput.style.borderColor = '#28a745';
-  montoInput.style.boxShadow = '0 0 6px #28a745aa';
+// Configuración Firebase (pon tus datos aquí)
+const firebaseConfig = {
+  apiKey: "tu_apiKey",
+  authDomain: "tu_authDomain.firebaseapp.com",
+  projectId: "tu_projectId",
+  storageBucket: "tu_storageBucket.appspot.com",
+  messagingSenderId: "tu_messagingSenderId",
+  appId: "tu_appId"
 };
 
-btnGasto.onclick = () => {
-  tipo = 'gasto';
-  btnGasto.classList.remove('inactivo');
-  btnIngreso.classList.add('inactivo');
-  montoInput.style.borderColor = '#dc3545';
-  montoInput.style.boxShadow = '0 0 6px #dc3545aa';
-};
+// Inicializar Firebase
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
 
-function formatearMoneda(num) {
-  return num.toLocaleString('es-MX', {
-    style: 'currency',
-    currency: 'MXN',
-    minimumFractionDigits: 2
-  });
+// Obtener elementos DOM
+const loginContainer = document.getElementById('loginContainer');
+const appContainer = document.getElementById('appContainer');
+const emailInput = document.getElementById('emailInput');
+const passwordInput = document.getElementById('passwordInput');
+const errorLogin = document.getElementById('errorLogin');
+
+// Función para iniciar sesión (debe estar global)
+function login() {
+  const email = emailInput.value.trim();
+  const password = passwordInput.value.trim();
+  errorLogin.textContent = '';
+
+  if (!email || !password) {
+    errorLogin.textContent = 'Por favor, completa correo y contraseña.';
+    return;
+  }
+
+  auth.signInWithEmailAndPassword(email, password)
+    .then(() => {
+      emailInput.value = '';
+      passwordInput.value = '';
+      errorLogin.textContent = '';
+    })
+    .catch(error => {
+      errorLogin.textContent = 'Error: ' + error.message;
+    });
 }
 
-function mostrarTransacciones() {
-  lista.innerHTML = '';
-  transacciones.forEach(tx => {
-    const li = document.createElement('li');
-    li.className = 'movimiento-item';
+// Función para registrar nuevo usuario (global)
+function register() {
+  const email = emailInput.value.trim();
+  const password = passwordInput.value.trim();
+  errorLogin.textContent = '';
 
-    const texto = document.createElement('div');
-    texto.className = 'movimiento-text';
-    texto.textContent = `[${tx.categoria}] ${tx.descripcion} - ${formatearMoneda(tx.monto)} (${tx.tipo})`;
+  if (!email || !password) {
+    errorLogin.textContent = 'Por favor, completa correo y contraseña.';
+    return;
+  }
+  if (password.length < 6) {
+    errorLogin.textContent = 'La contraseña debe tener al menos 6 caracteres.';
+    return;
+  }
 
-    const botonesDiv = document.createElement('div');
-    botonesDiv.className = 'movimiento-botones';
-
-    const btnEditar = document.createElement('button');
-    btnEditar.className = 'editar-btn';
-    btnEditar.textContent = '✏️';
-    btnEditar.title = 'Editar';
-    btnEditar.onclick = () => editarTransaccion(tx.id);
-
-    const btnEliminar = document.createElement('button');
-    btnEliminar.className = 'eliminar-btn';
-    btnEliminar.textContent = '❌';
-    btnEliminar.title = 'Eliminar';
-    btnEliminar.onclick = () => eliminarTransaccion(tx.id);
-
-    botonesDiv.appendChild(btnEditar);
-    botonesDiv.appendChild(btnEliminar);
-
-    li.appendChild(texto);
-    li.appendChild(botonesDiv);
-
-    lista.appendChild(li);
-  });
-  actualizarResumen();
+  auth.createUserWithEmailAndPassword(email, password)
+    .then(() => {
+      emailInput.value = '';
+      passwordInput.value = '';
+      errorLogin.textContent = '';
+    })
+    .catch(error => {
+      errorLogin.textContent = 'Error: ' + error.message;
+    });
 }
 
-function actualizarResumen() {
-  const ingresos = transacciones
-    .filter(tx => tx.tipo === 'ingreso')
-    .reduce((acc, tx) => acc + tx.monto, 0);
-  const gastos = transacciones
-    .filter(tx => tx.tipo === 'gasto')
-    .reduce((acc, tx) => acc + tx.monto, 0);
-  const balance = ingresos - gastos;
-
-  const balanceGrande = document.getElementById('balance-grande');
-  balanceGrande.textContent = formatearMoneda(balance);
-  balanceGrande.style.color = balance >= 0 ? '#28a745' : '#dc3545';
+// Función para cerrar sesión (global)
+function logout() {
+  auth.signOut()
+    .then(() => {
+      errorLogin.textContent = '';
+    })
+    .catch(error => {
+      errorLogin.textContent = 'Error: ' + error.message;
+    });
 }
 
-// Funciones agregar, editar, eliminar, login, register, logout etc iguales que antes...
+// Escuchar estado de autenticación
+auth.onAuthStateChanged(user => {
+  if (user) {
+    loginContainer.classList.add('oculto');
+    appContainer.classList.remove('oculto');
+  } else {
+    loginContainer.classList.remove('oculto');
+    appContainer.classList.add('oculto');
+  }
+});
