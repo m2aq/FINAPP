@@ -21,11 +21,11 @@ const montoInput = document.getElementById("monto");
 const categoriaSelect = document.getElementById("categoria");
 const lista = document.getElementById("lista");
 const balanceElem = document.getElementById("balance");
-const balanceDetElem = document.getElementById("balance-det");
 const totalIngresosElem = document.getElementById("total-ingresos");
 const totalGastosElem = document.getElementById("total-gastos");
 
 let tipo = "ingreso";
+let movimientoEditandoId = null;
 
 const formatDinero = n => `$${n.toLocaleString("es-MX", { minimumFractionDigits: 2 })}`;
 
@@ -34,34 +34,22 @@ auth.onAuthStateChanged(user => {
     loginContainer.classList.add("oculto");
     appContainer.classList.remove("oculto");
     cargarDatos();
-    errorLogin.textContent = "";
   } else {
     loginContainer.classList.remove("oculto");
     appContainer.classList.add("oculto");
     limpiarCampos();
-    errorLogin.textContent = "";
   }
 });
 
 function login() {
-  errorLogin.textContent = "";
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value.trim();
-  if (!email || !password) {
-    errorLogin.textContent = "Ingresa correo y contraseña.";
-    return;
-  }
   auth.signInWithEmailAndPassword(email, password).catch(e => errorLogin.textContent = e.message);
 }
 
 function register() {
-  errorLogin.textContent = "";
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value.trim();
-  if (!email || !password) {
-    errorLogin.textContent = "Ingresa correo y contraseña.";
-    return;
-  }
   auth.createUserWithEmailAndPassword(email, password).catch(e => errorLogin.textContent = e.message);
 }
 
@@ -76,49 +64,41 @@ function toggleTipo() {
     tipoToggleBtn.classList.remove("tipo-ingreso");
     tipoToggleBtn.classList.add("tipo-gasto");
     montoInput.style.borderColor = "#dc3545";
-    montoInput.style.boxShadow = "0 0 6px #dc3545aa";
   } else {
     tipo = "ingreso";
     tipoToggleBtn.textContent = "Ingreso";
     tipoToggleBtn.classList.remove("tipo-gasto");
     tipoToggleBtn.classList.add("tipo-ingreso");
     montoInput.style.borderColor = "#28a745";
-    montoInput.style.boxShadow = "0 0 6px #28a745aa";
   }
 }
 
 function agregarTransaccion() {
-  errorTransaccion.textContent = "";
   const descripcion = descripcionInput.value.trim();
   const monto = parseFloat(montoInput.value);
   const categoria = categoriaSelect.value;
-
-  if (!descripcion) {
-    errorTransaccion.textContent = "Agrega una descripción.";
-    return;
-  }
-  if (isNaN(monto) || monto <= 0) {
-    errorTransaccion.textContent = "Monto inválido.";
-    return;
-  }
-
   const user = auth.currentUser;
-  if (!user) return;
+  if (!descripcion || isNaN(monto) || monto <= 0 || !user) {
+    errorTransaccion.textContent = "Datos inválidos.";
+    return;
+  }
 
-  const transaccion = {
-    descripcion,
-    monto,
-    tipo,
-    categoria,
-    fecha: new Date().toISOString()
-  };
+  const transaccion = { descripcion, monto, tipo, categoria, fecha: new Date().toISOString() };
+  const ref = db.collection("usuarios").doc(user.uid).collection("movimientos");
 
-  db.collection("usuarios").doc(user.uid).collection("movimientos").add(transaccion)
-    .then(() => {
+  if (movimientoEditandoId) {
+    ref.doc(movimientoEditandoId).update(transaccion).then(() => {
       limpiarCampos();
       cargarDatos();
-    })
-    .catch(e => errorTransaccion.textContent = "Error al guardar: " + e.message);
+      movimientoEditandoId = null;
+      document.querySelector("button[onclick='agregarTransaccion()']").textContent = "Agregar";
+    });
+  } else {
+    ref.add(transaccion).then(() => {
+      limpiarCampos();
+      cargarDatos();
+    });
+  }
 }
 
 function cargarDatos() {
@@ -127,28 +107,35 @@ function cargarDatos() {
 
   db.collection("usuarios").doc(user.uid).collection("movimientos").orderBy("fecha", "desc").onSnapshot(snapshot => {
     lista.innerHTML = "";
-    let ingresos = 0;
-    let gastos = 0;
+    let ingresos = 0, gastos = 0;
 
     snapshot.forEach(doc => {
       const t = doc.data();
       const li = document.createElement("li");
       li.className = "movimiento-item";
 
+      const texto = `${t.descripcion} - ${formatDinero(t.monto)} (${t.categoria})`;
       const spanTexto = document.createElement("span");
       spanTexto.className = "movimiento-text";
-      spanTexto.textContent = `${t.descripcion} - ${formatDinero(t.monto)} (${t.categoria})`;
+      spanTexto.textContent = texto;
 
       const btnEditar = document.createElement("button");
       btnEditar.className = "boton-burbuja boton-editar";
       btnEditar.textContent = "✏️";
-      btnEditar.title = "Editar (no implementado)";
-      btnEditar.disabled = true; // futuro
+      btnEditar.onclick = () => {
+        descripcionInput.value = t.descripcion;
+        montoInput.value = t.monto;
+        categoriaSelect.value = t.categoria;
+        tipo = t.tipo;
+        tipoToggleBtn.textContent = tipo === "gasto" ? "Gasto" : "Ingreso";
+        tipoToggleBtn.className = tipo === "gasto" ? "tipo-gasto" : "tipo-ingreso";
+        movimientoEditandoId = doc.id;
+        document.querySelector("button[onclick='agregarTransaccion()']").textContent = "Actualizar";
+      };
 
       const btnEliminar = document.createElement("button");
       btnEliminar.className = "boton-burbuja boton-eliminar";
-      btnEliminar.textContent = "✕";
-      btnEliminar.title = "Eliminar movimiento";
+      btnEliminar.textContent = "✖";
       btnEliminar.onclick = () => {
         if (confirm("¿Eliminar este movimiento?")) {
           db.collection("usuarios").doc(user.uid).collection("movimientos").doc(doc.id).delete();
@@ -160,14 +147,12 @@ function cargarDatos() {
       li.appendChild(btnEliminar);
       lista.appendChild(li);
 
-      if (t.tipo === "ingreso") ingresos += t.monto;
-      else gastos += t.monto;
+      t.tipo === "ingreso" ? ingresos += t.monto : gastos += t.monto;
     });
 
     const balance = ingresos - gastos;
     balanceElem.textContent = formatDinero(balance);
     balanceElem.className = balance >= 0 ? "balance-positivo" : "balance-negativo";
-    balanceDetElem.textContent = formatDinero(balance);
     totalIngresosElem.textContent = formatDinero(ingresos);
     totalGastosElem.textContent = formatDinero(gastos);
   });
@@ -177,11 +162,8 @@ function limpiarCampos() {
   descripcionInput.value = "";
   montoInput.value = "";
   categoriaSelect.value = "General";
-  errorTransaccion.textContent = "";
-  montoInput.style.borderColor = "";
-  montoInput.style.boxShadow = "";
   tipo = "ingreso";
   tipoToggleBtn.textContent = "Ingreso";
-  tipoToggleBtn.classList.remove("tipo-gasto");
-  tipoToggleBtn.classList.add("tipo-ingreso");
+  tipoToggleBtn.className = "tipo-ingreso";
+  movimientoEditandoId = null;
 }
