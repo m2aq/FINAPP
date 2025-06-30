@@ -109,7 +109,7 @@ select {
   box-sizing: border-box; /* Asegurar que padding no afecte el width */
 }
 
-/* Ajustes específicos para el input de monto cuando se enfoca */
+/* Estilos específicos para el input de monto cuando se enfoca o según el tipo */
 input[type="number"].color-gasto {
   border-color: #dc3545;
   box-shadow: 0 0 6px #dc3545aa;
@@ -165,6 +165,15 @@ input[type="number"].color-ingreso {
   font-weight: 600;
   letter-spacing: 0.03em;
   margin-top: 10px; /* Espacio sobre el botón */
+  background-color: #28a745; /* Color principal */
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 12px;
+  transition: background-color 0.2s ease;
+}
+.btn-agregar-transaccion:hover {
+    background-color: #218838;
 }
 
 /* --- Resumen --- */
@@ -219,7 +228,7 @@ input[type="number"].color-ingreso {
   background-color: #f9f9f9;
   border-radius: 12px;
   box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-  border-left: 5px solid #ccc; /* Borde predeterminado */
+  border-left: 5px solid #ccc; /* Borde predeterminado gris */
   transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
   position: relative; /* Necesario para posicionar elementos internos como el botón oculto */
   overflow: hidden; /* Esconde el contenido fuera de los límites */
@@ -249,7 +258,7 @@ input[type="number"].color-ingreso {
     text-overflow: ellipsis; /* Muestra puntos suspensivos si el texto es muy largo */
 }
 
-.movimiento-text {
+.movimiento-text { /* Este span dentro de .movimiento-content no se usa directamente como clase ahora */
   font-size: 16px;
   color: #333;
 }
@@ -279,7 +288,7 @@ input[type="number"].color-ingreso {
     white-space: nowrap;
 }
 
-/* Botón de eliminar (preparado para swipe) */
+/* Botón de eliminar (diseñado para ser revelado con swipe) */
 .eliminar-btn {
   background-color: #dc3545; /* Fondo rojo */
   color: white;
@@ -289,9 +298,9 @@ input[type="number"].color-ingreso {
   font-size: 18px;
   padding: 14px 20px; /* Padding para que sea fácil de presionar */
   border-radius: 12px;
-  margin-left: 10px; /* Espacio al botón principal */
+  margin-left: 10px; /* Espacio al contenido del movimiento */
   transition: opacity 0.2s ease, color 0.2s ease, background-color 0.2s ease;
-  flex-shrink: 0;
+  flex-shrink: 0; /* Evita que se encoja */
 }
 .eliminar-btn:hover {
   background-color: #c82333; /* Rojo más oscuro al hover */
@@ -317,10 +326,19 @@ input[type="number"].color-ingreso {
   background-color: #5a6268;
 }
 
-/* Posicionamiento fijo para logout (opcional, pero común) */
-/* .app-container { position: relative; padding-bottom: 80px; } */
-/* .btn-logout { position: sticky; bottom: 20px; } */
-/* Ajustaré el padding del .contenedor para que funcione con un bottom fijo si lo implementamos */
+/* Para mantener el botón de logout al final de la pantalla en móvil */
+.app-container {
+  position: relative;
+  padding-bottom: 80px; /* Espacio suficiente para el botón fijo abajo */
+}
+/* Si quisieras un botón de logout fijo, podrías descomentar y adaptar esto:
+.btn-logout {
+  position: sticky;
+  bottom: 20px;
+  z-index: 10;
+}
+.contenedor { padding-bottom: 100px; } // Ajustar si usas sticky button
+*/
 
 
 /* --- Mensaje de Lista Vacía --- */
