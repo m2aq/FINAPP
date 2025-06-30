@@ -12,6 +12,7 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
 
+// Elementos del DOM
 const loginContainer = document.getElementById("login-container");
 const appContainer = document.getElementById("app-container");
 const errorLogin = document.getElementById("error-login");
@@ -25,31 +26,33 @@ const balanceElem = document.getElementById("balance");
 const balanceDetElem = document.getElementById("balance-det");
 const totalIngresosElem = document.getElementById("total-ingresos");
 const totalGastosElem = document.getElementById("total-gastos");
-
-// Referencia al mensaje de lista vacía
 const listaVaciaMsg = document.getElementById("lista-vacia-msg");
+const btnAgregar = document.querySelector('.btn-agregar-transaccion'); // Referencia al botón de agregar
 
-let tipo = "ingreso";
-let unsubscribeFirestore = null; // Variable para guardar la función de unsubscribe del listener de Firestore
+let tipo = "ingreso"; // Estado actual: "ingreso" o "gasto"
+let unsubscribeFirestore = null; // Para guardar la función de unsubscribe del listener de Firestore
 
+// ---- Manejo de Estado de Usuario ----
 auth.onAuthStateChanged(user => {
   if (user) {
+    // Usuario está logueado
     loginContainer.classList.add("oculto");
     appContainer.classList.remove("oculto");
-    // Llamar a cargarDatos para iniciar la suscripción a los cambios
-    if (unsubscribeFirestore) { // Si hubiera un listener anterior, desuscribir
+    limpiarCamposTransaccion(); // Limpiar campos al entrar a la app
+    if (unsubscribeFirestore) { // Si hubiera un listener anterior, asegurarse de desuscribir
       unsubscribeFirestore();
     }
-    unsubscribeFirestore = cargarDatos(); // Guardar la nueva función de unsubscribe
-    errorLogin.textContent = ""; // Limpiar errores si hay un re-login
+    unsubscribeFirestore = cargarDatos(); // Cargar datos e iniciar listener
+    errorLogin.textContent = ""; // Limpiar errores si se redirige de nuevo a la app
   } else {
+    // No hay usuario logueado
     loginContainer.classList.remove("oculto");
     appContainer.classList.add("oculto");
-    limpiarCampos(); // Limpiar campos de transacción si se cierra sesión
-    errorLogin.textContent = ""; // Limpiar errores
-    // Limpiar la lista al desloguearse también, en caso de que hubiera datos cargados
+    limpiarCamposTransaccion(); // Limpiar campos si se cierra sesion
+
+    // Resetear visualización si se desloguea
     lista.innerHTML = "";
-    listaVaciaMsg.classList.add("oculto"); // Ocultar el mensaje de lista vacía
+    listaVaciaMsg.classList.add("oculto");
     balanceElem.textContent = "$0";
     balanceDetElem.textContent = "$0";
     totalIngresosElem.textContent = "$0";
@@ -59,19 +62,21 @@ auth.onAuthStateChanged(user => {
       unsubscribeFirestore();
       unsubscribeFirestore = null;
     }
+    errorLogin.textContent = ""; // Limpiar errores
   }
 });
 
+// ---- Autenticación ----
 function login() {
   errorLogin.textContent = "";
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value.trim();
   if (!email || !password) {
-    errorLogin.textContent = "Ingresa correo y contraseña.";
+    errorLogin.textContent = "Por favor, ingresa correo electrónico y contraseña.";
     return;
   }
   auth.signInWithEmailAndPassword(email, password)
-    .catch(e => errorLogin.textContent = e.message);
+    .catch(e => errorLogin.textContent = e.message); // Muestra el mensaje de error de Firebase
 }
 
 function register() {
@@ -79,10 +84,9 @@ function register() {
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value.trim();
   if (!email || !password) {
-    errorLogin.textContent = "Ingresa correo y contraseña.";
+    errorLogin.textContent = "Por favor, ingresa correo electrónico y contraseña.";
     return;
   }
-  // Añadir validación simple para contraseña (mínimo 6 caracteres)
   if (password.length < 6) {
       errorLogin.textContent = "La contraseña debe tener al menos 6 caracteres.";
       return;
@@ -95,184 +99,193 @@ function logout() {
   auth.signOut();
 }
 
+// ---- Interfaz de Transacción ----
 function toggleTipo() {
   if (tipo === "ingreso") {
     tipo = "gasto";
     tipoToggleBtn.textContent = "Gasto";
     tipoToggleBtn.classList.remove("tipo-ingreso");
     tipoToggleBtn.classList.add("tipo-gasto");
-    // Actualizar estilos del input de monto
-    montoInput.style.borderColor = "#dc3545";
-    montoInput.style.boxShadow = "0 0 6px #dc3545aa";
+    // Aplicar estilos visuales al campo monto para reflejar que es un gasto
+    montoInput.classList.add("color-gasto");
+    montoInput.classList.remove("color-ingreso");
   } else {
     tipo = "ingreso";
     tipoToggleBtn.textContent = "Ingreso";
     tipoToggleBtn.classList.remove("tipo-gasto");
     tipoToggleBtn.classList.add("tipo-ingreso");
-    // Resetear estilos del input de monto para volver al color de enfoque por defecto si el usuario retorna a ingreso
-    // Esto hace que cuando se vuelve a 'Ingreso', el campo monto retome un estilo neutral (o verde si se configura)
-    montoInput.style.borderColor = "#28a745"; // Se puede poner el color principal de la app
-    montoInput.style.boxShadow = "0 0 6px #28a745aa";
+    // Restaurar estilos visuales al campo monto para ingreso
+    montoInput.classList.add("color-ingreso");
+    montoInput.classList.remove("color-gasto");
   }
 }
 
 function agregarTransaccion() {
-  errorTransaccion.textContent = "";
+  errorTransaccion.textContent = ""; // Limpiar error previo
   const descripcion = descripcionInput.value.trim();
-  // Usar Number() en lugar de parseFloat() para la conversión del monto
-  const monto = Number(montoInput.value);
+  const monto = Number(montoInput.value); // Usar Number() para mejor manejo de decimales
   const categoria = categoriaSelect.value;
-
-  if (!descripcion) {
-    errorTransaccion.textContent = "Agrega una descripción.";
-    return;
-  }
-  // Validación para monto: no ser NaN, ser mayor que 0
-  if (isNaN(monto) || monto <= 0) {
-    errorTransaccion.textContent = "Monto inválido. Debe ser un número positivo.";
-    return;
-  }
-
   const user = auth.currentUser;
+
+  // --- Validación de Campos ---
   if (!user) {
-    errorTransaccion.textContent = "No estás autenticado. Por favor, inicia sesión.";
-    // Opcional: redirigir a login o mostrar mensaje más persistente
+    errorTransaccion.textContent = "Debes estar autenticado para agregar movimientos.";
     return;
   }
+  if (!descripcion) {
+    errorTransaccion.textContent = "La descripción no puede estar vacía.";
+    return;
+  }
+  if (isNaN(monto) || monto <= 0) {
+    errorTransaccion.textContent = "El monto debe ser un número positivo.";
+    return;
+  }
+  if (!categoria) { // Aunque por defecto hay una opción, mejor validar
+      errorTransaccion.textContent = "Selecciona una categoría.";
+      return;
+  }
 
+  // --- Creación de Objeto Transacción ---
   const transaccion = {
     descripcion,
     monto,
     tipo,
     categoria,
-    fecha: new Date().toISOString() // Fecha actual en formato ISO
+    fecha: new Date().toISOString() // Guardar fecha en formato ISO UTC
   };
 
-  // Añadir la transacción a Firestore
+  // --- Guardar en Firestore ---
   db.collection("usuarios").doc(user.uid).collection("movimientos").add(transaccion)
     .then(() => {
-      limpiarCampos(); // Limpiar campos después de agregar
-      // onSnapshot en cargarDatos() se actualiza automáticamente, no se necesita llamar a cargarDatos() aquí.
+      limpiarCamposTransaccion(); // Limpiar el formulario tras éxito
+      // El listener en cargarDatos() se actualizará automáticamente, no es necesario llamar a cargarDatos() aquí.
+      console.log("Transacción agregada exitosamente!");
     })
-    .catch(e => errorTransaccion.textContent = "Error al guardar: " + e.message);
+    .catch(e => {
+        errorTransaccion.textContent = `Error al guardar: ${e.message}`;
+        console.error("Error al agregar transacción: ", e);
+    });
 }
 
-// La función para cargar datos y manejar las actualizaciones en tiempo real.
-// Retorna la función `unsubscribe` del listener de Firestore.
+function limpiarCamposTransaccion() {
+  descripcionInput.value = "";
+  montoInput.value = "";
+  categoriaSelect.value = "General"; // Volver a la categoría por defecto
+  errorTransaccion.textContent = ""; // Limpiar mensajes de error
+
+  // Resetear el tipo y el botón
+  if (tipo !== "ingreso") { // Si estaba en gasto, volver a ingreso
+    toggleTipo(); // Reutiliza la lógica de toggleTipo para resetear
+  } else {
+    // Si ya estaba en ingreso, solo asegurarse de que los estilos visuales del monto estén correctos
+    montoInput.classList.add("color-ingreso");
+    montoInput.classList.remove("color-gasto");
+  }
+}
+
+
+// ---- Cargar y Mostrar Transacciones ----
 function cargarDatos() {
   const user = auth.currentUser;
   if (!user) {
-      // Si no hay usuario logueado, no hacer nada
-      return null; // Devolver null si no hay usuario para que unsubscribeFirestore sepa que no hay listener activo
+      return null; // No hay usuario, no hay listener activo.
   }
 
-  const movementsCollection = db.collection("usuarios").doc(user.uid).collection("movimientos");
+  // Referencia a la colección de movimientos del usuario actual
+  const movementsCollectionRef = db.collection("usuarios").doc(user.uid).collection("movimientos");
 
-  // Usar orderBy directamente en la colección (método de la API Compat)
-  const orderedMovementsQuery = movementsCollection.orderBy("fecha", "desc");
+  // Crear la query para obtener movimientos ordenados por fecha descendente
+  const q = movementsCollectionRef.orderBy("fecha", "desc");
 
-  // Establecer el listener onSnapshot
-  const unsubscribe = orderedMovementsQuery.onSnapshot(snapshot => {
-    lista.innerHTML = ""; // Limpia la lista en CADA actualización del snapshot
+  // Configurar el listener que se ejecutará cada vez que haya cambios en la colección
+  const unsubscribe = q.onSnapshot(snapshot => {
+    lista.innerHTML = ""; // Limpiar la lista antes de renderizar de nuevo
     let ingresos = 0;
     let gastos = 0;
 
     if (snapshot.empty) {
-      listaVaciaMsg.classList.remove("oculto"); // Mostrar mensaje si no hay docs
+      // Si la colección está vacía, mostrar el mensaje "lista vacía"
+      listaVaciaMsg.classList.remove("oculto");
     } else {
-      listaVaciaMsg.classList.add("oculto"); // Ocultar mensaje si hay docs
+      // Si hay transacciones, ocultar el mensaje "lista vacía"
+      listaVaciaMsg.classList.add("oculto");
 
-      snapshot.forEach(doc => {
+      snapshot.forEach(doc => { // Iterar sobre cada documento (transacción)
         const t = doc.data(); // Datos de la transacción
+
+        // --- Creación del Elemento LI ---
         const li = document.createElement("li");
-        // Añadir clase para diferenciar ingresos/gastos y para estilos
-        li.className = `movimiento-item movimiento-item-${t.tipo}`;
+        li.className = `movimiento-item movimiento-item-${t.tipo}`; // Clase base + tipo
+        li.setAttribute('data-id', doc.id); // Guardar el ID para posible eliminación/edición futura
 
         // Formatear fecha
         const fechaFormateada = new Date(t.fecha).toLocaleDateString('es-ES', {
             day: '2-digit', month: '2-digit', year: 'numeric'
         }).replace(/\//g, '-'); // Formato DD-MM-YYYY
 
+        // Determinar el símbolo y color del monto según el tipo
         const symbol = t.tipo === "ingreso" ? "+" : "-";
-        // Usar colores para el símbolo, según el tipo
-        const signColor = t.tipo === "ingreso" ? "#28a745" : "#dc3545";
+        const signColor = t.tipo === "ingreso" ? "#28a745" : "#dc3545"; // Colores de ingreso/gasto
 
-        // Crear el span para el texto del movimiento con detalles formateados
-        const spanTexto = document.createElement("span");
-        spanTexto.className = "movimiento-text";
-        spanTexto.innerHTML = `
+        // Estructura HTML para el contenido de la transacción
+        li.innerHTML = `
+          <div class="movimiento-content" style="max-width: calc(100% - 70px);"> <!-- Limit width to leave space for delete btn -->
             <span class="fecha-movimiento">${fechaFormateada}</span>
             <span style="color:${signColor}; font-weight:bold;">${symbol}</span>
             <span class="monto-movimiento">$${t.monto.toFixed(2)}</span>
             (<span class="categoria-movimiento">${t.categoria}</span>)
+          </div>
+          <button class="eliminar-btn" title="Eliminar movimiento" data-id="${doc.id}">×</button>
         `;
-
-        // Crear el botón de eliminar
-        const btnEliminar = document.createElement("button");
-        btnEliminar.className = "eliminar-btn";
-        btnEliminar.textContent = "×"; // Símbolo de "x"
-        btnEliminar.title = "Eliminar movimiento";
-        btnEliminar.onclick = () => {
-          // Mensaje de confirmación antes de eliminar
+        
+        // Añadir listener para el botón de eliminar
+        const deleteButton = li.querySelector('.eliminar-btn');
+        deleteButton.onclick = () => {
           if (confirm("¿Estás seguro de que deseas eliminar este movimiento?")) {
-            // Para eliminar, usamos el método delete() directamente en el documento
-            movementsCollection.doc(doc.id).delete()
+            movementsCollectionRef.doc(doc.id).delete()
               .then(() => {
-                console.log("Movimiento eliminado exitosamente.");
-                // La actualización de la lista se maneja automáticamente por onSnapshot.
+                console.log(`Movimiento ${doc.id} eliminado.`);
+                // El onSnapshot se actualiza automáticamente
               })
               .catch(err => {
-                console.error("Error al eliminar el movimiento:", err);
-                // Podrías mostrar un mensaje de error al usuario aquí si lo deseas
+                console.error("Error al eliminar movimiento:", err);
+                alert("Hubo un error al intentar eliminar el movimiento."); // Notificar al usuario
               });
           }
         };
 
-        // Añadir los elementos al LI
-        li.appendChild(spanTexto);
-        li.appendChild(btnEliminar);
-        // Añadir el LI a la lista UL
-        lista.appendChild(li);
+        lista.appendChild(li); // Añadir el elemento LI completo a la lista UL
 
-        // Acumular los totales
+        // Acumular ingresos y gastos para los totales
         if (t.tipo === "ingreso") {
           ingresos += t.monto;
         } else {
           gastos += t.monto;
         }
       }); // Fin del forEach
+
+      // --- Actualizar los elementos del DOM con los totales ---
+      const balance = ingresos - gastos;
+      balanceElem.textContent = `$${balance.toFixed(2)}`; // Balance principal
+      balanceDetElem.textContent = `$${balance.toFixed(2)}`; // Balance detallado
+      totalIngresosElem.textContent = `$${ingresos.toFixed(2)}`;
+      totalGastosElem.textContent = `$${gastos.toFixed(2)}`;
+
     } // Fin del else (snapshot.empty)
 
-    // Actualizar los elementos del DOM con los totales calculados
-    const balance = ingresos - gastos;
-    balanceElem.textContent = `$${balance.toFixed(2)}`;
-    balanceDetElem.textContent = `$${balance.toFixed(2)}`; // Balance general
-    totalIngresosElem.textContent = `$${ingresos.toFixed(2)}`;
-    totalGastosElem.textContent = `$${gastos.toFixed(2)}`;
-
-  }, error => { // Manejo de errores en el listener onSnapshot
-      console.error("Error fetching data:", error);
-      errorTransaccion.textContent = "Error al cargar los datos."; // Mostrar error de carga
+  }, error => { // Manejo de errores para el listener de Firestore
+    console.error("Error al obtener datos de Firestore:", error);
+    errorTransaccion.textContent = "Error al cargar los movimientos.";
   });
 
-  return unsubscribe; // Devolver la función de unsubscribe
+  return unsubscribe; // Retorna la función para poder detener el listener más tarde
 }
 
-function limpiarCampos() {
-  descripcionInput.value = "";
-  montoInput.value = "";
-  categoriaSelect.value = "General";
-  errorTransaccion.textContent = "";
+// --- Lógica para Swipe to Delete (Estructura Preparada) ---
+// Esta es la lógica básica. Para una implementación completa,
+// se necesitaría código adicional para el movimiento, transiciones,
+// manejo de múltiples items swiped, etc.
+// Las llamadas a los elementos 'eliminar-btn' y sus listeners ya están en cargarDatos().
 
-  // Resetear estilos en línea aplicados por toggleTipo al monto
-  montoInput.style.borderColor = ""; // Vuelve al estilo por defecto del CSS general
-  montoInput.style.boxShadow = "";
-
-  // Asegurarse de que el botón y el estado interno 'tipo' vuelvan a Ingreso
-  if (tipo !== "ingreso") {
-    tipo = "ingreso";
-    tipoToggleBtn.textContent = "Ingreso";
-    tipoToggleBtn.classList.remove("tipo-gasto");
-    tipoToggleBtn.classList.add("tipo-ingreso");
-  }
-}
+// Se pueden añadir aquí las funciones para manejar touch events si se desea implementar la interactividad completa.
+// Por ahora, solo los botones 'eliminar-btn' son visibles directamente.
