@@ -1,67 +1,60 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-<title>Sanas Finanzas</title>
-<link rel="stylesheet" href="estilos.css" />
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sanas Finanzas</title>
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#28a745" />
+  <link rel="icon" type="image/png" href="icono192.png" />
+  <link rel="stylesheet" href="estilos.css" />
+  <!-- Firebase SDKs Compatibles -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 </head>
 <body>
-
-<div id="login-container" class="contenedor">
-  <h2>Iniciar sesión</h2>
-  <input type="email" id="email" placeholder="Correo electrónico" autocomplete="username" />
-  <input type="password" id="password" placeholder="Contraseña" autocomplete="current-password" />
-  <button onclick="login()">Entrar</button>
-  <button onclick="register()">Registrarse</button>
-  <p id="error-login" class="error-msg"></p>
-</div>
-
-<div id="app-container" class="contenedor oculto">
-  <h1>Sanas Finanzas</h1>
-
-  <form id="formulario" onsubmit="event.preventDefault(); agregarTransaccion();">
-    <div class="input-group">
-      <input id="descripcion" type="text" placeholder="Descripción" required autocomplete="off" />
-    </div>
-
-    <div class="input-group flex-row">
-      <input id="monto" type="number" placeholder="Monto" min="0.01" step="0.01" required />
-      <div class="tipo-btn-group">
-        <button type="button" id="btnIngreso" class="tipo-toggle-btn tipo-ingreso activo">Ingreso</button>
-        <button type="button" id="btnGasto" class="tipo-toggle-btn tipo-gasto">Gasto</button>
-      </div>
-    </div>
-
-    <div class="input-group">
-      <select id="categoria" required>
-        <option value="" disabled selected>Selecciona categoría</option>
-        <option>General</option>
-        <option>Comida</option>
-        <option>Transporte</option>
-        <option>Hogar</option>
-        <option>Salud</option>
-        <option>Ocio</option>
-      </select>
-    </div>
-
-    <button type="submit" class="btn-agregar">Agregar</button>
-    <p id="error-transaccion" class="error-msg"></p>
-  </form>
-
-  <ul id="lista"></ul>
-
-  <div id="balance-container">
-    <h2>Balance General</h2>
-    <p id="balance-grande" class="balance-positivo">$0.00</p>
+  <div class="contenedor" id="login-container">
+    <h1>Sanas Finanzas</h1>
+    <input type="email" id="email" placeholder="Correo electrónico" />
+    <input type="password" id="password" placeholder="Contraseña" />
+    <button onclick="login()">Iniciar sesión</button>
+    <button onclick="register()">Registrarse</button>
+    <p id="error-login" class="error-msg"></p>
   </div>
 
-  <button id="logoutBtn" onclick="logout()">Cerrar sesión</button>
-</div>
+  <div class="contenedor oculto" id="app-container">
+    <h1>Balance: <span id="balance">$0</span></h1>
+    <button onclick="logout()">Cerrar sesión</button>
+    <div class="flex-row" style="align-items:center; margin-top: 15px;">
+      <input type="text" id="descripcion" placeholder="Descripción" class="flex-grow" />
+      <input type="number" id="monto" placeholder="Monto" min="0" />
+      <button id="tipoToggleBtn" class="tipo-toggle-btn tipo-ingreso" onclick="toggleTipo()">Ingreso</button>
+    </div>
+    <select id="categoria">
+      <option value="General">General</option>
+      <option value="Comida">Comida</option>
+      <option value="Transporte">Transporte</option>
+      <option value="Salud">Salud</option>
+      <option value="Otros">Otros</option>
+    </select>
+    <button onclick="agregarTransaccion()">Agregar</button>
+    <p id="error-transaccion" class="error-msg"></p>
 
-<script src="script.js"></script>
+    <div class="resumen" style="margin-top:20px;">
+      <div class="resumen-item resumen-ingresos">Ingresos: <span id="total-ingresos">$0</span></div>
+      <div class="resumen-item resumen-gastos">Gastos: <span id="total-gastos">$0</span></div>
+      <div class="resumen-item">Balance: <span id="balance-det">$0</span></div>
+    </div>
+
+    <ul id="lista"></ul>
+  </div>
+
+  <script src="script.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js');
+    }
+  </script>
 </body>
 </html>
