@@ -1,14 +1,4 @@
-// Firebase config y setup idéntico al anterior, solo aquí la parte que maneja UI:
 
-const loginContainer = document.getElementById('login-container');
-const appContainer = document.getElementById('app-container');
-
-const emailInput = document.getElementById('email');
-const passwordInput = document.getElementById('password');
-const errorLogin = document.getElementById('error-login');
-
-const btnIngreso = document.getElementById('btnIngreso');
-const btnGasto = document.getElementById('btnGasto');
 const montoInput = document.getElementById('monto');
 const descripcionInput = document.getElementById('descripcion');
 const categoriaSelect = document.getElementById('categoria');
