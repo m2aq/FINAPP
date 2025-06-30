@@ -1,31 +1,34 @@
 :root {
-  --primary-color: #3498db; /* Azul principal */
-  --secondary-color: #2ecc71; /* Verde secundario (éxito) */
-  --accent-color: #e74c3c; /* Rojo acento (error/gasto) */
-  --background-color: #f5f5f5; /* Fondo claro */
-  --card-background: #fff; /* Fondo de los contenedores */
-  --text-color-primary: #333; /* Texto principal oscuro */
-  --text-color-secondary: #777; /* Texto secundario gris */
-  --border-color: #ddd; /* Color de bordes */
-  --border-radius: 8px; /* Radio de los bordes */
-  --box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra suave */
-  --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Fuente moderna */
+  --primary-color: #007aff; /* Azul de sistema iOS */
+  --secondary-color: #34c759; /* Verde de éxito iOS */
+  --accent-color: #ff3b30; /* Rojo de error iOS */
+  --background-color: #f2f2f7; /* Fondo de sistema iOS */
+  --card-background: #ffffff; /* Fondo de las tarjetas/contenedores */
+  --text-color-primary: #1c1c1e; /* Texto oscuro principal */
+  --color-gray-500: #8e8e93; /* Gris medio para texto secundario */
+  --border-color: #e5e5ea; /* Borde sutil */
+  --border-radius: 12px; /* Radios de esquinas más suaves */
+  --box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08); /* Sombra más sutil */
+  --font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', Helvetica, Arial, sans-serif; /* Fuentes de sistema iOS */
 
   /* Para que los colores RGB sean accesibles para rgba() */
-  --primary-color-rgb: 52, 152, 219;
-  --secondary-color-rgb: 46, 204, 113;
-  --accent-color-rgb: 231, 76, 60;
+  --primary-color-rgb: 0, 122, 255;
+  --secondary-color-rgb: 52, 199, 89;
+  --accent-color-rgb: 255, 59, 48;
 }
 
 body {
   font-family: var(--font-family);
   background-color: var(--background-color);
   margin: 0;
-  padding: 20px;
+  padding: 0; /* padding 0 para que el contenedor lo maneje */
   display: flex;
   justify-content: center;
-  align-items: center;
-  min-height: 100vh; /* Para centrar verticalmente en pantallas grandes */
+  align-items: flex-start; /* Alinea al inicio verticalmente para evitar mucho espacio arriba */
+  min-height: 100vh;
+  box-sizing: border-box; /* Asegura que padding y border estén incluidos en el width/height */
+  padding-top: 40px; /* Un poco de espacio desde arriba */
+  padding-bottom: 40px; /* Un poco de espacio desde abajo */
 }
 
 .contenedor {
@@ -33,15 +36,17 @@ body {
   padding: 30px;
   border-radius: var(--border-radius);
   max-width: 550px;
-  width: 100%;
+  width: calc(100% - 40px); /* Ocupa casi todo el ancho con un margen a los lados */
   box-shadow: var(--box-shadow);
+  box-sizing: border-box;
 }
 
 h1 {
-  color: var(--primary-color);
+  color: var(--text-color-primary);
   text-align: center;
   margin-bottom: 25px;
-  font-weight: 600;
+  font-weight: 700; /* Más audaz */
+  font-size: 28px; /* Tamaño de título */
 }
 
 .oculto {
@@ -49,45 +54,64 @@ h1 {
 }
 
 input,
-select,
-button {
+select {
   font-family: var(--font-family);
-  font-size: 16px;
+  font-size: 17px; /* Tamaño de texto de input iOS */
   font-weight: 400;
-  border-radius: var(--border-radius);
+  border-radius: 10px; /* Ligeramente menos redondeado para inputs */
   border: 1px solid var(--border-color);
-  padding: 12px 15px;
+  padding: 14px 15px; /* Más padding vertical */
   margin-bottom: 15px;
   box-sizing: border-box;
   width: 100%;
   outline: none;
-  transition: border-color 0.3s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  color: var(--text-color-primary);
+  -webkit-appearance: none; /* Eliminar estilos por defecto en iOS */
+  -moz-appearance: none;
+  appearance: none;
 }
+
+input::placeholder {
+    color: var(--color-gray-500); /* Color de placeholder más sutil */
+    opacity: 1; /* Asegurar visibilidad */
+}
+
 
 input:focus,
 select:focus {
   border-color: var(--primary-color);
-  box-shadow: 0 0 5px rgba(var(--primary-color-rgb), 0.5);
+  box-shadow: 0 0 0 3px rgba(var(--primary-color-rgb), 0.2); /* Sombra de foco iOS */
 }
 
 button {
+  font-family: var(--font-family);
+  font-size: 17px;
+  font-weight: 600; /* Más audaz */
   background-color: var(--primary-color);
   color: white;
   border: none;
+  border-radius: 10px; /* Botones también ligeramente menos redondeados */
   cursor: pointer;
-  font-weight: 500;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.2s ease, opacity 0.2s ease;
   padding: 14px 20px;
+  width: 100%; /* Ocupa todo el ancho por defecto */
+  margin-bottom: 10px; /* Espacio entre botones */
 }
 
 button:hover {
-  background-color: #2980b9;
+  background-color: #006ee6; /* Un tono más oscuro de azul */
+}
+
+button:active {
+  opacity: 0.8; /* Efecto de click */
 }
 
 .flex-row {
   display: flex;
   gap: 10px;
   margin-bottom: 15px;
+  flex-wrap: wrap; /* Para que se ajusten en pantallas pequeñas */
 }
 
 .flex-grow {
@@ -95,15 +119,16 @@ button:hover {
 }
 
 .tipo-toggle-btn {
-  background-color: var(--secondary-color); /* Por defecto ingreso */
+  background-color: var(--secondary-color);
   color: white;
   border: none;
   cursor: pointer;
-  font-weight: 500;
-  border-radius: var(--border-radius);
-  padding: 12px 15px;
-  width: auto;
-  transition: background-color 0.3s ease;
+  font-weight: 600;
+  border-radius: 10px;
+  padding: 14px 15px;
+  width: auto; /* Ancho ajustado al contenido */
+  transition: background-color 0.2s ease, opacity 0.2s ease;
+  flex-shrink: 0; /* Evita que se encoja en flex-row */
 }
 
 .tipo-toggle-btn.tipo-gasto {
@@ -114,56 +139,70 @@ button:hover {
   filter: brightness(0.95);
 }
 
+.tipo-toggle-btn:active {
+  opacity: 0.8;
+}
+
 /* Estilos para notificaciones */
 .notification {
-  background-color: #f9e79f; /* Amarillo claro */
-  color: var(--text-color-primary); /* Ajustado a color de texto primario */
-  padding: 15px;
-  border-radius: var(--border-radius);
-  margin: 10px auto 20px auto; /* Margen superior, centrado, margen inferior */
-  max-width: 500px; /* Ancho máximo para la notificación */
+  background-color: var(--card-background); /* Fondo de tarjeta para notificaciones */
+  color: var(--text-color-primary);
+  padding: 15px 20px; /* Más padding para que se vea mejor */
+  border-radius: 10px; /* Bordes suaves */
+  margin: 15px auto; /* Espacio y centrado */
+  max-width: 500px;
   text-align: center;
   font-weight: 500;
   box-shadow: var(--box-shadow);
-  transition: opacity 0.3s ease, visibility 0.3s ease, height 0.3s ease, padding 0.3s ease, margin 0.3s ease;
+  /* Transiciones para que aparezcan y desaparezcan suavemente */
+  transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease, height 0.3s ease, padding 0.3s ease, margin 0.3s ease;
+  overflow: hidden; /* Asegura que el contenido no se desborde al ocultarse */
 }
 
 .notification.error {
-  background-color: #fdecea; /* Rojo muy claro */
+  background-color: rgba(var(--accent-color-rgb), 0.1); /* Fondo muy claro del color de acento */
   color: var(--accent-color);
-  border: 1px solid rgba(var(--accent-color-rgb), 0.3);
+  border: 1px solid rgba(var(--accent-color-rgb), 0.2);
 }
 
 .notification.exito {
-  background-color: #e6f9e8; /* Verde muy claro */
+  background-color: rgba(var(--secondary-color-rgb), 0.1);
   color: var(--secondary-color);
-  border: 1px solid rgba(var(--secondary-color-rgb), 0.3);
+  border: 1px solid rgba(var(--secondary-color-rgb), 0.2);
 }
 
 .notification.ocultar {
   opacity: 0;
   visibility: hidden;
   height: 0;
-  padding: 0;
+  padding: 0 20px; /* Mantener padding horizontal al ocultar para la transición */
   margin: 0 auto; /* Mantener el centrado al ocultar */
+  transform: translateY(-20px); /* Desaparece hacia arriba */
 }
 
 .resumen {
-  background-color: #e8f0fe; /* Azul muy claro */
+  background-color: var(--card-background);
   padding: 15px;
   border-radius: var(--border-radius);
-  margin-top: 20px;
+  margin-top: 25px; /* Más espacio */
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around; /* Distribuir espacio */
   align-items: center;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--text-color-primary);
   box-shadow: var(--box-shadow);
 }
 
 .resumen-item {
-  flex: 1; /* Permite que los ítems tomen espacio equitativo */
   text-align: center;
+  flex: 1; /* Permite que los ítems tomen espacio equitativo */
+  padding: 0 5px; /* Pequeño padding interno */
+}
+
+.resumen-item span {
+  display: block; /* Para que el valor esté en una nueva línea */
+  font-size: 18px; /* Tamaño más grande para los valores */
+  margin-top: 5px;
 }
 
 .resumen-ingresos {
@@ -177,7 +216,8 @@ button:hover {
 #lista {
   list-style: none;
   padding: 0;
-  margin-top: 20px;
+  margin-top: 25px; /* Más espacio */
+  border-top: 1px solid var(--border-color); /* Borde superior para la lista */
 }
 
 .movimiento-item {
@@ -186,16 +226,17 @@ button:hover {
   align-items: center;
   padding: 15px 0;
   border-bottom: 1px solid var(--border-color);
+  color: var(--text-color-primary);
 }
 
 .movimiento-item:last-child {
-  border-bottom: none; /* Elimina el borde del último elemento de la lista */
+  border-bottom: none;
 }
 
 .movimiento-text {
   flex-grow: 1;
-  font-size: 16px;
-  color: var(--text-color-primary);
+  font-size: 17px;
+  line-height: 1.4; /* Mejor legibilidad */
 }
 
 .eliminar-btn {
@@ -204,12 +245,16 @@ button:hover {
   color: var(--accent-color);
   cursor: pointer;
   font-weight: bold;
-  font-size: 18px;
-  padding: 5px;
-  opacity: 0.7;
-  transition: opacity 0.3s ease;
+  font-size: 20px; /* Más grande para que sea fácil de tocar */
+  padding: 5px 10px;
+  opacity: 0.8;
+  transition: opacity 0.2s ease, transform 0.1s ease;
 }
 
 .eliminar-btn:hover {
   opacity: 1;
+}
+
+.eliminar-btn:active {
+  transform: scale(0.95); /* Pequeño efecto de "presión" */
 }
