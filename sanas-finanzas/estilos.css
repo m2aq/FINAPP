@@ -1,89 +1,149 @@
+/* --- Estilos Generales --- */
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
     Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-  background: #f0f0f0;
+  background: #f4f7f6; /* Fondo más suave */
   margin: 0;
   padding: 20px;
+  color: #333;
 }
 
 .contenedor {
   background: white;
-  padding: 20px;
-  border-radius: 12px;
+  padding: 25px 20px; /* Más padding */
+  border-radius: 16px; /* Bordes más redondeados */
   max-width: 500px;
-  margin: auto;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  padding-bottom: 40px; /* Más espacio abajo */
+  margin: 20px auto; /* Espacio arriba/abajo */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); /* Sombra más pronunciada */
+  display: flex;
+  flex-direction: column; /* Para que los elementos fluyan verticalmente */
 }
 
 .oculto {
-  display: none;
+  display: none !important; /* Usar !important para asegurar que oculte */
 }
 
-input,
-select,
-button {
-  font-size: 17px;
+h1 {
+  text-align: center;
+  color: #28a745; /* Color principal */
+  margin-bottom: 25px;
+  font-size: 2em;
+}
+
+h2 {
+  font-size: 1.4em;
+  margin-top: 25px;
+  margin-bottom: 15px;
+  color: #333;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 5px;
+}
+
+/* --- Login Container --- */
+#login-container h1 {
+    color: #333; /* Color de título para login */
+}
+#login-container input,
+#login-container button {
+    margin-top: 10px; /* Margen más ajustado */
+}
+#login-container button {
+    margin-top: 15px; /* Botones login/register con más separación */
+}
+
+
+/* --- App Container y Componentes --- */
+.app-container {
+  position: relative; /* Para poder posicionar el botón de logout abajo */
+  padding-bottom: 80px; /* Espacio para el botón de logout fijo abajo */
+}
+
+.app-header {
+  text-align: center;
+  margin-bottom: 30px;
+  background-color: #e9f7ef; /* Fondo verde claro para el balance */
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #d1ecd8;
+}
+
+.app-header h1 {
+  margin-bottom: 10px;
+  font-size: 1.2em;
+  color: #28a745;
+}
+
+.balance-principal {
+  font-size: 2.5em;
+  font-weight: bold;
+  color: #28a745;
+}
+
+/* --- Formulario de Transacción --- */
+.form-section {
+  margin-bottom: 30px;
+}
+
+.input-group {
+  margin-bottom: 12px; /* Espacio entre campos */
+}
+
+.input-group input:focus,
+.input-group select:focus {
+  border-color: #28a745;
+  box-shadow: 0 0 8px #28a74599; /* Sombra más pronunciada en foco */
+}
+
+/* Estilos base para todos los inputs y selects */
+input[type="text"],
+input[type="number"],
+select {
+  font-size: 1rem; /* Ajustar tamaño de fuente */
   font-weight: 500;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-  border-radius: 14px;
-  border: 1.5px solid #ccc;
-  padding: 14px 16px;
-  margin: 8px 0; /* Margen vertical ajustado */
-  box-sizing: border-box;
+  border-radius: 12px; /* Bordes más suaves */
+  border: 1.5px solid #ced4da; /* Color de borde más estándar */
+  padding: 15px 18px; /* Padding */
   outline-offset: 3px;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
   width: 100%;
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  cursor: pointer;
+  box-sizing: border-box; /* Asegurar que padding no afecte el width */
 }
 
-input:focus,
-select:focus {
+/* Ajustes específicos para el input de monto cuando se enfoca */
+input[type="number"].color-gasto {
+  border-color: #dc3545;
+  box-shadow: 0 0 6px #dc3545aa;
+}
+input[type="number"].color-ingreso {
   border-color: #28a745;
   box-shadow: 0 0 6px #28a745aa;
 }
 
-button {
-  background-color: #28a745;
-  color: white;
-  border: none;
-  cursor: pointer;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  user-select: none;
-}
 
-button:hover {
-  background-color: #218838;
-}
-
-.flex-row {
+.flex-row { /* Usado para monto y toggle */
   display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  align-items: center; /* Alineación para que los elementos se vean bien */
+  gap: 12px;
+  align-items: center; /* Alinea elementos verticalmente */
+  flex-wrap: wrap; /* Permite que se adapte si no hay espacio */
 }
 
 .flex-grow {
-  flex-grow: 1;
+  flex-grow: 1; /* Hace que el input tome el espacio disponible */
 }
 
 .tipo-toggle-btn {
-  width: 110px; /* Ajustado un poco si es necesario */
-  padding: 14px 12px; /* Ajuste fino de padding */
-  font-size: 17px;
+  width: 110px;
+  padding: 15px 18px; /* Alinear padding con inputs */
+  font-size: 1rem; /* Mismo tamaño de fuente */
   font-weight: 600;
-  border-radius: 14px;
+  border-radius: 12px;
   border: none;
   cursor: pointer;
   user-select: none;
   color: white;
-  transition: background-color 0.3s ease;
-  flex-shrink: 0; /* Evitar que se encoja demasiado */
+  transition: background-color 0.3s ease, filter 0.3s ease;
+  flex-shrink: 0; /* Evita que se encoja */
+  text-align: center;
 }
 
 .tipo-ingreso {
@@ -98,62 +158,98 @@ button:hover {
   filter: brightness(0.9);
 }
 
-.error-msg {
-  color: #dc3545;
+.btn-agregar-transaccion {
+  width: 100%;
+  padding: 16px 20px; /* Padding mayor */
+  font-size: 1.1rem; /* Fuente más grande */
   font-weight: 600;
-  margin: 5px 0 0 0;
-  font-size: 0.9em;
+  letter-spacing: 0.03em;
+  margin-top: 10px; /* Espacio sobre el botón */
 }
 
-/* Estilo para el mensaje de lista vacía */
-.mensaje-vacio {
+/* --- Resumen --- */
+.resumen-section {
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+.resumen {
+  font-weight: 600;
+  font-size: 1em;
+  display: flex;
+  justify-content: space-between;
+  background: #e9f7ef; /* Fondo verde claro */
+  padding: 16px 20px;
+  border-radius: 12px;
+  border: 1px solid #d1ecd8;
+  flex-wrap: wrap; /* Permite wrap en pantallas pequeñas */
+  gap: 15px; /* Espacio entre items */
+}
+
+.resumen-item {
+  flex: 1; /* Permite que cada item ocupe espacio equitativamente */
+  text-align: center;
+  min-width: 100px; /* Ancho mínimo para que no colapsen mucho */
+}
+
+.resumen-ingresos {
+  color: #28a745; /* Verde para ingresos */
+}
+
+.resumen-gastos {
+  color: #dc3545; /* Rojo para gastos */
+}
+
+
+/* --- Lista de Transacciones --- */
+.transacciones-section {
+    margin-top: 20px;
+}
+.transacciones-section h2 {
     text-align: center;
-    color: #888;
-    font-style: italic;
-    margin-top: 30px;
-    font-size: 1.1em;
-    padding: 0 15px; /* Añade un poco de padding horizontal */
+    border: none;
+    margin-bottom: 20px;
 }
 
-/* Estilos para los ítems de la lista de movimientos */
 .movimiento-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 15px; /* Más padding */
-  border-bottom: 1px solid #eee;
-  margin-bottom: 8px; /* Espacio entre elementos */
-  background-color: #f9f9f9; /* Fondo suave para cada ítem */
-  border-radius: 8px; /* Bordes redondeados */
-  transition: background-color 0.2s ease, transform 0.2s ease;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.05); /* Sutil sombra */
-}
-
-.movimiento-item:last-child {
-  border-bottom: none; /* No bordes en el último item */
-  margin-bottom: 0;
+  padding: 14px 18px;
+  margin-bottom: 10px;
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  border-left: 5px solid #ccc; /* Borde predeterminado */
+  transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  position: relative; /* Necesario para posicionar elementos internos como el botón oculto */
+  overflow: hidden; /* Esconde el contenido fuera de los límites */
 }
 
 .movimiento-item:hover {
-  background-color: #f0f0f0; /* Efecto hover */
-  transform: translateY(-2px); /* Ligero levantamiento */
-  box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+  background-color: #f0f0f0;
+  transform: translateY(-3px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
 /* Indicadores visuales para Ingreso y Gasto */
 .movimiento-item-ingreso {
-  border-left: 5px solid #28a745; /* Borde izquierdo verde */
+  border-left: 5px solid #28a745; /* Verde */
+}
+.movimiento-item-gasto {
+  border-left: 5px solid #dc3545; /* Rojo */
 }
 
-.movimiento-item-gasto {
-  border-left: 5px solid #dc3545; /* Borde izquierdo rojo */
+.movimiento-content { /* Contenedor para el texto principal del movimiento */
+    display: flex;
+    align-items: center;
+    flex-grow: 1; /* Ocupa todo el espacio posible */
+    gap: 8px;
+    overflow: hidden; /* Asegura que el texto no se salga */
+    white-space: nowrap; /* Evita que el texto se rompa en varias líneas si es muy largo */
+    text-overflow: ellipsis; /* Muestra puntos suspensivos si el texto es muy largo */
 }
 
 .movimiento-text {
-  flex-grow: 1;
-  display: flex; /* Usa flexbox para alinear contenido interno */
-  align-items: center;
-  gap: 8px; /* Espacio entre fecha, símbolo, monto, categoría */
   font-size: 16px;
   color: #333;
 }
@@ -161,38 +257,117 @@ button:hover {
 .fecha-movimiento {
   color: #555;
   font-weight: 500;
-  font-size: 0.95em;
-  flex-shrink: 0; /* Evita que la fecha se encoja */
+  font-size: 0.9em;
+  flex-shrink: 0;
 }
 
 .monto-movimiento {
   font-weight: 600;
   min-width: 70px; /* Ancho mínimo para alinear montos */
-  text-align: right; /* Alinear monto a la derecha */
+  text-align: right;
+  flex-shrink: 0; /* Evita que el monto se encoja */
 }
 
 .categoria-movimiento {
-    font-size: 0.9em;
+    font-size: 0.85em;
     color: #777;
     font-style: italic;
-    flex-shrink: 0; /* Evita que la categoría se encoja */
+    flex-shrink: 0;
+    max-width: 100px; /* Ancho máximo para la categoría */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
-/* Estilos para el botón de eliminar */
+/* Botón de eliminar (preparado para swipe) */
 .eliminar-btn {
-  background-color: transparent;
+  background-color: #dc3545; /* Fondo rojo */
+  color: white;
   border: none;
-  color: #dc3545;
   cursor: pointer;
   font-weight: 700;
-  font-size: 24px; /* Más grande */
-  padding: 0 12px; /* Más padding horizontal */
-  user-select: none;
-  opacity: 0.7;
-  transition: opacity 0.2s ease, color 0.2s ease;
+  font-size: 18px;
+  padding: 14px 20px; /* Padding para que sea fácil de presionar */
+  border-radius: 12px;
+  margin-left: 10px; /* Espacio al botón principal */
+  transition: opacity 0.2s ease, color 0.2s ease, background-color 0.2s ease;
+  flex-shrink: 0;
+}
+.eliminar-btn:hover {
+  background-color: #c82333; /* Rojo más oscuro al hover */
 }
 
-.eliminar-btn:hover {
-  opacity: 1;
-  color: #a00; /* Rojo más oscuro */
+/* --- Botón de Logout --- */
+.btn-logout {
+  display: block; /* Para que ocupe todo el ancho */
+  width: 100%;
+  background-color: #6c757d; /* Color gris neutro para logout */
+  color: white;
+  padding: 15px 20px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 12px;
+  margin-top: 20px; /* Espacio si no está fijo */
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.2s ease;
+  letter-spacing: 0.03em;
+}
+.btn-logout:hover {
+  background-color: #5a6268;
+}
+
+/* Posicionamiento fijo para logout (opcional, pero común) */
+/* .app-container { position: relative; padding-bottom: 80px; } */
+/* .btn-logout { position: sticky; bottom: 20px; } */
+/* Ajustaré el padding del .contenedor para que funcione con un bottom fijo si lo implementamos */
+
+
+/* --- Mensaje de Lista Vacía --- */
+.mensaje-vacio {
+    text-align: center;
+    color: #888;
+    font-style: italic;
+    margin-top: 30px;
+    font-size: 1.1em;
+    padding: 0 15px;
+}
+
+/* --- Errores --- */
+.error-msg {
+  color: #dc3545;
+  font-weight: 600;
+  margin-top: 10px; /* Más espacio para los mensajes de error */
+  font-size: 0.95em;
+  text-align: center; /* Centrar mensajes de error */
+}
+
+/* --- Responsividad --- */
+@media (max-width: 600px) {
+  body {
+    padding: 10px; /* Menos padding en pantallas pequeñas */
+  }
+  .contenedor {
+    margin: 10px auto;
+    padding: 20px 15px; /* Ajuste de padding */
+  }
+  .flex-row {
+    flex-direction: column; /* Columnar en pantallas pequeñas si no cabe */
+    gap: 0; /* Resetear gap si se vuelve columnar */
+  }
+  .input-group.flex-row .flex-grow,
+  .input-group.flex-row .tipo-toggle-btn {
+    width: 100%; /* Ambos ocupan todo el ancho */
+    margin-bottom: 12px; /* Espacio entre ellos */
+  }
+  .resumen {
+    flex-direction: column; /* Columnar el resumen */
+    align-items: center;
+  }
+  .resumen-item {
+      margin-bottom: 10px;
+  }
+  .resumen-item:last-child {
+      margin-bottom: 0;
+  }
 }
