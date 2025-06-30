@@ -13,13 +13,15 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 </head>
 <body>
+  <div id="notification" class="notification ocultar"></div>
+
   <div class="contenedor" id="login-container">
     <h1>Sanas Finanzas</h1>
     <input type="email" id="email" placeholder="Correo electrónico" />
     <input type="password" id="password" placeholder="Contraseña" />
     <button onclick="login()">Iniciar sesión</button>
     <button onclick="register()">Registrarse</button>
-    <div id="notification" class="notification ocultar"></div> </div>
+    </div>
 
   <div class="contenedor oculto" id="app-container">
     <h1>Balance: <span id="balance">$0</span></h1>
@@ -37,7 +39,7 @@
       <option value="Otros">Otros</option>
     </select>
     <button onclick="agregarTransaccion()">Agregar</button>
-    <div id="notification" class="notification ocultar"></div> <div class="resumen" style="margin-top:20px;">
+    <div class="resumen" style="margin-top:20px;">
       <div class="resumen-item resumen-ingresos">Ingresos: <span id="total-ingresos">$0</span></div>
       <div class="resumen-item resumen-gastos">Gastos: <span id="total-gastos">$0</span></div>
       <div class="resumen-item">Balance: <span id="balance-det">$0</span></div>
