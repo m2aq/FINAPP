@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 <title>Sanas Finanzas</title>
 <link rel="stylesheet" href="estilos.css" />
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
@@ -13,47 +13,55 @@
 
 <div id="login-container" class="contenedor">
   <h2>Iniciar sesión</h2>
-  <input type="email" id="email" placeholder="Correo electrónico" />
-  <input type="password" id="password" placeholder="Contraseña" />
+  <input type="email" id="email" placeholder="Correo electrónico" autocomplete="username" />
+  <input type="password" id="password" placeholder="Contraseña" autocomplete="current-password" />
   <button onclick="login()">Entrar</button>
   <button onclick="register()">Registrarse</button>
   <p id="error-login" class="error-msg"></p>
 </div>
 
 <div id="app-container" class="contenedor oculto">
-
   <h1>Sanas Finanzas</h1>
 
-  <div class="flex-row balance-monto">
-    <div id="balance-grande">$0.00</div>
-    <input id="monto" type="number" placeholder="Monto" />
-  </div>
+  <form id="formulario" onsubmit="event.preventDefault(); agregarTransaccion();">
+    <div class="input-group">
+      <input id="descripcion" type="text" placeholder="Descripción" required autocomplete="off" />
+    </div>
 
-  <div class="tipo-btn-group">
-    <button id="btnIngreso" class="tipo-toggle-btn tipo-ingreso">Ingreso</button>
-    <button id="btnGasto" class="tipo-toggle-btn tipo-gasto inactivo">Gasto</button>
-  </div>
+    <div class="input-group flex-row">
+      <input id="monto" type="number" placeholder="Monto" min="0.01" step="0.01" required />
+      <div class="tipo-btn-group">
+        <button type="button" id="btnIngreso" class="tipo-toggle-btn tipo-ingreso activo">Ingreso</button>
+        <button type="button" id="btnGasto" class="tipo-toggle-btn tipo-gasto">Gasto</button>
+      </div>
+    </div>
 
-  <div class="formulario">
-    <input id="descripcion" type="text" placeholder="Descripción" />
-    <select id="categoria">
-      <option>General</option>
-      <option>Comida</option>
-      <option>Transporte</option>
-      <option>Hogar</option>
-      <option>Salud</option>
-      <option>Ocio</option>
-    </select>
-    <button onclick="agregarTransaccion()">Agregar</button>
+    <div class="input-group">
+      <select id="categoria" required>
+        <option value="" disabled selected>Selecciona categoría</option>
+        <option>General</option>
+        <option>Comida</option>
+        <option>Transporte</option>
+        <option>Hogar</option>
+        <option>Salud</option>
+        <option>Ocio</option>
+      </select>
+    </div>
+
+    <button type="submit" class="btn-agregar">Agregar</button>
     <p id="error-transaccion" class="error-msg"></p>
-  </div>
+  </form>
 
   <ul id="lista"></ul>
+
+  <div id="balance-container">
+    <h2>Balance General</h2>
+    <p id="balance-grande" class="balance-positivo">$0.00</p>
+  </div>
 
   <button id="logoutBtn" onclick="logout()">Cerrar sesión</button>
 </div>
 
 <script src="script.js"></script>
-
 </body>
 </html>
