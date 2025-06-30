@@ -29,13 +29,11 @@ const lista = document.getElementById('lista');
 
 const totalIngresosEl = document.getElementById('total-ingresos');
 const totalGastosEl = document.getElementById('total-gastos');
-const balanceEl = document.getElementById('balance');
 
 let tipo = 'ingreso'; // ingreso o gasto
 let transacciones = [];
 let editandoId = null;
 
-// Cambia el tipo ingreso/gasto
 function toggleTipo() {
   if (tipo === 'ingreso') {
     tipo = 'gasto';
@@ -50,7 +48,6 @@ function toggleTipo() {
   }
 }
 
-// Formatea números a moneda MXN con miles y decimales
 function formatearMoneda(num) {
   return num.toLocaleString('es-MX', {
     style: 'currency',
@@ -59,7 +56,6 @@ function formatearMoneda(num) {
   });
 }
 
-// Dibuja las transacciones en la lista
 function mostrarTransacciones() {
   lista.innerHTML = '';
   transacciones.forEach(tx => {
@@ -70,7 +66,6 @@ function mostrarTransacciones() {
     texto.className = 'movimiento-text';
     texto.textContent = `[${tx.categoria}] ${tx.descripcion} - ${formatearMoneda(tx.monto)} (${tx.tipo})`;
 
-    // Botón editar
     const btnEditar = document.createElement('button');
     btnEditar.className = 'eliminar-btn';
     btnEditar.style.color = '#17a2b8';
@@ -78,7 +73,6 @@ function mostrarTransacciones() {
     btnEditar.title = 'Editar';
     btnEditar.onclick = () => editarTransaccion(tx.id);
 
-    // Botón eliminar
     const btnEliminar = document.createElement('button');
     btnEliminar.className = 'eliminar-btn';
     btnEliminar.textContent = '❌';
@@ -94,7 +88,6 @@ function mostrarTransacciones() {
   actualizarResumen();
 }
 
-// Actualiza el resumen de ingresos, gastos y balance con color
 function actualizarResumen() {
   const ingresos = transacciones
     .filter(tx => tx.tipo === 'ingreso')
@@ -107,15 +100,16 @@ function actualizarResumen() {
   totalIngresosEl.textContent = formatearMoneda(ingresos);
   totalGastosEl.textContent = formatearMoneda(gastos);
 
-  balanceEl.textContent = `Balance: ${formatearMoneda(balance)}`;
+  const balanceGrande = document.getElementById('balance-grande');
+  balanceGrande.textContent = formatearMoneda(balance);
+
   if (balance >= 0) {
-    balanceEl.style.color = '#28a745';
+    balanceGrande.style.color = '#28a745';
   } else {
-    balanceEl.style.color = '#dc3545';
+    balanceGrande.style.color = '#dc3545';
   }
 }
 
-// Agrega o actualiza una transacción
 async function agregarTransaccion() {
   errorTransaccion.textContent = '';
 
@@ -139,13 +133,11 @@ async function agregarTransaccion() {
 
   try {
     if (editandoId) {
-      // Actualizar documento
       await db.collection('usuarios').doc(uid)
         .collection('transacciones').doc(editandoId).update(transaccion);
       editandoId = null;
       tipoToggleBtn.disabled = false;
     } else {
-      // Agregar nuevo documento
       await db.collection('usuarios').doc(uid)
         .collection('transacciones').add(transaccion);
     }
@@ -162,7 +154,6 @@ async function agregarTransaccion() {
   }
 }
 
-// Cargar transacciones en tiempo real para el usuario actual
 function cargarTransacciones() {
   const uid = auth.currentUser.uid;
   db.collection('usuarios').doc(uid)
@@ -177,7 +168,6 @@ function cargarTransacciones() {
     });
 }
 
-// Editar una transacción (carga valores en el formulario)
 function editarTransaccion(id) {
   const tx = transacciones.find(t => t.id === id);
   if (!tx) return;
@@ -195,7 +185,6 @@ function editarTransaccion(id) {
   tipoToggleBtn.disabled = true;
 }
 
-// Eliminar una transacción
 async function eliminarTransaccion(id) {
   if (!confirm('¿Eliminar esta transacción?')) return;
 
@@ -208,7 +197,6 @@ async function eliminarTransaccion(id) {
   }
 }
 
-// Login con Firebase
 async function login() {
   errorLogin.textContent = '';
   const email = emailInput.value.trim();
@@ -226,7 +214,6 @@ async function login() {
   }
 }
 
-// Registro con Firebase
 async function register() {
   errorLogin.textContent = '';
   const email = emailInput.value.trim();
@@ -244,12 +231,10 @@ async function register() {
   }
 }
 
-// Logout
 async function logout() {
   await auth.signOut();
 }
 
-// Detecta cambios en el estado de autenticación
 auth.onAuthStateChanged(user => {
   if (user) {
     loginContainer.classList.add('oculto');
