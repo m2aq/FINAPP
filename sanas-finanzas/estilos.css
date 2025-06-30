@@ -150,3 +150,47 @@ button:hover {
 .resumen-gastos {
   color: #dc3545;
 }
+.boton-burbuja {
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  margin-left: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  transition: background-color 0.2s ease;
+}
+
+.boton-editar {
+  background-color: #17a2b8;
+}
+
+.boton-editar:hover {
+  background-color: #138496;
+}
+
+.boton-eliminar {
+  background-color: #dc3545;
+}
+
+.boton-eliminar:hover {
+  background-color: #bd2130;
+}
+
+#balance {
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.balance-positivo {
+  color: #28a745;
+}
+
+.balance-negativo {
+  color: #dc3545;
+}
