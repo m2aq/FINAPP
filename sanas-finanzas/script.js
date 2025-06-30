@@ -4,8 +4,7 @@ const firebaseConfig = {
   projectId: "sanas-finanzas-450a6",
   storageBucket: "sanas-finanzas-450a6.appspot.com",
   messagingSenderId: "585032859960",
-  appId: "1:585032859960:web:1d7594cf4c3d58214e01cd",
-  measurementId: "G-BWNH2QJTTB"
+  appId: "1:585032859960:web:1d7594cf4c3d58214e01cd"
 };
 
 firebase.initializeApp(firebaseConfig);
@@ -27,6 +26,8 @@ const totalIngresosElem = document.getElementById("total-ingresos");
 const totalGastosElem = document.getElementById("total-gastos");
 
 let tipo = "ingreso";
+
+const formatDinero = n => `$${n.toLocaleString("es-MX", { minimumFractionDigits: 2 })}`;
 
 auth.onAuthStateChanged(user => {
   if (user) {
@@ -50,8 +51,7 @@ function login() {
     errorLogin.textContent = "Ingresa correo y contraseña.";
     return;
   }
-  auth.signInWithEmailAndPassword(email, password)
-    .catch(e => errorLogin.textContent = e.message);
+  auth.signInWithEmailAndPassword(email, password).catch(e => errorLogin.textContent = e.message);
 }
 
 function register() {
@@ -62,8 +62,7 @@ function register() {
     errorLogin.textContent = "Ingresa correo y contraseña.";
     return;
   }
-  auth.createUserWithEmailAndPassword(email, password)
-    .catch(e => errorLogin.textContent = e.message);
+  auth.createUserWithEmailAndPassword(email, password).catch(e => errorLogin.textContent = e.message);
 }
 
 function logout() {
@@ -104,10 +103,7 @@ function agregarTransaccion() {
   }
 
   const user = auth.currentUser;
-  if (!user) {
-    errorTransaccion.textContent = "No estás autenticado.";
-    return;
-  }
+  if (!user) return;
 
   const transaccion = {
     descripcion,
@@ -139,14 +135,19 @@ function cargarDatos() {
       const li = document.createElement("li");
       li.className = "movimiento-item";
 
-      const texto = `${t.descripcion} - $${t.monto.toFixed(2)} (${t.categoria})`;
       const spanTexto = document.createElement("span");
       spanTexto.className = "movimiento-text";
-      spanTexto.textContent = texto;
+      spanTexto.textContent = `${t.descripcion} - ${formatDinero(t.monto)} (${t.categoria})`;
+
+      const btnEditar = document.createElement("button");
+      btnEditar.className = "boton-burbuja boton-editar";
+      btnEditar.textContent = "✏️";
+      btnEditar.title = "Editar (no implementado)";
+      btnEditar.disabled = true; // futuro
 
       const btnEliminar = document.createElement("button");
-      btnEliminar.className = "eliminar-btn";
-      btnEliminar.textContent = "×";
+      btnEliminar.className = "boton-burbuja boton-eliminar";
+      btnEliminar.textContent = "✕";
       btnEliminar.title = "Eliminar movimiento";
       btnEliminar.onclick = () => {
         if (confirm("¿Eliminar este movimiento?")) {
@@ -155,6 +156,7 @@ function cargarDatos() {
       };
 
       li.appendChild(spanTexto);
+      li.appendChild(btnEditar);
       li.appendChild(btnEliminar);
       lista.appendChild(li);
 
@@ -163,10 +165,11 @@ function cargarDatos() {
     });
 
     const balance = ingresos - gastos;
-    balanceElem.textContent = `$${balance.toFixed(2)}`;
-    balanceDetElem.textContent = `$${balance.toFixed(2)}`;
-    totalIngresosElem.textContent = `$${ingresos.toFixed(2)}`;
-    totalGastosElem.textContent = `$${gastos.toFixed(2)}`;
+    balanceElem.textContent = formatDinero(balance);
+    balanceElem.className = balance >= 0 ? "balance-positivo" : "balance-negativo";
+    balanceDetElem.textContent = formatDinero(balance);
+    totalIngresosElem.textContent = formatDinero(ingresos);
+    totalGastosElem.textContent = formatDinero(gastos);
   });
 }
 
