@@ -1,61 +1,89 @@
 body {
-  font-family: Arial, sans-serif;
-  margin: 20px;
-  background: #f0f2f5;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f0f2f5;
+  margin: 0;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-h1, h2 {
+h1 {
+  color: #333;
   margin-bottom: 10px;
 }
 
-input, select, button {
-  padding: 10px;
-  margin: 5px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  font-size: 16px;
+h2 {
+  margin: 5px 0;
 }
 
-select, input[type="number"] {
-  width: 180px;
+input, select, button {
+  padding: 12px;
+  margin: 6px;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  outline: none;
+  box-sizing: border-box;
+}
+
+input:focus, select:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 4px rgba(0, 123, 255, 0.5);
 }
 
 button {
-  cursor: pointer;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #0056b3;
 }
 
 #tipoToggleBtn {
   background-color: #28a745;
-  color: white;
-  border: none;
 }
 
 .tipo-gasto {
   background-color: #dc3545 !important;
 }
 
-.formulario {
-  margin: 20px 0;
+.formulario, .resumen {
+  width: 100%;
+  max-width: 400px;
+  background-color: white;
+  border-radius: 16px;
+  box-shadow: 0 0 12px rgba(0,0,0,0.1);
+  padding: 20px;
+  margin-top: 20px;
 }
 
-ul {
+#lista {
+  width: 100%;
+  max-width: 400px;
   list-style: none;
   padding: 0;
+  margin-top: 20px;
 }
 
 .movimiento-item {
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 10px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: white;
-  border: 1px solid #ccc;
-  margin-bottom: 5px;
-  padding: 10px;
-  border-radius: 6px;
 }
 
 .movimiento-text {
   flex: 1;
+  font-size: 15px;
+  color: #333;
 }
 
 .boton-burbuja {
@@ -63,7 +91,7 @@ ul {
   border-radius: 50%;
   width: 32px;
   height: 32px;
-  margin-left: 6px;
+  margin-left: 8px;
   font-size: 16px;
   font-weight: bold;
   cursor: pointer;
@@ -71,22 +99,29 @@ ul {
   align-items: center;
   justify-content: center;
   color: white;
+  transition: background-color 0.2s ease;
 }
 
 .boton-editar {
   background-color: #17a2b8;
 }
 
-.boton-eliminar {
-  background-color: #dc3545;
-}
-
 .boton-editar:hover {
   background-color: #138496;
 }
 
+.boton-eliminar {
+  background-color: #dc3545;
+}
+
 .boton-eliminar:hover {
-  background-color: #c82333;
+  background-color: #bd2130;
+}
+
+#balance {
+  font-size: 26px;
+  font-weight: 700;
+  text-align: center;
 }
 
 .balance-positivo {
@@ -103,4 +138,31 @@ ul {
 
 .error {
   color: red;
+  font-size: 14px;
+  margin-top: 6px;
+  text-align: center;
+}
+
+@media (max-width: 480px) {
+  input, select, button {
+    width: 100%;
+  }
+
+  .formulario, .resumen {
+    padding: 15px;
+  }
+
+  .movimiento-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .movimiento-text {
+    margin-bottom: 10px;
+  }
+
+  .boton-burbuja {
+    margin-left: 0;
+    margin-right: 8px;
+  }
 }
