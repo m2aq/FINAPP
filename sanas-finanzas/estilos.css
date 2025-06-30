@@ -1,18 +1,47 @@
+:root {
+  --primary-color: #3498db; /* Azul principal */
+  --secondary-color: #2ecc71; /* Verde secundario (éxito) */
+  --accent-color: #e74c3c; /* Rojo acento (error/gasto) */
+  --background-color: #f5f5f5; /* Fondo claro */
+  --card-background: #fff; /* Fondo de los contenedores */
+  --text-color-primary: #333; /* Texto principal oscuro */
+  --text-color-secondary: #777; /* Texto secundario gris */
+  --border-color: #ddd; /* Color de bordes */
+  --border-radius: 8px; /* Radio de los bordes */
+  --box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra suave */
+  --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Fuente moderna */
+
+  /* Para que los colores RGB sean accesibles para rgba() */
+  --primary-color-rgb: 52, 152, 219;
+  --secondary-color-rgb: 46, 204, 113;
+  --accent-color-rgb: 231, 76, 60;
+}
+
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
-    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-  background: #f0f0f0;
+  font-family: var(--font-family);
+  background-color: var(--background-color);
   margin: 0;
   padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; /* Para centrar verticalmente en pantallas grandes */
 }
 
 .contenedor {
-  background: white;
-  padding: 20px;
-  border-radius: 12px;
-  max-width: 500px;
-  margin: auto;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: var(--card-background);
+  padding: 30px;
+  border-radius: var(--border-radius);
+  max-width: 550px;
+  width: 100%;
+  box-shadow: var(--box-shadow);
+}
+
+h1 {
+  color: var(--primary-color);
+  text-align: center;
+  margin-bottom: 25px;
+  font-weight: 600;
 }
 
 .oculto {
@@ -22,48 +51,43 @@ body {
 input,
 select,
 button {
-  font-size: 17px;
-  font-weight: 500;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-  border-radius: 14px;
-  border: 1.5px solid #ccc;
-  padding: 14px 16px;
-  margin: 10px 0;
+  font-family: var(--font-family);
+  font-size: 16px;
+  font-weight: 400;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border-color);
+  padding: 12px 15px;
+  margin-bottom: 15px;
   box-sizing: border-box;
-  outline-offset: 3px;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
   width: 100%;
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  cursor: pointer;
+  outline: none;
+  transition: border-color 0.3s ease;
 }
 
 input:focus,
 select:focus {
-  border-color: #28a745;
-  box-shadow: 0 0 6px #28a745aa;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 5px rgba(var(--primary-color-rgb), 0.5);
 }
 
 button {
-  background-color: #28a745;
+  background-color: var(--primary-color);
   color: white;
   border: none;
   cursor: pointer;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  user-select: none;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+  padding: 14px 20px;
 }
 
 button:hover {
-  background-color: #218838;
+  background-color: #2980b9;
 }
 
 .flex-row {
   display: flex;
   gap: 10px;
-  flex-wrap: wrap;
+  margin-bottom: 15px;
 }
 
 .flex-grow {
@@ -71,51 +95,49 @@ button:hover {
 }
 
 .tipo-toggle-btn {
-  width: 110px;
-  padding: 14px;
-  font-size: 17px;
-  font-weight: 600;
-  border-radius: 14px;
+  background-color: var(--secondary-color); /* Por defecto ingreso */
+  color: white;
   border: none;
   cursor: pointer;
-  user-select: none;
-  color: white;
+  font-weight: 500;
+  border-radius: var(--border-radius);
+  padding: 12px 15px;
+  width: auto;
   transition: background-color 0.3s ease;
 }
 
-.tipo-ingreso {
-  background-color: #28a745;
-}
-
-.tipo-gasto {
-  background-color: #dc3545;
+.tipo-toggle-btn.tipo-gasto {
+  background-color: var(--accent-color);
 }
 
 .tipo-toggle-btn:hover {
-  filter: brightness(0.9);
+  filter: brightness(0.95);
 }
 
-/* Nuevos estilos para notificaciones */
+/* Estilos para notificaciones */
 .notification {
-  padding: 10px 15px;
-  margin: 10px auto; /* Centrar la notificación */
-  border-radius: 8px;
-  font-weight: 600;
+  background-color: #f9e79f; /* Amarillo claro */
+  color: var(--text-color-primary); /* Ajustado a color de texto primario */
+  padding: 15px;
+  border-radius: var(--border-radius);
+  margin: 10px auto 20px auto; /* Margen superior, centrado, margen inferior */
+  max-width: 500px; /* Ancho máximo para la notificación */
   text-align: center;
+  font-weight: 500;
+  box-shadow: var(--box-shadow);
   transition: opacity 0.3s ease, visibility 0.3s ease, height 0.3s ease, padding 0.3s ease, margin 0.3s ease;
-  max-width: 400px; /* Ancho máximo para la notificación */
 }
 
 .notification.error {
-  background-color: #f8d7da;
-  color: #721c24;
-  border: 1px solid #f5c6cb;
+  background-color: #fdecea; /* Rojo muy claro */
+  color: var(--accent-color);
+  border: 1px solid rgba(var(--accent-color-rgb), 0.3);
 }
 
 .notification.exito {
-  background-color: #d4edda;
-  color: #155724;
-  border: 1px solid #c3e6cb;
+  background-color: #e6f9e8; /* Verde muy claro */
+  color: var(--secondary-color);
+  border: 1px solid rgba(var(--secondary-color-rgb), 0.3);
 }
 
 .notification.ocultar {
@@ -125,61 +147,69 @@ button:hover {
   padding: 0;
   margin: 0 auto; /* Mantener el centrado al ocultar */
 }
-/* Fin de nuevos estilos para notificaciones */
 
-/* Esta regla ya no es necesaria si eliminas los <p class="error-msg"> */
-/* .error-msg {
-  color: #dc3545;
-  font-weight: 600;
-  margin: 5px 0 0 0;
-  font-size: 0.9em;
-} */
+.resumen {
+  background-color: #e8f0fe; /* Azul muy claro */
+  padding: 15px;
+  border-radius: var(--border-radius);
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 500;
+  color: var(--text-color-primary);
+  box-shadow: var(--box-shadow);
+}
+
+.resumen-item {
+  flex: 1; /* Permite que los ítems tomen espacio equitativo */
+  text-align: center;
+}
+
+.resumen-ingresos {
+  color: var(--secondary-color);
+}
+
+.resumen-gastos {
+  color: var(--accent-color);
+}
+
+#lista {
+  list-style: none;
+  padding: 0;
+  margin-top: 20px;
+}
 
 .movimiento-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 0;
-  border-bottom: 1px solid #eee;
+  padding: 15px 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.movimiento-item:last-child {
+  border-bottom: none; /* Elimina el borde del último elemento de la lista */
 }
 
 .movimiento-text {
   flex-grow: 1;
   font-size: 16px;
+  color: var(--text-color-primary);
 }
 
 .eliminar-btn {
   background-color: transparent;
   border: none;
-  color: #dc3545;
+  color: var(--accent-color);
   cursor: pointer;
-  font-weight: 700;
+  font-weight: bold;
   font-size: 18px;
-  padding: 0 10px;
-  user-select: none;
+  padding: 5px;
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
 }
 
-.resumen {
-  margin-top: 20px;
-  font-weight: 600;
-  font-size: 18px;
-  display: flex;
-  justify-content: space-between;
-  background: #e9f7ef;
-  padding: 12px 16px;
-  border-radius: 14px;
-}
-
-.resumen-item {
-  flex: 1;
-  text-align: center;
-  color: #333;
-}
-
-.resumen-ingresos {
-  color: #28a745;
-}
-
-.resumen-gastos {
-  color: #dc3545;
+.eliminar-btn:hover {
+  opacity: 1;
 }
