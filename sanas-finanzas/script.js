@@ -1,4 +1,4 @@
-// Configuración Firebase (pon aquí tu propia configuración)
+// Configuración Firebase (usa tu propia configuración)
 const firebaseConfig = {
   apiKey: "AIzaSyAvReIBNYy-RQ67hyTEPwTX-4lnvhlo8T0",
   authDomain: "sanas-finanzas-450a6.firebaseapp.com",
@@ -20,9 +20,10 @@ const emailInput = document.getElementById('email');
 const passwordInput = document.getElementById('password');
 const errorLogin = document.getElementById('error-login');
 
-const tipoToggleBtn = document.getElementById('tipoToggleBtn');
-const descripcionInput = document.getElementById('descripcion');
+const btnIngreso = document.getElementById('btnIngreso');
+const btnGasto = document.getElementById('btnGasto');
 const montoInput = document.getElementById('monto');
+const descripcionInput = document.getElementById('descripcion');
 const categoriaSelect = document.getElementById('categoria');
 const errorTransaccion = document.getElementById('error-transaccion');
 const lista = document.getElementById('lista');
@@ -30,23 +31,26 @@ const lista = document.getElementById('lista');
 const totalIngresosEl = document.getElementById('total-ingresos');
 const totalGastosEl = document.getElementById('total-gastos');
 
-let tipo = 'ingreso'; // ingreso o gasto
+let tipo = 'ingreso'; // por defecto
 let transacciones = [];
 let editandoId = null;
 
-function toggleTipo() {
-  if (tipo === 'ingreso') {
-    tipo = 'gasto';
-    tipoToggleBtn.textContent = 'Gasto';
-    tipoToggleBtn.classList.remove('tipo-ingreso');
-    tipoToggleBtn.classList.add('tipo-gasto');
-  } else {
-    tipo = 'ingreso';
-    tipoToggleBtn.textContent = 'Ingreso';
-    tipoToggleBtn.classList.remove('tipo-gasto');
-    tipoToggleBtn.classList.add('tipo-ingreso');
-  }
-}
+// Botones ingreso/gasto: alternar estado y colores
+btnIngreso.onclick = () => {
+  tipo = 'ingreso';
+  btnIngreso.classList.remove('inactivo');
+  btnGasto.classList.add('inactivo');
+  montoInput.style.borderColor = '#28a745';
+  montoInput.style.boxShadow = '0 0 6px #28a745aa';
+};
+
+btnGasto.onclick = () => {
+  tipo = 'gasto';
+  btnGasto.classList.remove('inactivo');
+  btnIngreso.classList.add('inactivo');
+  montoInput.style.borderColor = '#dc3545';
+  montoInput.style.boxShadow = '0 0 6px #dc3545aa';
+};
 
 function formatearMoneda(num) {
   return num.toLocaleString('es-MX', {
@@ -66,9 +70,11 @@ function mostrarTransacciones() {
     texto.className = 'movimiento-text';
     texto.textContent = `[${tx.categoria}] ${tx.descripcion} - ${formatearMoneda(tx.monto)} (${tx.tipo})`;
 
+    const botonesDiv = document.createElement('div');
+    botonesDiv.className = 'movimiento-botones';
+
     const btnEditar = document.createElement('button');
-    btnEditar.className = 'eliminar-btn';
-    btnEditar.style.color = '#17a2b8';
+    btnEditar.className = 'editar-btn';
     btnEditar.textContent = '✏️';
     btnEditar.title = 'Editar';
     btnEditar.onclick = () => editarTransaccion(tx.id);
@@ -79,9 +85,11 @@ function mostrarTransacciones() {
     btnEliminar.title = 'Eliminar';
     btnEliminar.onclick = () => eliminarTransaccion(tx.id);
 
+    botonesDiv.appendChild(btnEditar);
+    botonesDiv.appendChild(btnEliminar);
+
     li.appendChild(texto);
-    li.appendChild(btnEditar);
-    li.appendChild(btnEliminar);
+    li.appendChild(botonesDiv);
 
     lista.appendChild(li);
   });
@@ -97,17 +105,10 @@ function actualizarResumen() {
     .reduce((acc, tx) => acc + tx.monto, 0);
   const balance = ingresos - gastos;
 
-  totalIngresosEl.textContent = formatearMoneda(ingresos);
-  totalGastosEl.textContent = formatearMoneda(gastos);
-
+  // Actualiza balance grande y color
   const balanceGrande = document.getElementById('balance-grande');
   balanceGrande.textContent = formatearMoneda(balance);
-
-  if (balance >= 0) {
-    balanceGrande.style.color = '#28a745';
-  } else {
-    balanceGrande.style.color = '#dc3545';
-  }
+  balanceGrande.style.color = balance >= 0 ? '#28a745' : '#dc3545';
 }
 
 async function agregarTransaccion() {
@@ -136,7 +137,6 @@ async function agregarTransaccion() {
       await db.collection('usuarios').doc(uid)
         .collection('transacciones').doc(editandoId).update(transaccion);
       editandoId = null;
-      tipoToggleBtn.disabled = false;
     } else {
       await db.collection('usuarios').doc(uid)
         .collection('transacciones').add(transaccion);
@@ -146,9 +146,11 @@ async function agregarTransaccion() {
     montoInput.value = '';
     categoriaSelect.value = 'General';
     tipo = 'ingreso';
-    tipoToggleBtn.textContent = 'Ingreso';
-    tipoToggleBtn.classList.remove('tipo-gasto');
-    tipoToggleBtn.classList.add('tipo-ingreso');
+    btnIngreso.classList.remove('inactivo');
+    btnGasto.classList.add('inactivo');
+    montoInput.style.borderColor = '#28a745';
+    montoInput.style.boxShadow = '0 0 6px #28a745aa';
+
   } catch (error) {
     errorTransaccion.textContent = 'Error guardando datos: ' + error.message;
   }
@@ -177,12 +179,19 @@ function editarTransaccion(id) {
   categoriaSelect.value = tx.categoria;
   tipo = tx.tipo;
 
-  tipoToggleBtn.textContent = tipo === 'ingreso' ? 'Ingreso' : 'Gasto';
-  tipoToggleBtn.classList.toggle('tipo-ingreso', tipo === 'ingreso');
-  tipoToggleBtn.classList.toggle('tipo-gasto', tipo === 'gasto');
+  if (tipo === 'ingreso') {
+    btnIngreso.classList.remove('inactivo');
+    btnGasto.classList.add('inactivo');
+    montoInput.style.borderColor = '#28a745';
+    montoInput.style.boxShadow = '0 0 6px #28a745aa';
+  } else {
+    btnGasto.classList.remove('inactivo');
+    btnIngreso.classList.add('inactivo');
+    montoInput.style.borderColor = '#dc3545';
+    montoInput.style.boxShadow = '0 0 6px #dc3545aa';
+  }
 
   editandoId = id;
-  tipoToggleBtn.disabled = true;
 }
 
 async function eliminarTransaccion(id) {
