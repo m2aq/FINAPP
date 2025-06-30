@@ -5,44 +5,48 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Sanas Finanzas</title>
   <link rel="stylesheet" href="estilos.css" />
-  <link rel="manifest" href="manifest.json" />
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 </head>
 <body>
-  <div id="login-container">
+  <div id="login-container" class="contenedor">
     <h2>Iniciar sesión</h2>
     <input type="email" id="email" placeholder="Correo electrónico" />
     <input type="password" id="password" placeholder="Contraseña" />
     <button onclick="login()">Entrar</button>
     <button onclick="register()">Registrarse</button>
-    <p id="error-login" class="error"></p>
+    <p id="error-login" class="error-msg"></p>
   </div>
 
-  <div id="app-container" class="oculto">
+  <div id="app-container" class="contenedor oculto">
     <h1>Sanas Finanzas</h1>
     <button onclick="logout()">Cerrar sesión</button>
+
     <div class="resumen">
-      <h2>Balance: <span id="balance">$0.00</span></h2>
-      <p>Ingresos: <span id="total-ingresos">$0.00</span></p>
-      <p>Gastos: <span id="total-gastos">$0.00</span></p>
+      <div class="resumen-item resumen-ingresos">Ingresos: <span id="total-ingresos">$0.00</span></div>
+      <div class="resumen-item resumen-gastos">Gastos: <span id="total-gastos">$0.00</span></div>
+      <div class="resumen-item" id="balance">Balance: $0.00</div>
     </div>
 
     <div class="formulario">
-      <button id="tipoToggleBtn" class="tipo-ingreso" onclick="toggleTipo()">Ingreso</button>
-      <input type="text" id="descripcion" placeholder="Descripción" />
-      <input type="number" id="monto" placeholder="Monto" />
-      <select id="categoria">
-        <option>General</option>
-        <option>Comida</option>
-        <option>Transporte</option>
-        <option>Hogar</option>
-        <option>Salud</option>
-        <option>Ocio</option>
-      </select>
+      <div class="flex-row">
+        <button id="tipoToggleBtn" class="tipo-toggle-btn tipo-ingreso" onclick="toggleTipo()">Ingreso</button>
+        <input id="descripcion" class="flex-grow" type="text" placeholder="Descripción" />
+      </div>
+      <div class="flex-row">
+        <input id="monto" type="number" placeholder="Monto" />
+        <select id="categoria">
+          <option>General</option>
+          <option>Comida</option>
+          <option>Transporte</option>
+          <option>Hogar</option>
+          <option>Salud</option>
+          <option>Ocio</option>
+        </select>
+      </div>
       <button onclick="agregarTransaccion()">Agregar</button>
-      <p id="error-transaccion" class="error"></p>
+      <p id="error-transaccion" class="error-msg"></p>
     </div>
 
     <ul id="lista"></ul>
