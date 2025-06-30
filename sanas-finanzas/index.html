@@ -1,58 +1,59 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sanas Finanzas</title>
-  <link rel="stylesheet" href="estilos.css" />
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sanas Finanzas</title>
+<link rel="stylesheet" href="estilos.css" />
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 </head>
 <body>
-  <div id="login-container" class="contenedor">
-    <h2>Iniciar sesión</h2>
-    <input type="email" id="email" placeholder="Correo electrónico" />
-    <input type="password" id="password" placeholder="Contraseña" />
-    <button onclick="login()">Entrar</button>
-    <button onclick="register()">Registrarse</button>
-    <p id="error-login" class="error-msg"></p>
+
+<div id="login-container" class="contenedor">
+  <h2>Iniciar sesión</h2>
+  <input type="email" id="email" placeholder="Correo electrónico" />
+  <input type="password" id="password" placeholder="Contraseña" />
+  <button onclick="login()">Entrar</button>
+  <button onclick="register()">Registrarse</button>
+  <p id="error-login" class="error-msg"></p>
+</div>
+
+<div id="app-container" class="contenedor oculto">
+
+  <h1>Sanas Finanzas</h1>
+
+  <div class="flex-row balance-monto">
+    <div id="balance-grande">$0.00</div>
+    <input id="monto" type="number" placeholder="Monto" />
   </div>
 
-  <div id="app-container" class="contenedor oculto">
-    <h1>Sanas Finanzas</h1>
-
-    <div class="flex-row balance-monto">
-      <div id="balance-grande">$0.00</div>
-      <input id="monto" type="number" placeholder="Monto" />
-    </div>
-
-    <div class="tipo-btn-group">
-      <button id="btnIngreso" class="tipo-btn ingreso">Ingreso</button>
-      <button id="btnGasto" class="tipo-btn gasto inactivo">Gasto</button>
-    </div>
-
-    <div class="formulario">
-      <input id="descripcion" type="text" placeholder="Descripción" />
-
-      <select id="categoria">
-        <option>General</option>
-        <option>Comida</option>
-        <option>Transporte</option>
-        <option>Hogar</option>
-        <option>Salud</option>
-        <option>Ocio</option>
-      </select>
-
-      <button onclick="agregarTransaccion()">Agregar</button>
-      <p id="error-transaccion" class="error-msg"></p>
-    </div>
-
-    <ul id="lista"></ul>
-
-    <button id="logoutBtn" onclick="logout()">Cerrar sesión</button>
+  <div class="tipo-btn-group">
+    <button id="btnIngreso" class="tipo-toggle-btn tipo-ingreso">Ingreso</button>
+    <button id="btnGasto" class="tipo-toggle-btn tipo-gasto inactivo">Gasto</button>
   </div>
 
-  <script src="script.js"></script>
+  <div class="formulario">
+    <input id="descripcion" type="text" placeholder="Descripción" />
+    <select id="categoria">
+      <option>General</option>
+      <option>Comida</option>
+      <option>Transporte</option>
+      <option>Hogar</option>
+      <option>Salud</option>
+      <option>Ocio</option>
+    </select>
+    <button onclick="agregarTransaccion()">Agregar</button>
+    <p id="error-transaccion" class="error-msg"></p>
+  </div>
+
+  <ul id="lista"></ul>
+
+  <button id="logoutBtn" onclick="logout()">Cerrar sesión</button>
+</div>
+
+<script src="script.js"></script>
+
 </body>
 </html>
