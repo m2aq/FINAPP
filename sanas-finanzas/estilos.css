@@ -13,6 +13,7 @@ body {
   max-width: 500px;
   margin: auto;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding-bottom: 40px; /* Más espacio abajo */
 }
 
 .oculto {
@@ -29,7 +30,7 @@ button {
   border-radius: 14px;
   border: 1.5px solid #ccc;
   padding: 14px 16px;
-  margin: 10px 0;
+  margin: 8px 0; /* Margen vertical ajustado */
   box-sizing: border-box;
   outline-offset: 3px;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
@@ -64,6 +65,7 @@ button:hover {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
+  align-items: center; /* Alineación para que los elementos se vean bien */
 }
 
 .flex-grow {
@@ -71,8 +73,8 @@ button:hover {
 }
 
 .tipo-toggle-btn {
-  width: 110px;
-  padding: 14px;
+  width: 110px; /* Ajustado un poco si es necesario */
+  padding: 14px 12px; /* Ajuste fino de padding */
   font-size: 17px;
   font-weight: 600;
   border-radius: 14px;
@@ -81,6 +83,7 @@ button:hover {
   user-select: none;
   color: white;
   transition: background-color 0.3s ease;
+  flex-shrink: 0; /* Evitar que se encoja demasiado */
 }
 
 .tipo-ingreso {
@@ -102,51 +105,94 @@ button:hover {
   font-size: 0.9em;
 }
 
+/* Estilo para el mensaje de lista vacía */
+.mensaje-vacio {
+    text-align: center;
+    color: #888;
+    font-style: italic;
+    margin-top: 30px;
+    font-size: 1.1em;
+    padding: 0 15px; /* Añade un poco de padding horizontal */
+}
+
+/* Estilos para los ítems de la lista de movimientos */
 .movimiento-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 0;
+  padding: 12px 15px; /* Más padding */
   border-bottom: 1px solid #eee;
+  margin-bottom: 8px; /* Espacio entre elementos */
+  background-color: #f9f9f9; /* Fondo suave para cada ítem */
+  border-radius: 8px; /* Bordes redondeados */
+  transition: background-color 0.2s ease, transform 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05); /* Sutil sombra */
+}
+
+.movimiento-item:last-child {
+  border-bottom: none; /* No bordes en el último item */
+  margin-bottom: 0;
+}
+
+.movimiento-item:hover {
+  background-color: #f0f0f0; /* Efecto hover */
+  transform: translateY(-2px); /* Ligero levantamiento */
+  box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+}
+
+/* Indicadores visuales para Ingreso y Gasto */
+.movimiento-item-ingreso {
+  border-left: 5px solid #28a745; /* Borde izquierdo verde */
+}
+
+.movimiento-item-gasto {
+  border-left: 5px solid #dc3545; /* Borde izquierdo rojo */
 }
 
 .movimiento-text {
   flex-grow: 1;
+  display: flex; /* Usa flexbox para alinear contenido interno */
+  align-items: center;
+  gap: 8px; /* Espacio entre fecha, símbolo, monto, categoría */
   font-size: 16px;
+  color: #333;
 }
 
+.fecha-movimiento {
+  color: #555;
+  font-weight: 500;
+  font-size: 0.95em;
+  flex-shrink: 0; /* Evita que la fecha se encoja */
+}
+
+.monto-movimiento {
+  font-weight: 600;
+  min-width: 70px; /* Ancho mínimo para alinear montos */
+  text-align: right; /* Alinear monto a la derecha */
+}
+
+.categoria-movimiento {
+    font-size: 0.9em;
+    color: #777;
+    font-style: italic;
+    flex-shrink: 0; /* Evita que la categoría se encoja */
+}
+
+/* Estilos para el botón de eliminar */
 .eliminar-btn {
   background-color: transparent;
   border: none;
   color: #dc3545;
   cursor: pointer;
   font-weight: 700;
-  font-size: 18px;
-  padding: 0 10px;
+  font-size: 24px; /* Más grande */
+  padding: 0 12px; /* Más padding horizontal */
   user-select: none;
+  opacity: 0.7;
+  transition: opacity 0.2s ease, color 0.2s ease;
 }
 
-.resumen {
-  margin-top: 20px;
-  font-weight: 600;
-  font-size: 18px;
-  display: flex;
-  justify-content: space-between;
-  background: #e9f7ef;
-  padding: 12px 16px;
-  border-radius: 14px;
-}
-
-.resumen-item {
-  flex: 1;
-  text-align: center;
-  color: #333;
-}
-
-.resumen-ingresos {
-  color: #28a745;
-}
-
-.resumen-gastos {
-  color: #dc3545;
+.eliminar-btn:hover {
+  opacity: 1;
+  color: #a00; /* Rojo más oscuro */
 }
