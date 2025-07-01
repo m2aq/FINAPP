@@ -1,41 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestor de Torneos</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- MermaidJS para diagramas de flujo/brackets (opcional pero útil para brackets) -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+    <script>
+        // Inicializar MermaidJS
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>🎮 Gestor de Torneos 🎮</h1>
 
-    <header><h1>Gestor de Torneos</h1>
-<button onclick="nuevoTorneo()" style="margin-top: 10px;">♻️ Nuevo Torneo</button>
-</header>
-    <div id="tabs">
-      <button class="tab-button active" data-tab="inscripcion">1. Inscripción</button>
-      <button class="tab-button" data-tab="round-robin" disabled>2. Fase de Grupos</button>
-      <button class="tab-button" data-tab="bracket" disabled>3. Eliminatorias</button>
+        <!-- Sección de Reinicio -->
+        <div class="control-section">
+            <button id="btnNuevoTorneo">♻️ Nuevo Torneo</button>
+        </div>
+
+        <!-- Fase 1: Inscripción -->
+        <section id="inscripcion-section">
+            <h2>1. Inscripción de Participantes</h2>
+            <div class="input-group">
+                <label for="nombreParticipante">Nombre:</label>
+                <input type="text" id="nombreParticipante" placeholder="Introduce nombre">
+                <button id="btnAgregarParticipante">✚ Agregar</button>
+            </div>
+            <h3>Participantes Inscritos:</h3>
+            <ul id="listaParticipantes">
+                <!-- Los participantes se añadirán aquí dinámicamente por JavaScript -->
+            </ul>
+            <button id="btnIniciarRoundRobin" disabled>▶ Iniciar Fase de Grupos</button>
+        </section>
+
+        <!-- Fase 2: Round Robin (oculta inicialmente) -->
+        <section id="round-robin-section" class="hidden">
+            <h2>2. Fase de Grupos (Todos contra Todos)</h2>
+            <div class="content-wrapper">
+                <div class="matches-section">
+                    <h3>Partidos</h3>
+                    <div id="partidosRoundRobin">
+                        <!-- Los partidos del Round Robin se mostrarán aquí -->
+                    </div>
+                    <button id="btnIniciarBracket" disabled>▶ Iniciar Fase de Eliminatorias</button>
+                </div>
+                <div class="standings-section">
+                    <h3>Tabla de Posiciones</h3>
+                    <table id="tablaPosiciones">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Nombre</th>
+                                <th>Puntos</th>
+                                <th>V</th>
+                                <th>D</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- La tabla se llenará aquí -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Fase 3: Bracket (oculta inicialmente) -->
+        <section id="bracket-section" class="hidden">
+            <h2>3. Bracket de Eliminatorias</h2>
+            <div class="bracket-container">
+                <!-- El bracket se mostrará aquí. MermaidJS es una buena opción -->
+                <!-- Ejemplo con Mermaid: <div class="mermaid">...</div> -->
+                <div id="bracketDisplay">
+                    <!-- Placeholder para el bracket -->
+                    <p>Generando bracket...</p>
+                </div>
+            </div>
+            <div class="winner-section">
+                <h3 id="campeonDisplay"></h3>
+            </div>
+        </section>
+
     </div>
-    <main>
-      <section id="inscripcion" class="tab active">
-        <h2>Inscripción de Participantes</h2>
-        <div class="input-group">
-          <input type="text" id="nombreInput" placeholder="Nombre del participante">
-          <button id="agregarBtn">✚ Agregar Participante</button>
-        </div>
-        <pre id="listaParticipantes"></pre>
-        <button id="iniciarRRBtn" disabled>▶ Iniciar Fase de Grupos</button>
-      </section>
-      <section id="round-robin" class="tab">
-        <h2>Fase de Grupos (Round Robin)</h2>
-        <div class="round-robin-container">
-          <div id="partidosList"></div>
-          <table id="tablaPosiciones">
-            <thead>
-              <tr><th>#</th><th>Nombre</th><th>Puntos</th><th>V</th><th>D</th></tr>
-            </thead>
-            <tbody></tbody>
-          </table>
-        </div>
-        <button id="iniciarKnockoutBtn" disabled>▶ Iniciar Eliminatorias</button>
-      </section>
-      <section id="bracket" class="tab">
-        <h2>Bracket de Eliminatorias</h2>
-        <canvas id="bracketCanvas"></canvas>
-      </section>
-    </main>
-  </div>
-  <script src="script.js"></script>
+
+    <script src="script.js"></script>
 </body>
 </html>
