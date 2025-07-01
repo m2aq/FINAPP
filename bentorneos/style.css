@@ -181,8 +181,7 @@ button:disabled {
     white-space: nowrap; /* Importante para Mermaid: evita que los elementos internos salten de línea */
 }
 
-/* Estilos específicos para nodos Mermaid (usando las clases definidas en Mermaid) */
-/* Mermaid usa SVG, así que apuntamos a rect y path dentro de los nodos */
+/* Estilos para los nodos Mermaid (aplicados por las clases .decided y .undecided) */
 .mermaid .decided rect,
 .mermaid .decided path {
     fill: #e8f5e9 !important; /* Fondo verde claro para partidos decididos */
@@ -208,12 +207,80 @@ button:disabled {
     color: #888; /* Color gris sutil */
 }
 
-/* Asegura que el SVG generado por Mermaid se muestre correctamente y se maneje el overflow */
+/* Asegura que el SVG generado por Mermaid se muestre correctamente */
 .bracket-container svg {
     display: block; /* Quita espacio extra debajo del SVG */
     margin: 0 auto; /* Centra el SVG si ocupa menos espacio que el contenedor */
-    /* Mermaid puede escalar el SVG internamente, pero aseguramos que no se corte */
 }
+
+/* --- NUEVOS ESTILOS PARA CONTROLES DEL BRACKET --- */
+#bracket-controls-section {
+    margin-top: 30px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    text-align: center; /* Centra el contenido */
+}
+
+#bracket-controls-section h3 {
+    margin-top: 0; /* Quita margen superior si es el primer H3 */
+    border-bottom: none; /* No necesita borde inferior aquí */
+}
+
+#pendingBracketMatches {
+    display: flex;
+    flex-direction: column; /* Los partidos se apilan verticalmente */
+    gap: 10px; /* Espacio entre partidos */
+    align-items: center; /* Centra los elementos horizontalmente */
+}
+
+#pendingBracketMatches > div { /* Estilo para cada div de partido pendiente */
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Espacio entre nombre y controles */
+    background-color: #eef8ff; /* Fondo azul muy claro */
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #cfe8ff; /* Borde sutil */
+    width: 80%; /* Ocupa un porcentaje del ancho */
+    max-width: 600px; /* Límite máximo */
+    flex-wrap: wrap; /* Permite que los controles se apilen en pantallas estrechas */
+    justify-content: center; /* Centra todo si se envuelve */
+}
+
+/* Contenedor para el select y el botón */
+#pendingBracketMatches > div > div {
+     display: flex;
+     align-items: center;
+     margin-top: 5px; /* Pequeño margen superior si los controles se envuelven */
+}
+
+/* Estilo para los selects y botones en los partidos pendientes */
+#pendingBracketMatches select {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-left: 10px;
+    font-size: 0.9em;
+}
+
+#pendingBracketMatches button.btn-register-winner {
+    padding: 6px 12px; /* Botones más pequeños */
+    font-size: 0.9em;
+    background-color: #2196f3; /* Azul diferente */
+    margin-left: 10px; /* Espacio entre select y botón */
+}
+
+#pendingBracketMatches button.btn-register-winner:hover {
+    background-color: #1976d2;
+}
+
+#pendingBracketMatches button.btn-register-winner:disabled {
+     background-color: #bbb;
+     cursor: not-allowed;
+}
+/* --- FIN ESTILOS NUEVOS --- */
 
 
 /* Clases auxiliares */
