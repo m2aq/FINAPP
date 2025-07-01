@@ -12,9 +12,10 @@
         // Inicializar MermaidJS cuando la página esté lista
         document.addEventListener('DOMContentLoaded', () => {
             if (typeof mermaid !== 'undefined') {
+                // Configuración recomendada para inicialización
                 mermaid.initialize({
-                    startOnLoad: true, // Opcional, pero bueno para el setup inicial
-                    theme: 'default'  // Puedes probar otros temas si lo deseas
+                    startOnLoad: true, // Carga automáticamente los gráficos con la clase 'mermaid'
+                    theme: 'default'   // Tema por defecto
                  });
             } else {
                 console.error("La librería Mermaid no se ha cargado correctamente.");
@@ -86,19 +87,31 @@
         <!-- Fase 3: Bracket (oculta inicialmente) -->
         <section id="bracket-section" class="hidden">
             <h2>3. Bracket de Eliminatorias</h2>
+            
+            <!-- Contenedor para la visualización estática del bracket con Mermaid -->
             <div class="bracket-container">
-                <!-- El bracket se mostrará aquí usando Mermaid -->
                 <div id="bracketDisplay">
                     <!-- Mermaid generará su salida aquí -->
                     <p>Generando el bracket...</p>
                 </div>
             </div>
+            
+            <!-- Nueva Sección: Controles para partidos pendientes del Bracket -->
+            <!-- Oculta por defecto y se muestra cuando hay partidos pendientes -->
+            <div id="bracket-controls-section" class="hidden">
+                <h3>Partidos Pendientes del Bracket:</h3>
+                <div id="pendingBracketMatches">
+                    <!-- Los partidos pendientes y sus controles (selects, botones) se cargarán aquí -->
+                </div>
+            </div>
+
+            <!-- Sección para mostrar al campeón -->
             <div class="winner-section">
                 <h3 id="campeonDisplay"></h3>
             </div>
         </section>
 
-    </div>
+    </div> <!-- Cierre de .container -->
 
     <!-- El script principal que maneja toda la lógica -->
     <script src="script.js"></script>
