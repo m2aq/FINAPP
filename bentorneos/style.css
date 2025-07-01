@@ -1,34 +1,35 @@
 /* Estilos Generales */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f0f2f5;
+    background-color: #f0f2f5; /* Fondo similar al de tu app Tkinter */
     color: #333;
     line-height: 1.6;
     margin: 0;
     padding: 0;
     display: flex;
     justify-content: center; /* Centrar el contenido principal */
+    min-height: 100vh; /* Asegura que el fondo cubra toda la altura */
 }
 
 .container {
     width: 95%;
     max-width: 1200px; /* Ancho máximo similar al de tu app Tkinter */
-    margin: 20px auto;
+    margin: 20px auto; /* Margen superior/inferior y centrado horizontal */
     background-color: #fff;
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1); /* Sutil sombra */
 }
 
 h1, h2, h3 {
     text-align: center;
-    color: #005fcc;
+    color: #005fcc; /* Color azul corporativo */
     margin-bottom: 20px;
 }
 
 h1 {
     font-size: 2.2em;
-    margin-top: 0;
+    margin-top: 0; /* Eliminar margen superior si es el primer h1 */
 }
 
 h2 {
@@ -37,12 +38,12 @@ h2 {
 
 h3 {
     font-size: 1.3em;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #eee; /* Línea separadora sutil */
     padding-bottom: 5px;
 }
 
 button {
-    background-color: #0078d4;
+    background-color: #0078d4; /* Azul principal para botones */
     color: white;
     border: none;
     padding: 10px 18px;
@@ -50,24 +51,24 @@ button {
     cursor: pointer;
     font-size: 1em;
     font-weight: bold;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease; /* Transición suave al pasar el ratón */
     margin-top: 10px;
-    margin-right: 5px;
+    margin-right: 5px; /* Espacio entre botones */
 }
 
 button:hover {
-    background-color: #005a9e;
+    background-color: #005a9e; /* Azul más oscuro al pasar el ratón */
 }
 
 button:disabled {
-    background-color: #cce8ff;
-    cursor: not-allowed;
+    background-color: #cce8ff; /* Azul claro deshabilitado */
+    cursor: not-allowed; /* Cursor de "no permitido" */
 }
 
 .input-group {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: center; /* Centra los elementos del grupo */
     margin-bottom: 20px;
 }
 
@@ -83,88 +84,156 @@ button:disabled {
     margin-right: 10px;
     font-size: 1em;
     flex-grow: 1; /* Ocupa el espacio disponible */
-    max-width: 250px;
+    max-width: 250px; /* Limita el ancho del campo de texto */
 }
 
+/* Estilos para la lista de participantes */
 #listaParticipantes {
-    list-style: none;
+    list-style: none; /* Quita los puntos de lista */
     padding: 0;
-    margin: 20px auto;
+    margin: 20px auto; /* Centrado */
     max-width: 300px; /* Ajusta según sea necesario */
-    text-align: left;
+    text-align: left; /* Alinea el texto a la izquierda */
 }
 
 #listaParticipantes li {
-    background-color: #f9f9f9;
+    background-color: #f9f9f9; /* Fondo sutil para cada participante */
     padding: 8px 12px;
     margin-bottom: 5px;
     border-radius: 3px;
-    border: 1px solid #eee;
+    border: 1px solid #eee; /* Borde ligero */
 }
 
+/* Contenedor principal de las fases de grupos y tabla */
 .content-wrapper {
-    display: flex;
-    gap: 20px; /* Espacio entre secciones de partidos y tabla */
-    flex-wrap: wrap; /* Permite que las secciones se apilen en pantallas pequeñas */
+    display: flex; /* Usa Flexbox para dividir el espacio */
+    gap: 20px; /* Espacio entre las columnas */
+    flex-wrap: wrap; /* Permite que las columnas se apilen en pantallas pequeñas */
 }
 
 .matches-section, .standings-section {
     flex: 1; /* Cada sección intenta ocupar el mismo espacio */
-    min-width: 300px; /* Ancho mínimo para que no se vean muy apretadas */
+    min-width: 300px; /* Ancho mínimo antes de que se apilen */
 }
 
-/* Tabla de Posiciones */
+/* Estilos para la Tabla de Posiciones */
 #tablaPosiciones {
     width: 100%;
-    border-collapse: collapse;
+    border-collapse: collapse; /* Fusiona los bordes de las celdas */
     margin-top: 15px;
 }
 
 #tablaPosiciones th, #tablaPosiciones td {
-    border: 1px solid #ddd;
-    padding: 10px;
-    text-align: center;
+    border: 1px solid #ddd; /* Bordes para celdas */
+    padding: 10px; /* Espaciado interno */
+    text-align: center; /* Alineación centrada */
 }
 
 #tablaPosiciones th {
-    background-color: #0078d4;
+    background-color: #0078d4; /* Cabecera con el azul principal */
     color: white;
     font-weight: bold;
 }
 
+/* Filas pares con un color de fondo ligeramente distinto para legibilidad */
 #tablaPosiciones tbody tr:nth-child(even) {
     background-color: #f2f2f2;
 }
 
-/* Contenedor para partidos individuales */
-#partidosRoundRobin div { /* Estilo para cada match */
+/* Estilos para los partidos individuales en la Fase de Grupos */
+#partidosRoundRobin div { /* Estilo para cada div de partido */
     display: flex;
     align-items: center;
-    justify-content: space-between; /* Espacio entre nombre y botones */
-    background-color: #eef8ff;
+    justify-content: space-between; /* Distribuye espacio entre el nombre y los botones */
+    background-color: #eef8ff; /* Fondo azul muy claro para los partidos */
     padding: 10px;
     margin-bottom: 8px;
     border-radius: 4px;
-    border: 1px solid #cfe8ff;
+    border: 1px solid #cfe8ff; /* Borde sutil */
 }
 
-/* Bracket */
+/* Estilo específico para los botones "Gana X" */
+#partidosRoundRobin button.btn-ganador {
+    padding: 5px 10px;
+    font-size: 0.9em;
+    margin-left: 5px; /* Margen entre el nombre y los botones */
+    background-color: #2196f3; /* Un azul distinto para estos botones */
+}
+
+#partidosRoundRobin button.btn-ganador:hover {
+     background-color: #1976d2;
+}
+
+#partidosRoundRobin button.btn-ganador:disabled {
+    background-color: #bbb; /* Deshabilitado gris */
+    cursor: not-allowed;
+}
+
+/* Estilos para el Bracket */
 .bracket-container {
-    text-align: center;
-    overflow-x: auto; /* Scroll horizontal si el bracket es muy ancho */
+    text-align: center; /* Centra el contenido del bracket */
+    overflow-x: auto; /* Añade scroll horizontal si el bracket es más ancho que la pantalla */
     padding: 20px;
-    background-color: #fdfdfd;
+    background-color: #fdfdfd; /* Fondo casi blanco para el área del bracket */
     border: 1px solid #eee;
     border-radius: 5px;
-    min-height: 400px; /* Altura mínima para que se vea algo */
+    min-height: 400px; /* Altura mínima para que sea visible */
+    white-space: nowrap; /* Importante para Mermaid: evita que los elementos internos salten de línea */
 }
+
+/* Estilos específicos para nodos Mermaid (usando las clases definidas en Mermaid) */
+/* Mermaid usa SVG, así que apuntamos a rect y path dentro de los nodos */
+.mermaid .decided rect,
+.mermaid .decided path {
+    fill: #e8f5e9 !important; /* Fondo verde claro para partidos decididos */
+    stroke: #4CAF50 !important; /* Borde verde oscuro */
+    stroke-width: 1.5px; /* Grosor del borde */
+}
+
+.mermaid .undecided rect,
+.mermaid .undecided path {
+    fill: #ffffff !important; /* Fondo blanco para partidos pendientes */
+    stroke: #ccc !important; /* Borde gris claro */
+    stroke-width: 1px;
+}
+
+/* Estilo general del texto dentro de los nodos Mermaid */
+.mermaid text {
+    font-family: 'Segoe UI', sans-serif !important; /* Hereda la fuente principal */
+}
+
+/* Estilo para el texto adicional dentro de los nodos (ej. "(Pending)") */
+.mermaid span {
+    font-size: 0.8em;
+    color: #888; /* Color gris sutil */
+}
+
+/* Asegura que el SVG generado por Mermaid se muestre correctamente y se maneje el overflow */
+.bracket-container svg {
+    display: block; /* Quita espacio extra debajo del SVG */
+    margin: 0 auto; /* Centra el SVG si ocupa menos espacio que el contenedor */
+    /* Mermaid puede escalar el SVG internamente, pero aseguramos que no se corte */
+}
+
 
 /* Clases auxiliares */
 .hidden {
-    display: none;
+    display: none; /* Oculta elementos */
 }
 
+/* Sección de controles globales (ej: botón nuevo torneo) */
 .control-section {
-    text-align: right;
+    text-align: right; /* Alinea a la derecha los botones de control */
     margin-bottom: 20px;
+}
+
+/* Sección del campeón */
+.winner-section {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.winner-section h3 {
+    color: #ff9800; /* Naranja para destacar al campeón */
+    font-size: 1.8em;
 }
