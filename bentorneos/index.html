@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Gestor de Torneos</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <header><h1>Gestor de Torneos</h1></header>
+    <div id="tabs">
+      <button class="tab-button active" data-tab="inscripcion">1. Inscripción</button>
+      <button class="tab-button" data-tab="round-robin" disabled>2. Fase de Grupos</button>
+      <button class="tab-button" data-tab="bracket" disabled>3. Eliminatorias</button>
+    </div>
+    <main>
+      <section id="inscripcion" class="tab active">
+        <h2>Inscripción de Participantes</h2>
+        <div class="input-group">
+          <input type="text" id="nombreInput" placeholder="Nombre del participante">
+          <button id="agregarBtn">✚ Agregar Participante</button>
+        </div>
+        <pre id="listaParticipantes"></pre>
+        <button id="iniciarRRBtn" disabled>▶ Iniciar Fase de Grupos</button>
+      </section>
+      <section id="round-robin" class="tab">
+        <h2>Fase de Grupos (Round Robin)</h2>
+        <div class="round-robin-container">
+          <div id="partidosList"></div>
+          <table id="tablaPosiciones">
+            <thead>
+              <tr><th>#</th><th>Nombre</th><th>Puntos</th><th>V</th><th>D</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <button id="iniciarKnockoutBtn" disabled>▶ Iniciar Eliminatorias</button>
+      </section>
+      <section id="bracket" class="tab">
+        <h2>Bracket de Eliminatorias</h2>
+        <canvas id="bracketCanvas"></canvas>
+      </section>
+    </main>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>

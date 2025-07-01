@@ -1,0 +1,80 @@
+body {
+  font-family: "Segoe UI", sans-serif;
+  background: #f0f2f5;
+  margin: 0;
+  padding: 0;
+}
+.container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 10px;
+}
+header h1 {
+  text-align: center;
+  color: #005fcc;
+}
+#tabs {
+  display: flex;
+  margin: 20px 0;
+}
+.tab-button {
+  flex: 1;
+  padding: 12px;
+  font-size: 16px;
+  border: none;
+  background: #d9dce1;
+  color: #333;
+  cursor: pointer;
+}
+.tab-button.active { background: #fff; color: #005fcc; }
+.tab-button:disabled { opacity: 0.5; cursor: not-allowed; }
+.tab { display: none; }
+.tab.active { display: block; }
+.input-group {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+#listaParticipantes {
+  background: #fff;
+  border: 1px solid #ccc;
+  padding: 10px;
+  height: 150px;
+  overflow-y: auto;
+}
+.round-robin-container {
+  display: flex;
+  gap: 20px;
+}
+#partidosList {
+  flex: 1;
+  max-height: 500px;
+  overflow-y: auto;
+  background: #fff;
+  border: 1px solid #ccc;
+  padding: 10px;
+}
+#tablaPosiciones {
+  border-collapse: collapse;
+  width: 300px;
+  background: #fff;
+}
+#tablaPosiciones th, #tablaPosiciones td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: center;
+}
+#bracketCanvas {
+  width: 100%;
+  height: 600px;
+  background: #fff;
+  display: block;
+}
+button {
+  background: #0078d4;
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+button:disabled { opacity: 0.5; cursor: not-allowed; }
