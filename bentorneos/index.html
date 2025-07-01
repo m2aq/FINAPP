@@ -5,18 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestor de Torneos</title>
     <link rel="stylesheet" href="style.css">
-    <!-- MermaidJS para diagramas de flujo/brackets (opcional pero útil para brackets) -->
+
+    <!-- Incluir la librería MermaidJS para diagramas de bracket -->
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
     <script>
-        // Inicializar MermaidJS
-        mermaid.initialize({ startOnLoad: true });
+        // Inicializar MermaidJS cuando la página esté lista
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof mermaid !== 'undefined') {
+                mermaid.initialize({
+                    startOnLoad: true, // Opcional, pero bueno para el setup inicial
+                    theme: 'default'  // Puedes probar otros temas si lo deseas
+                 });
+            } else {
+                console.error("La librería Mermaid no se ha cargado correctamente.");
+            }
+        });
     </script>
 </head>
 <body>
     <div class="container">
         <h1>🎮 Gestor de Torneos 🎮</h1>
 
-        <!-- Sección de Reinicio -->
+        <!-- Sección de Control Global -->
         <div class="control-section">
             <button id="btnNuevoTorneo">♻️ Nuevo Torneo</button>
         </div>
@@ -32,7 +42,9 @@
             <h3>Participantes Inscritos:</h3>
             <ul id="listaParticipantes">
                 <!-- Los participantes se añadirán aquí dinámicamente por JavaScript -->
+                <li>No hay participantes inscritos todavía.</li>
             </ul>
+            <!-- Botón habilitado dinámicamente por JS -->
             <button id="btnIniciarRoundRobin" disabled>▶ Iniciar Fase de Grupos</button>
         </section>
 
@@ -45,6 +57,7 @@
                     <div id="partidosRoundRobin">
                         <!-- Los partidos del Round Robin se mostrarán aquí -->
                     </div>
+                    <!-- Botón habilitado dinámicamente por JS -->
                     <button id="btnIniciarBracket" disabled>▶ Iniciar Fase de Eliminatorias</button>
                 </div>
                 <div class="standings-section">
@@ -60,7 +73,10 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- La tabla se llenará aquí -->
+                            <!-- La tabla se llenará aquí dinámicamente por JavaScript -->
+                            <tr>
+                                <td colspan="5">Generando tabla...</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -71,11 +87,10 @@
         <section id="bracket-section" class="hidden">
             <h2>3. Bracket de Eliminatorias</h2>
             <div class="bracket-container">
-                <!-- El bracket se mostrará aquí. MermaidJS es una buena opción -->
-                <!-- Ejemplo con Mermaid: <div class="mermaid">...</div> -->
+                <!-- El bracket se mostrará aquí usando Mermaid -->
                 <div id="bracketDisplay">
-                    <!-- Placeholder para el bracket -->
-                    <p>Generando bracket...</p>
+                    <!-- Mermaid generará su salida aquí -->
+                    <p>Generando el bracket...</p>
                 </div>
             </div>
             <div class="winner-section">
@@ -85,6 +100,7 @@
 
     </div>
 
+    <!-- El script principal que maneja toda la lógica -->
     <script src="script.js"></script>
 </body>
 </html>
