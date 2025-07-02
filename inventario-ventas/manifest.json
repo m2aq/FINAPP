@@ -1,20 +1,20 @@
 {
-  "name": "Mi Inventario PWA",
-  "short_name": "Inventario",
-  "description": "Aplicación PWA para gestionar tu inventario de venta con Firebase.",
+  "name": "Test PWA Base",
+  "short_name": "TestPWA",
+  "description": "Test de PWA base.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#007aff",
+  "theme_color": "#4CAF50",
   "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "icons/icon-192x192.png",
+      "src": "icon-192x192.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "icons/icon-512x512.png",
+      "src": "icon-512x512.png",
       "type": "image/png",
       "sizes": "512x512"
     }
