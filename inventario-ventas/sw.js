@@ -1,12 +1,14 @@
-console.log('Service Worker iniciado.');
-
-const CACHE_NAME = 'test-pwa-cache-v1';
+const CACHE_NAME = 'inventario-cache-v3'; // Versiona la cache
+// Rutas AJUSTADAS para reflejar que todo está en la raíz (gracias a la etiqueta <base>)
 const urlsToCache = [
-    '/', // La raíz servida
+    '/',
     'index.html',
-    'style.css',
-    'app.js',
-    'manifest.json'
+    'style.css',        // <-- ¡Ahora está en la raíz!
+    'app.js',           // <-- ¡Ahora está en la raíz!
+    'manifest.json',
+    'favicon.ico',
+    'icons/icon-192x192.png', // La carpeta icons/ sí se mantiene
+    'icons/icon-512x512.png'
 ];
 
 self.addEventListener('install', (event) => {
@@ -28,7 +30,6 @@ self.addEventListener('install', (event) => {
 
 self.addEventListener('activate', (event) => {
     console.log('SW: Activado.');
-    // Limpiar caches viejas si es necesario (similar a lo que teníamos antes)
     event.waitUntil(
         caches.keys().then((cacheNames) => {
             return Promise.all(
@@ -39,15 +40,13 @@ self.addEventListener('activate', (event) => {
                     }
                 })
             );
-        }).then(() => self.clients.claim()) // Tomar control inmediato
+        }).then(() => self.clients.claim())
     );
 });
 
 self.addEventListener('fetch', (event) => {
     event.respondWith(
         caches.match(event.request).then(response => {
-            // Si el recurso está en caché, lo devuelve.
-            // Si no, intenta obtenerlo de la red.
             return response || fetch(event.request);
         })
     );
