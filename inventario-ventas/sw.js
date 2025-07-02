@@ -7,8 +7,8 @@ const urlsToCache = [
     'app.js',           // <-- ¡Ahora está en la raíz!
     'manifest.json',
     'favicon.ico',
-    'icons/icon-192x192.png', // La carpeta icons/ sí se mantiene
-    'icons/icon-512x512.png'
+    'icon-192x192.png', // La carpeta icons/ sí se mantiene
+    'icon-512x512.png'
 ];
 
 self.addEventListener('install', (event) => {
