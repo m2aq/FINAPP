@@ -3,14 +3,14 @@ import { initializeApp } from "firebase/app";
 import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc, query, where } from "firebase/firestore";
 
 // --- Configuración de Firebase ---
-// Aquí está tu configuración específica. ¡No la compartas públicamente si es sensible!
+// ¡¡¡IMPORTANTE!!! Reemplaza estos valores con los de TU PROYECTO Firebase.
 const firebaseConfig = {
-  apiKey: "AIzaSyBqjHiWsBnK0AVUpE4arVqHmTI2B1udwaI",
-  authDomain: "inventario-ventas-c8c69.firebaseapp.com",
-  projectId: "inventario-ventas-c8c69",
-  storageBucket: "inventario-ventas-c8c69.firebasestorage.app",
-  messagingSenderId: "1098853280661",
-  appId: "1:1098853280661:web:bb9efdb2bb09244c5ee49c"
+  apiKey: "AIzaSyBqjHiWsBnK0AVUpE4arVqHmTI2B1udwaI", // <<< ¡TU API KEY REAL AQUÍ!
+  authDomain: "inventario-ventas-c8c69.firebaseapp.com", // <<< TU AUTH DOMAIN REAL AQUÍ
+  projectId: "inventario-ventas-c8c69", // <<< TU PROJECT ID REAL AQUÍ
+  storageBucket: "inventario-ventas-c8c69.firebasestorage.app", // <<< TU STORAGE BUCKET REAL AQUÍ
+  messagingSenderId: "1098853280661", // <<< TU MESSAGING SENDER ID REAL AQUÍ
+  appId: "1:1098853280661:web:bb9efdb2bb09244c5ee49c" // <<< TU APP ID REAL AQUÍ
 };
 
 // Initialize Firebase
@@ -34,9 +34,10 @@ let editingItemId = null; // ID del item que se está editando
 // Cargar inventario desde Firebase y renderizarlo
 async function cargarInventario(searchTerm = '') {
     inventarioList.innerHTML = '<li>Cargando inventario...</li>';
-    inventarioItems = []; // Limpia el array local
+    inventarioItems = []; // Limpia el array local antes de cargar nuevos datos
     try {
         // Consulta para traer todos los datos. El filtrado se hace en el cliente para este ejemplo.
+        // Para aplicaciones con muchísimos productos, se optimizaría la consulta en Firestore.
         const querySnapshot = await getDocs(inventarioCollectionRef);
 
         if (querySnapshot.empty) {
@@ -68,14 +69,14 @@ async function cargarInventario(searchTerm = '') {
 
 // Renderiza la lista de items en el DOM
 function renderInventario(itemsToRender = inventarioItems) {
-    inventarioList.innerHTML = ''; // Limpia la lista actual
+    inventarioList.innerHTML = ''; // Limpia la lista actual antes de añadir los nuevos items
     if (itemsToRender.length === 0) {
         inventarioList.innerHTML = '<li>No hay artículos que coincidan con tu búsqueda.</li>';
         return;
     }
     itemsToRender.forEach((item) => {
         const listItem = document.createElement('li');
-        listItem.dataset.id = item.id; // Guarda el ID de Firebase para futuras operaciones
+        listItem.dataset.id = item.id; // Guarda el ID de Firebase para futuras operaciones (editar/eliminar)
 
         listItem.innerHTML = `
             <div class="item-info">
@@ -113,6 +114,7 @@ inventarioForm.addEventListener('submit', async (e) => {
         return;
     }
 
+    // Objeto con los datos del nuevo artículo
     const newItemData = {
         sku,
         lote,
@@ -132,7 +134,7 @@ inventarioForm.addEventListener('submit', async (e) => {
             await addDoc(inventarioCollectionRef, newItemData);
             alert('Artículo agregado exitosamente.');
         }
-        inventarioForm.reset(); // Limpia el formulario
+        inventarioForm.reset(); // Limpia el formulario después de agregar/actualizar
         editingItemId = null; // Resetea el modo de edición
         // Elimina el estilo de edición del item previamente editado si existe
         const currentlyEditingItem = document.querySelector('#inventario-list li.editing');
@@ -147,64 +149,64 @@ inventarioForm.addEventListener('submit', async (e) => {
     }
 });
 
-// Maneja los clics en los botones de editar o eliminar de cada item
+// Maneja los clics en los botones de editar o eliminar de cada item en la lista
 inventarioList.addEventListener('click', async (e) => {
     const target = e.target;
     const itemId = target.dataset.id; // Obtiene el ID del item del atributo data-id
 
-    if (!itemId) return; // Si el clic no fue en un elemento con data-id
+    if (!itemId) return; // Si el clic no fue en un elemento con data-id, no hacemos nada
 
     if (target.classList.contains('delete-btn')) { // Si se hizo clic en el botón de eliminar
         if (confirm('¿Estás seguro de que quieres eliminar este artículo?')) {
             try {
                 await deleteDoc(doc(db, 'inventario', itemId));
                 alert('Artículo eliminado.');
-                await cargarInventario(); // Recarga la lista
+                await cargarInventario(); // Recarga la lista para reflejar el cambio
             } catch (error) {
                 console.error("Error al eliminar el artículo: ", error);
                 alert('Hubo un error al eliminar el artículo. Verifica tu conexión o la consola.');
             }
         }
     } else if (target.classList.contains('edit-btn')) { // Si se hizo clic en el botón de editar
-        // Encuentra el item en el array local de inventarioItems
+        // Encuentra el item en el array local de inventarioItems usando su ID
         const itemToEdit = inventarioItems.find(item => item.id === itemId);
         if (itemToEdit) {
-            // Llena el formulario con los datos del item seleccionado
+            // Llena el formulario con los datos del item seleccionado para su edición
             document.getElementById('sku').value = itemToEdit.sku;
             document.getElementById('lote').value = itemToEdit.lote;
             document.getElementById('nombre').value = itemToEdit.nombre;
             document.getElementById('descripcion').value = itemToEdit.descripcion;
             // Manejo seguro para valores numéricos que podrían no estar definidos
-            document.getElementById('inversion').value = itemToEdit.inversion !== undefined ? itemToEdit.inversion.toFixed(2) : '';
+            document.getElementById('inversion').value = itemToEdit.inversion !== undefined ? itemToItem.inversion.toFixed(2) : '';
             document.getElementById('precio-retail').value = itemToEdit.precio_retail !== undefined ? itemToEdit.precio_retail.toFixed(2) : '';
             document.getElementById('precio-publico').value = itemToEdit.precio_publico !== undefined ? itemToEdit.precio_publico.toFixed(2) : '';
 
-            editingItemId = itemId; // Guarda el ID del item que se está editando
+            editingItemId = itemId; // Guarda el ID del item que se está editando para usarlo en la actualización
 
             // Resalta visualmente el item en la lista que está en modo de edición
             const currentlyEditingItem = document.querySelector('#inventario-list li.editing');
             if (currentlyEditingItem) {
                 currentlyEditingItem.classList.remove('editing');
             }
-            const listItem = target.closest('li');
+            const listItem = target.closest('li'); // Busca el elemento 'li' más cercano al botón clicado
             if (listItem) {
-                listItem.classList.add('editing');
+                listItem.classList.add('editing'); // Añade la clase para resaltar
             }
             document.getElementById('nombre').focus(); // Mueve el foco al campo Nombre para facilitar la edición
         }
     }
 });
 
-// Evento para el campo de búsqueda
+// Evento para el campo de búsqueda: filtra los items en tiempo real
 buscarInput.addEventListener('input', (e) => {
     const searchTerm = e.target.value.trim();
-    cargarInventario(searchTerm); // Llama a cargarInventario para filtrar y renderizar
+    cargarInventario(searchTerm); // Llama a cargarInventario para filtrar y renderizar los resultados
 });
 
 // --- Inicialización ---
 // Registro del Service Worker para funcionalidad PWA (offline, instalación)
 if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/js/sw.js')
+    navigator.serviceWorker.register('/js/sw.js') // Ruta correcta al Service Worker
         .then(function(registration) {
             console.log('Service Worker registrado con éxito:', registration.scope);
         })
