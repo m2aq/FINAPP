@@ -15,7 +15,8 @@
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="favicon.ico">
 
-    <link rel="stylesheet" href="css/style.css">
+    <!-- Rutas ajustadas a la raíz -->
+    <link rel="stylesheet" href="style.css">
 
     <!-- Firebase SDK via CDN -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -76,14 +77,14 @@
     </footer>
 
     <!-- Script principal -->
-    <script src="js/app.js"></script>
+    <script src="app.js"></script>
 
     <!-- Script para registrar el Service Worker -->
     <script>
         if ('serviceWorker' in navigator) {
             // Con la etiqueta <base href="/app/inventario-ventas/">,
-            // la ruta absoluta para el SW debería ser correcta.
-            navigator.serviceWorker.register('js/sw.js')
+            // esta ruta debería funcionar para el SW que estará en la raíz.
+            navigator.serviceWorker.register('sw.js') // <-- Rutas ajustadas a la raíz
                 .then(function(registration) {
                     console.log('Service Worker registrado con éxito:', registration.scope);
                 })
