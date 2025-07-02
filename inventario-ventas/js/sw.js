@@ -3,10 +3,10 @@ const CACHE_NAME = 'inventario-cache-v2'; // Versiona la cache para facilitar ac
 const urlsToCache = [
     '/', // La raíz de la aplicación
     '/index.html', // El archivo principal HTML
-    '/css/style.css', // La hoja de estilos
-    '/js/app.js', // El script principal de la aplicación
-    '/icons/icon-192x192.png'
-    '/icons/icon-512x512.png'
+    'css/style.css', // La hoja de estilos
+    'js/app.js', // El script principal de la aplicación
+    'icons/icon-192x192.png'
+    'icons/icon-512x512.png'
 ];
 
 // Evento 'install': Se dispara cuando el Service Worker se instala por primera vez.
