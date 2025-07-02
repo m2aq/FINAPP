@@ -83,7 +83,7 @@
         if ('serviceWorker' in navigator) {
             // Con la etiqueta <base href="/app/inventario-ventas/">,
             // la ruta absoluta para el SW debería ser correcta.
-            navigator.serviceWorker.register('/js/sw.js')
+            navigator.serviceWorker.register('js/sw.js')
                 .then(function(registration) {
                     console.log('Service Worker registrado con éxito:', registration.scope);
                 })
