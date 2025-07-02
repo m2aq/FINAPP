@@ -6,6 +6,11 @@
     <title>Mi Inventario PWA</title>
     <meta name="description" content="Aplicación PWA para gestionar tu inventario de venta con Firebase.">
 
+    <!-- === AJUSTE CRUCIAL PARA GITHUB PAGES === -->
+    <!-- Indica la ruta base de tu sitio en GitHub Pages -->
+    <base href="/app/inventario-ventas/">
+    <!-- ======================================= -->
+
     <link rel="manifest" href="manifest.json">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="favicon.ico">
@@ -13,10 +18,8 @@
     <link rel="stylesheet" href="css/style.css">
 
     <!-- Firebase SDK via CDN -->
-    <!-- Asegúrate de que estas URLs son correctas y están disponibles -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-    <!-- Si usas autenticación u otros servicios, necesitarás añadir sus scripts también -->
 
 </head>
 <body>
@@ -72,23 +75,15 @@
         <p>© 2023 Tu Nombre / Nombre de tu Proyecto</p>
     </footer>
 
-    <!--
-        Script principal de la aplicación.
-        Como Firebase se carga por CDN, ya no necesitamos type="module" ni la importación directa aquí.
-        Sin embargo, la forma en que Firebase se inicializa y expone Globalmente debe ser manejada.
-        Vamos a mover la lógica de inicialización y las funciones a este script.
-    -->
-    <script src="js/app.js"></script> <!-- NOTA: Sin type="module" ahora -->
+    <!-- Script principal -->
+    <script src="js/app.js"></script>
 
+    <!-- Script para registrar el Service Worker -->
     <script>
-        // Script para registrar el Service Worker
-        // Si tu sitio está en una subcarpeta de GitHub Pages (ej: /inventario-ventas/),
-        // la ruta del SW debe ser relativa a la raíz del sitio servido.
-        // Si el SW está en /js/sw.js, la ruta correcta sería 'js/sw.js' o '/js/sw.js' dependiendo de la configuración base.
-        // Para GitHub Pages en subcarpeta, 'js/sw.js' o '/tu-repo/js/sw.js' si no hay base href.
-        // Si usas <base href="/inventario-ventas/"> en index.html, entonces '/js/sw.js' debería funcionar.
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/js/sw.js') // Mantenemos esta ruta por ahora, ¡la ajustaremos si falla el registro!
+            // Con la etiqueta <base href="/app/inventario-ventas/">,
+            // la ruta absoluta para el SW debería ser correcta.
+            navigator.serviceWorker.register('/js/sw.js')
                 .then(function(registration) {
                     console.log('Service Worker registrado con éxito:', registration.scope);
                 })
