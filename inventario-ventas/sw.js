@@ -3,12 +3,12 @@ const CACHE_NAME = 'inventario-cache-v3'; // Versiona la cache
 const urlsToCache = [
     '/',
     'index.html',
-    'style.css',        // <-- ¡Ahora está en la raíz!
-    'app.js',           // <-- ¡Ahora está en la raíz!
+    'style.css',        // <-- Si style.css está en la raíz
+    'app.js',           // <-- Si app.js está en la raíz
     'manifest.json',
     'favicon.ico',
-    'icon-192x192.png', // La carpeta icons/ sí se mantiene
-    'icon-512x512.png'
+    'icon-192x192.png', // <-- Si icon-192x192.png está en la raíz
+    'icon-512x512.png'  // <-- Si icon-512x512.png está en la raíz
 ];
 
 self.addEventListener('install', (event) => {
