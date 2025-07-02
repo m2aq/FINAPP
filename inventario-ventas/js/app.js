@@ -1,6 +1,5 @@
-// Importa las funciones de Firebase que necesites
-import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc, query, where } from "firebase/firestore";
+// NO USAMOS 'import' aquí porque Firebase se carga vía CDN.
+// Las funcionalidades de Firebase estarán disponibles en el objeto global 'firebase'.
 
 // --- Configuración de Firebase ---
 // ¡¡¡IMPORTANTE!!! Reemplaza estos valores con los de TU PROYECTO Firebase.
@@ -13,10 +12,12 @@ const firebaseConfig = {
   appId: "1:1098853280661:web:bb9efdb2bb09244c5ee49c" // <<< TU APP ID REAL AQUÍ
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-// Obtener el servicio Firestore
-const db = getFirestore(app);
+// Initialize Firebase using the globally available 'firebase' object
+// Asegúrate de que los scripts de Firebase en index.html se cargaron ANTES que este script.
+const app = firebase.initializeApp(firebaseConfig);
+
+// Obtener el servicio Firestore usando la instancia de la app inicializada
+const db = firebase.firestore();
 // Crear una referencia a la colección 'inventario' en Firestore
 const inventarioCollectionRef = collection(db, 'inventario');
 
@@ -37,7 +38,6 @@ async function cargarInventario(searchTerm = '') {
     inventarioItems = []; // Limpia el array local antes de cargar nuevos datos
     try {
         // Consulta para traer todos los datos. El filtrado se hace en el cliente para este ejemplo.
-        // Para aplicaciones con muchísimos productos, se optimizaría la consulta en Firestore.
         const querySnapshot = await getDocs(inventarioCollectionRef);
 
         if (querySnapshot.empty) {
@@ -128,10 +128,10 @@ inventarioForm.addEventListener('submit', async (e) => {
 
     try {
         if (editingItemId) { // Si estamos en modo de edición
-            await updateDoc(doc(db, 'inventario', editingItemId), newItemData);
+            await db.collection('inventario').doc(editingItemId).update(newItemData); // Usamos la API global de Firebase v8
             alert('Artículo actualizado exitosamente.');
         } else { // Si estamos agregando un nuevo artículo
-            await addDoc(inventarioCollectionRef, newItemData);
+            await db.collection('inventario').add(newItemData); // Usamos la API global de Firebase v8
             alert('Artículo agregado exitosamente.');
         }
         inventarioForm.reset(); // Limpia el formulario después de agregar/actualizar
@@ -159,7 +159,7 @@ inventarioList.addEventListener('click', async (e) => {
     if (target.classList.contains('delete-btn')) { // Si se hizo clic en el botón de eliminar
         if (confirm('¿Estás seguro de que quieres eliminar este artículo?')) {
             try {
-                await deleteDoc(doc(db, 'inventario', itemId));
+                await db.collection('inventario').doc(itemId).delete(); // Usamos la API global de Firebase v8
                 alert('Artículo eliminado.');
                 await cargarInventario(); // Recarga la lista para reflejar el cambio
             } catch (error) {
@@ -177,9 +177,9 @@ inventarioList.addEventListener('click', async (e) => {
             document.getElementById('nombre').value = itemToEdit.nombre;
             document.getElementById('descripcion').value = itemToEdit.descripcion;
             // Manejo seguro para valores numéricos que podrían no estar definidos
-            document.getElementById('inversion').value = itemToEdit.inversion !== undefined ? itemToItem.inversion.toFixed(2) : '';
-            document.getElementById('precio-retail').value = itemToEdit.precio_retail !== undefined ? itemToEdit.precio_retail.toFixed(2) : '';
-            document.getElementById('precio-publico').value = itemToEdit.precio_publico !== undefined ? itemToEdit.precio_publico.toFixed(2) : '';
+            document.getElementById('inversion').value = itemToEdit.inversion !== undefined ? itemToEdit.inversion.toFixed(2) : '';
+            document.getElementById('precio-retail').value = itemToEdit.precio_retail !== undefined ? itemToItem.precio_retail.toFixed(2) : '';
+            document.getElementById('precio-publico').value = itemToEdit.precio_publico !== undefined ? itemToItem.precio_publico.toFixed(2) : '';
 
             editingItemId = itemId; // Guarda el ID del item que se está editando para usarlo en la actualización
 
@@ -203,17 +203,8 @@ buscarInput.addEventListener('input', (e) => {
     cargarInventario(searchTerm); // Llama a cargarInventario para filtrar y renderizar los resultados
 });
 
-// --- Inicialización ---
-// Registro del Service Worker para funcionalidad PWA (offline, instalación)
-if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/js/sw.js') // Ruta correcta al Service Worker
-        .then(function(registration) {
-            console.log('Service Worker registrado con éxito:', registration.scope);
-        })
-        .catch(function(err) {
-            console.log('Fallo al registrar Service Worker:', err);
-        });
-}
-
 // Carga inicial del inventario cuando la aplicación arranca
+// La carga del Service Worker se deja en el index.html para que ocurra antes.
+// Si se usa CDN, la inicialización de Firebase y las funciones de Firestore se harán aquí.
+// NOTA: El registro del SW está en index.html, así que no lo repetimos aquí.
 cargarInventario();
