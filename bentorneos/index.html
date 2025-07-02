@@ -88,6 +88,11 @@
       border-color: #4caf50;
       font-weight: bold;
     }
+
+    .boton-final {
+      text-align: center;
+      margin-top: 2rem;
+    }
   </style>
 </head>
 <body>
@@ -120,13 +125,17 @@
       <h2>3. Eliminación Directa</h2>
       <div class="bracket" id="bracket"></div>
     </section>
+
+    <div class="boton-final">
+      <button onclick="reiniciar()">🔁 Nuevo Torneo</button>
+    </div>
   </main>
 
   <script>
-    const participantes = [];
-    const resultados = {};
+    let participantes = [];
+    let resultados = {};
     let partidos = [];
-    let clasificados = [];
+    let rondaActual = [];
 
     function agregarParticipante() {
       const nombre = document.getElementById("nombre").value.trim();
@@ -151,8 +160,9 @@
           partidos.push([participantes[i], participantes[j]]);
         }
       }
+      resultados = {};
+      participantes.forEach(p => resultados[p] = { pts: 0, v: 0, d: 0 });
       actualizarPartidos();
-      participantes.forEach(p => resultados[p] = {pts: 0, v: 0, d: 0});
     }
 
     function actualizarPartidos() {
@@ -178,7 +188,7 @@
       partidos.splice(index, 1);
       actualizarPartidos();
       actualizarTabla();
-      if (partidos.length === 0) {
+      if (partidos.length === 0 && esPotenciaDeDos(participantes.length)) {
         document.getElementById("btnEliminatorias").disabled = false;
       }
     }
@@ -196,68 +206,75 @@
     function iniciarEliminatorias() {
       document.getElementById("grupos").style.display = "none";
       document.getElementById("eliminatorias").style.display = "block";
-      clasificados = Object.entries(resultados)
-        .sort((a,b) => b[1].pts - a[1].pts)
-        .map(([nombre]) => nombre);
-
       const bracket = document.getElementById("bracket");
       bracket.innerHTML = "";
 
-      while (clasificados.length % 2 !== 0) clasificados.pop();
+      const ordenados = Object.entries(resultados).sort((a,b) => b[1].pts - a[1].pts).map(e => e[0]);
+      const cantidad = ordenados.length;
+      if (!esPotenciaDeDos(cantidad)) {
+        alert("Solo puedes avanzar si el número de participantes es potencia de 2.");
+        return;
+      }
 
+      const emparejados = [];
+      for (let i = 0; i < cantidad / 2; i++) {
+        emparejados.push([ordenados[i], ordenados[cantidad - 1 - i]]);
+      }
+      rondaActual = emparejados;
+      mostrarRonda(emparejados);
+    }
+
+    function mostrarRonda(parejas) {
+      const bracket = document.getElementById("bracket");
       const ronda = document.createElement("div");
       ronda.className = "ronda";
-      ronda.innerHTML = "<h3>Ronda 1</h3>";
-
-      for (let i = 0; i < clasificados.length; i += 2) {
+      ronda.innerHTML = `<h3>Ronda</h3>`;
+      parejas.forEach(([p1, p2]) => {
         const box = document.createElement("div");
         box.className = "box";
-        const p1 = clasificados[i];
-        const p2 = clasificados[i + 1];
         box.innerHTML = `${p1} vs ${p2}<br>
-          <button onclick="avanzarRonda('${p1}', this)">Gana ${p1}</button>
-          <button onclick="avanzarRonda('${p2}', this)">Gana ${p2}</button>`;
+          <button onclick="avanzar('${p1}', this)">Gana ${p1}</button>
+          <button onclick="avanzar('${p2}', this)">Gana ${p2}</button>`;
         ronda.appendChild(box);
-      }
+      });
       bracket.appendChild(ronda);
     }
 
-    function avanzarRonda(ganador, boton) {
+    function avanzar(ganador, boton) {
       const box = boton.parentElement;
       box.innerHTML = `Ganador: ${ganador}`;
       box.classList.add("ganador");
 
-      const rondaActual = box.parentElement;
-      const bracket = document.getElementById("bracket");
-
-      let siguienteRonda = rondaActual.nextElementSibling;
-      if (!siguienteRonda) {
-        siguienteRonda = document.createElement("div");
-        siguienteRonda.className = "ronda";
-        siguienteRonda.innerHTML = `<h3>Siguiente Ronda</h3>`;
-        bracket.appendChild(siguienteRonda);
-      }
-
-      const boxes = rondaActual.querySelectorAll(".ganador");
-      if (boxes.length % 2 === 0) {
-        const ganadores = Array.from(boxes).map(b => b.textContent.replace("Ganador: ", ""));
-        siguienteRonda.innerHTML = `<h3>Siguiente Ronda</h3>`;
+      const rondaDiv = box.parentElement;
+      const ganadores = Array.from(rondaDiv.querySelectorAll(".ganador")).map(b => b.textContent.replace("Ganador: ", ""));
+      if (ganadores.length * 2 === rondaActual.length * 2) {
+        rondaActual = [];
         for (let i = 0; i < ganadores.length; i += 2) {
-          const b = document.createElement("div");
-          b.className = "box";
-          const a = ganadores[i];
-          const b2 = ganadores[i + 1];
-          if (!b2) {
-            b.innerHTML = `🏆 CAMPEÓN: ${a}`;
-            b.classList.add("ganador");
+          if (ganadores[i + 1]) {
+            rondaActual.push([ganadores[i], ganadores[i + 1]]);
           } else {
-            b.innerHTML = `${a} vs ${b2}<br>
-              <button onclick="avanzarRonda('${a}', this)">Gana ${a}</button>
-              <button onclick="avanzarRonda('${b2}', this)">Gana ${b2}</button>`;
+            mostrarCampeon(ganadores[i]);
+            return;
           }
-          siguienteRonda.appendChild(b);
         }
+        mostrarRonda(rondaActual);
       }
+    }
+
+    function mostrarCampeon(nombre) {
+      const bracket = document.getElementById("bracket");
+      const div = document.createElement("div");
+      div.className = "box ganador";
+      div.innerHTML = `🏆 CAMPEÓN: ${nombre}`;
+      bracket.appendChild(div);
+    }
+
+    function esPotenciaDeDos(n) {
+      return n && (n & (n - 1)) === 0;
+    }
+
+    function reiniciar() {
+      location.reload();
     }
   </script>
 </body>
