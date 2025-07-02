@@ -3,48 +3,93 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Inventario con Firebase</title>
+  <title>Inventario de Ventas</title>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
-      background: #f9f9f9;
-      padding: 20px;
-    }
-    h1 {
+      background: #f4f6f8;
+      padding: 30px;
       color: #333;
     }
-    input, button {
+    h1 {
+      text-align: center;
+      color: #0078D4;
+    }
+    .form {
+      max-width: 500px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .form input, .form button {
+      width: 100%;
       padding: 10px;
-      margin: 5px;
+      margin-top: 10px;
       font-size: 16px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    .form button {
+      background: #0078D4;
+      color: white;
+      cursor: pointer;
+      border: none;
+    }
+    .form button:hover {
+      background: #005fa3;
     }
     #productos {
-      margin-top: 20px;
+      max-width: 600px;
+      margin: 40px auto 0;
     }
     .producto {
-      background: #fff;
-      padding: 10px;
-      margin-bottom: 8px;
-      border: 1px solid #ddd;
+      background: white;
+      padding: 15px;
+      margin-bottom: 10px;
+      border-left: 5px solid #0078D4;
+      border-radius: 5px;
+      position: relative;
+    }
+    .producto button {
+      position: absolute;
+      right: 15px;
+      top: 15px;
+      background: red;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .resumen {
+      text-align: center;
+      margin-top: 30px;
+      font-size: 18px;
+      color: #555;
     }
   </style>
 </head>
 <body>
 
-  <h1>📦 Inventario de Productos</h1>
+  <h1>📦 Inventario de Ventas</h1>
 
-  <input type="text" id="nombre" placeholder="Nombre del producto" />
-  <input type="number" id="cantidad" placeholder="Cantidad" />
-  <button id="agregar">Agregar producto</button>
+  <div class="form">
+    <input type="text" id="nombre" placeholder="Nombre del producto" />
+    <input type="number" id="cantidad" placeholder="Cantidad" />
+    <button id="agregar">Agregar producto</button>
+  </div>
 
   <div id="productos"></div>
+  <div class="resumen" id="resumen"></div>
 
   <script type="module">
-    // Importar SDKs desde Firebase CDN
+    // Importar Firebase SDKs
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 
-    // Configuración de Firebase (tuya)
+    // Configuración de tu proyecto Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyBqjHiWsBnK0AVUpE4arVqHmTI2B1udwaI",
       authDomain: "inventario-ventas-c8c69.firebaseapp.com",
@@ -59,34 +104,55 @@
     const db = getFirestore(app);
     const productosRef = collection(db, "productos");
 
-    // Función para agregar productos
+    // Agregar producto
     document.getElementById("agregar").addEventListener("click", async () => {
       const nombre = document.getElementById("nombre").value.trim();
       const cantidad = parseInt(document.getElementById("cantidad").value);
 
-      if (nombre && !isNaN(cantidad)) {
+      if (nombre && cantidad > 0) {
         await addDoc(productosRef, { nombre, cantidad });
         document.getElementById("nombre").value = "";
         document.getElementById("cantidad").value = "";
       } else {
-        alert("Completa ambos campos");
+        alert("Completa ambos campos correctamente.");
       }
     });
 
     // Mostrar productos en tiempo real
     const productosDiv = document.getElementById("productos");
+    const resumenDiv = document.getElementById("resumen");
+
     onSnapshot(productosRef, (snapshot) => {
       productosDiv.innerHTML = "";
-      snapshot.forEach(doc => {
-        const producto = doc.data();
-        productosDiv.innerHTML += `
-          <div class="producto">
-            <strong>${producto.nombre}</strong><br>
-            Cantidad: ${producto.cantidad}
-          </div>
+      let totalProductos = 0;
+      let totalUnidades = 0;
+
+      snapshot.forEach(docSnap => {
+        const producto = docSnap.data();
+        const id = docSnap.id;
+
+        totalProductos++;
+        totalUnidades += producto.cantidad;
+
+        const div = document.createElement("div");
+        div.className = "producto";
+        div.innerHTML = `
+          <strong>${producto.nombre}</strong><br>
+          Cantidad: ${producto.cantidad}
+          <button onclick="eliminarProducto('${id}')">Eliminar</button>
         `;
+        productosDiv.appendChild(div);
       });
+
+      resumenDiv.innerText = `📊 Total productos: ${totalProductos} | Total unidades: ${totalUnidades}`;
     });
+
+    // Eliminar producto (expuesto globalmente)
+    window.eliminarProducto = async (id) => {
+      if (confirm("¿Eliminar este producto del inventario?")) {
+        await deleteDoc(doc(db, "productos", id));
+      }
+    };
   </script>
 
 </body>
