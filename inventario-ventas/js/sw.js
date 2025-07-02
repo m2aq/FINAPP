@@ -2,7 +2,7 @@ const CACHE_NAME = 'inventario-cache-v2'; // Versiona la cache para facilitar ac
 // Lista de archivos que queremos cachear para el funcionamiento offline y carga rápida.
 const urlsToCache = [
     '/', // La raíz de la aplicación
-    '/index.html', // El archivo principal HTML
+    'index.html', // El archivo principal HTML
     'css/style.css', // La hoja de estilos
     'js/app.js', // El script principal de la aplicación
     'icons/icon-192x192.png'
