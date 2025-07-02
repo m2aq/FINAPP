@@ -1,30 +1,221 @@
+/* General Styles */
 body {
-    font-family: sans-serif;
-    background-color: #f0f0f0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     margin: 0;
     padding: 0;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
+    background-color: #f0f2f5; /* Color de fondo suave de iOS */
+    color: #1c1c1e; /* Color de texto principal oscuro */
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased; /* Mejora renderizado de fuentes */
+    -moz-osx-font-smoothing: grayscale;
 }
 
 header {
-    background-color: #4CAF50; /* Verde */
-    color: white;
-    padding: 1rem;
+    background-color: #ffffff; /* Fondo blanco para la barra superior */
+    color: #1c1c1e; /* Texto oscuro */
+    padding: 12px 20px;
     text-align: center;
+    border-bottom: 1px solid #d1d1d6; /* Borde sutil */
+    position: sticky; /* Para que el header se quede fijo */
+    top: 0;
+    z-index: 1000; /* Asegura que el header esté por encima de otros elementos */
+    font-weight: 600; /* Negrita para el título */
+    font-size: 1.1em;
+}
+
+h1, h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
 }
 
 main {
-    flex-grow: 1;
+    max-width: 900px;
+    margin: 20px auto; /* Espacio alrededor del contenido principal */
     padding: 20px;
-    text-align: center;
-    color: #333;
+    background-color: #ffffff; /* Fondo blanco para el contenido */
+    border-radius: 12px; /* Bordes redondeados */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08); /* Sombra más suave */
 }
 
-footer {
-    background-color: #333;
+section {
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e5e5ea; /* Borde sutil para separar secciones */
+}
+
+section:last-child {
+    border-bottom: none; /* No aplicar borde a la última sección */
+}
+
+/* Form Styles */
+#formulario-agregar {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px; /* Espacio entre campos */
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin-bottom: 8px; /* Más espacio entre label y input */
+    font-weight: 500;
+    color: #6d6d72; /* Color de label más suave */
+    font-size: 0.95em;
+}
+
+input[type="text"],
+input[type="number"],
+textarea {
+    padding: 12px 15px;
+    border: 1px solid #ccc; /* Borde gris claro */
+    border-radius: 8px; /* Bordes redondeados */
+    font-size: 16px;
+    box-sizing: border-box;
+    width: 100%;
+    background-color: #f8f8f8; /* Fondo ligeramente gris para inputs */
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+textarea:focus {
+    outline: none;
+    border-color: #007aff; /* Color azul al enfocar */
+    box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.3); /* Sombra suave al enfocar */
+}
+
+textarea {
+    min-height: 90px; /* Más altura para el textarea */
+    resize: vertical;
+}
+
+button[type="submit"] {
+    background-color: #007aff; /* Botón azul principal de iOS */
     color: white;
+    border: none;
+    padding: 14px 25px; /* Padding más generoso */
+    border-radius: 10px; /* Bordes más redondeados */
+    font-size: 17px; /* Tamaño de fuente más grande */
+    font-weight: 600; /* Negrita */
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    grid-column: 1 / -1; /* Ocupa todo el ancho del grid */
+    width: auto;
+    margin-top: 15px; /* Más espacio antes del botón */
+    letter-spacing: -0.02em; /* Ligero ajuste de espaciado */
+}
+
+button[type="submit"]:hover {
+    background-color: #005ecb; /* Color al pasar el ratón */
+}
+
+/* List Styles */
+#buscar-input {
+    width: calc(100% - 30px); /* Ajuste para padding */
+    margin-bottom: 20px;
+    padding: 12px 15px; /* Más padding que antes */
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+    background-color: #f8f8f8;
+}
+
+#inventario-list {
+    list-style: none;
+    padding: 0;
+}
+
+#inventario-list li {
+    background-color: #ffffff; /* Fondo blanco para cada item */
+    border: 1px solid #e5e5ea; /* Borde sutil */
+    border-radius: 10px; /* Bordes redondeados */
+    margin-bottom: 12px; /* Más espacio entre items */
+    padding: 15px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05); /* Sombra suave */
+}
+
+#inventario-list li .item-info {
+    flex-grow: 1;
+    margin-right: 15px;
+}
+
+#inventario-list li strong {
+    color: #007aff; /* Color azul para el nombre del item */
+    font-weight: 600;
+}
+
+#inventario-list li span {
+    display: block;
+    font-size: 0.9em;
+    color: #6d6d72; /* Color gris para detalles */
+    margin-top: 6px; /* Más espacio entre líneas de detalles */
+}
+
+#inventario-list li .item-actions {
+    display: flex;
+    gap: 15px; /* Más espacio entre botones */
+    margin-left: auto; /* Empuja los botones a la derecha */
+}
+
+.edit-btn, .delete-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.3em; /* Tamaño de ícono ligeramente mayor */
+    padding: 5px 8px; /* Padding alrededor del ícono */
+    transition: color 0.2s ease;
+    border-radius: 6px; /* Bordes redondeados para los botones */
+}
+
+.edit-btn { color: #007aff; } /* Botón azul */
+.edit-btn:hover { background-color: rgba(0, 122, 255, 0.1); } /* Efecto hover azul sutil */
+.delete-btn { color: #ff3b30; } /* Botón rojo */
+.delete-btn:hover { background-color: rgba(255, 59, 48, 0.1); } /* Efecto hover rojo sutil */
+
+/* Estilo para indicar que un item está en modo de edición */
+#inventario-list li.editing {
+    border-left: 4px solid #007aff; /* Barra lateral azul */
+    background-color: #e8f0fe; /* Fondo ligeramente diferente */
+}
+
+/* Footer */
+footer {
     text-align: center;
-    padding: 1rem;
+    padding: 25px; /* Más padding */
+    color: #8e8e93; /* Color de texto suave */
+    font-size: 0.9em;
+    margin-top: 40px; /* Espacio para separarlo del contenido */
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    main {
+        margin: 10px;
+        padding: 15px;
+    }
+    #formulario-agregar {
+        grid-template-columns: 1fr;
+    }
+    button[type="submit"] {
+        grid-column: 1;
+    }
+    #inventario-list li {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    #inventario-list li .item-info {
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+    #inventario-list li .item-actions {
+        margin-left: 0; /* Los botones ya no van a la derecha en móvil */
+        width: 100%;
+        justify-content: flex-end; /* Alinea los botones a la derecha */
+    }
 }
