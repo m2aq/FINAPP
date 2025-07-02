@@ -18,10 +18,11 @@
     <!-- Rutas ajustadas a la raíz (asumiendo que style.css está en la raíz) -->
     <link rel="stylesheet" href="style.css">
 
-    <!-- Firebase SDK via CDN -->
-    <!-- Estos scripts deben estar en el head para que el objeto 'firebase' esté disponible globalmente -->
+    <!-- Firebase SDK via CDN (Versión 8) -->
+    <!-- Estas etiquetas son cruciales. Asegúrate de que estén aquí y en el <head>. -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <!-- Si necesitas autenticación u otros servicios, deberás añadir sus scripts aquí también -->
 
 </head>
 <body>
@@ -77,14 +78,19 @@
         <p>© 2025 m2aq / Inventario Online </p>
     </footer>
 
-    <!-- Script principal de la aplicación -->
-    <!-- Ahora usamos el script global de Firebase v8, no importaciones modulares -->
+    <!--
+        Script principal de la aplicación.
+        YA NO USAMOS type="module" y NO usamos 'import' porque Firebase
+        se carga vía CDN y se accede a través del objeto global 'firebase'.
+        Este script debe contener la lógica que te di para Firebase v8 CDN.
+    -->
     <script src="app.js"></script>
 
     <!-- Script para registrar el Service Worker -->
     <script>
         if ('serviceWorker' in navigator) {
-            // La ruta 'sw.js' es correcta porque está en la raíz y la etiqueta <base> resuelve la ruta.
+            // La ruta 'sw.js' es correcta porque está en la raíz,
+            // y la etiqueta <base> resuelve la ruta base correctamente.
             navigator.serviceWorker.register('sw.js')
                 .then(function(registration) {
                     console.log('SW registrado correctamente:', registration.scope);
