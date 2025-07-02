@@ -172,19 +172,21 @@
         const div = document.createElement("div");
         div.className = "match";
         div.innerHTML = `${p[0]} vs ${p[1]} 
-          <button onclick="registrarVictoria(${i}, 0)">Gana ${p[0]}</button>
-          <button onclick="registrarVictoria(${i}, 1)">Gana ${p[1]}</button>`;
+          <button onclick="rVictoria(${i}, 0)">Gana ${p[0]}</button>
+          <button onclick="rVictoria(${i}, 1)">Gana ${p[1]}</button>`;
         contenedor.appendChild(div);
       });
     }
 
-  function registrarVictoria(index, ganador) {
+function registrarVictoria(index, ganador) {
   const [p1, p2] = partidos[index];
   const ganadorNombre = ganador === 0 ? p1 : p2;
   const perdedorNombre = ganador === 0 ? p2 : p1;
+
   resultados[ganadorNombre].pts += 2;
   resultados[ganadorNombre].v += 1;
   resultados[perdedorNombre].d += 1;
+
   partidos.splice(index, 1);
   actualizarPartidos();
   actualizarTabla();
@@ -200,17 +202,29 @@
       document.getElementById("btnEliminatorias").disabled = false;
     }
 
-    // Mostrar quiénes fueron eliminados
-    const ordenados = Object.entries(resultados).sort((a,b) => b[1].pts - a[1].pts).map(e => e[0]);
+    const ordenados = Object.entries(resultados)
+      .sort((a, b) => b[1].pts - a[1].pts)
+      .map(e => e[0]);
+
+    const clasificados = ordenados.slice(0, maxClasificados);
     const eliminados = ordenados.slice(maxClasificados);
+
+    // Actualiza la lista de participantes y resultados con solo los clasificados
+    participantes = [...clasificados];
+    const nuevosResultados = {};
+    clasificados.forEach(p => {
+      nuevosResultados[p] = resultados[p];
+    });
+    resultados = nuevosResultados;
+
     if (eliminados.length > 0) {
       alert("Participantes eliminados por exceso:\n" + eliminados.map(e => " - " + e).join("\n"));
     }
 
-    // Filtrar resultados a solo los mejores clasificados
-    participantes = ordenados.slice(0, maxClasificados);
+    actualizarTabla();
   }
 }
+
 
 
     function actualizarTabla() {
