@@ -3,77 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Inventario PWA</title>
-    <meta name="description" content="Aplicación PWA para gestionar tu inventario de venta con Firebase.">
+    <title>Test PWA Base</title>
+    <meta name="description" content="Test para verificar estructura y Service Worker.">
 
-    <!-- === AJUSTE CRUCIAL PARA GITHUB PAGES === -->
-    <!-- Indica la ruta base de tu sitio en GitHub Pages -->
-    <base href="/app/inventario-ventas/">
-    <!-- ======================================= -->
+    <!-- Ajuste para GitHub Pages si se desplegara en una subcarpeta -->
+    <!-- Cambia 'test-pwa-base' por el nombre de tu repo si es necesario -->
+    <base href="/test-pwa-base/">
 
     <link rel="manifest" href="manifest.json">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="favicon.ico">
 
-    <!-- Rutas ajustadas a la raíz -->
-    <link rel="stylesheet" href="style.css">
-
-    <!-- Firebase SDK via CDN -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <link rel="stylesheet" href="style.css"> <!-- Ruta ajustada a la raíz -->
 
 </head>
 <body>
     <header>
-        <h1>Mi Inventario de Venta</h1>
+        <h1>Test PWA Base</h1>
     </header>
 
     <main>
-        <section id="formulario-agregar">
-            <h2>Agregar Nuevo Artículo</h2>
-            <form id="inventario-form">
-                <div class="form-group">
-                    <label for="sku">SKU:</label>
-                    <input type="text" id="sku" required>
-                </div>
-                <div class="form-group">
-                    <label for="lote">Lote:</label>
-                    <input type="text" id="lote">
-                </div>
-                <div class="form-group">
-                    <label for="nombre">Nombre:</label>
-                    <input type="text" id="nombre" required>
-                </div>
-                <div class="form-group">
-                    <label for="descripcion">Descripción:</label>
-                    <textarea id="descripcion"></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="inversion">Inversión ($):</label>
-                    <input type="number" id="inversion" step="0.01" required>
-                </div>
-                <div class="form-group">
-                    <label for="precio-retail">Precio Retail ($):</label>
-                    <input type="number" id="precio-retail" step="0.01">
-                </div>
-                <div class="form-group">
-                    <label for="precio-publico">Precio al Público ($):</label>
-                    <input type="number" id="precio-publico" step="0.01" required>
-                </div>
-                <button type="submit">Agregar Artículo</button>
-            </form>
-        </section>
-
-        <section id="lista-inventario">
-            <h2>Inventario Actual</h2>
-            <input type="text" id="buscar-input" placeholder="Buscar en inventario...">
-            <ul id="inventario-list">
-            </ul>
-        </section>
+        <p>¡Hola! Si ves esto y el estilo se aplica, ¡vamos bien!</p>
     </main>
 
     <footer>
-        <p>© 2025 m2aq / Inventario Online </p>
+        <p>Test Footer</p>
     </footer>
 
     <!-- Script principal -->
@@ -82,14 +36,13 @@
     <!-- Script para registrar el Service Worker -->
     <script>
         if ('serviceWorker' in navigator) {
-            // Con la etiqueta <base href="/app/inventario-ventas/">,
-            // esta ruta debería funcionar para el SW que estará en la raíz.
-            navigator.serviceWorker.register('sw.js') // <-- Rutas ajustadas a la raíz
+            // La ruta debe ser relativa a la base servida
+            navigator.serviceWorker.register('sw.js')
                 .then(function(registration) {
-                    console.log('Service Worker registrado con éxito:', registration.scope);
+                    console.log('SW registrado correctamente:', registration.scope);
                 })
                 .catch(function(err) {
-                    console.log('Fallo al registrar Service Worker:', err);
+                    console.log('Fallo al registrar SW:', err);
                 });
         }
     </script>
