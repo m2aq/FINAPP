@@ -1,103 +1,33 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Inventario de Ventas</title>
-  <style>
-    body { font-family: Arial, sans-serif; padding: 30px; background: #f4f4f4; }
-    h1 { color: #333; }
-    form { margin-bottom: 20px; }
-    input, button { padding: 10px; margin: 5px; font-size: 16px; }
-    ul { list-style: none; padding: 0; }
-    li {
-      background: #fff;
-      margin: 5px 0;
-      padding: 10px;
-      border: 1px solid #ddd;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .acciones button {
-      margin-left: 8px;
-      padding: 6px 10px;
-      font-size: 14px;
-      cursor: pointer;
-    }
-  </style>
-</head>
-<body>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+  import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 
-  <h1>📦 Inventario de Ventas</h1>
+  const firebaseConfig = {
+    apiKey: "AIzaSyBqjHiWsBnK0AVUpE4arVqHmTI2B1udwaI",
+    authDomain: "inventario-ventas-c8c69.firebaseapp.com",
+    projectId: "inventario-ventas-c8c69",
+    storageBucket: "inventario-ventas-c8c69.appspot.com",
+    messagingSenderId: "1098853280661",
+    appId: "1:1098853280661:web:bb9efdb2bb09244c5ee49c"
+  };
 
-  <form id="formulario">
-    <input type="text" id="nombre" placeholder="Nombre del producto" required />
-    <input type="number" id="cantidad" placeholder="Cantidad" required min="0" />
-    <button type="submit">Agregar al inventario</button>
-  </form>
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
 
-  <ul id="lista"></ul>
-
-  <!-- Firebase SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"></script>
-
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyBqjHiWsBnK0AVUpE4arVqHmTI2B1udwaI",
-      authDomain: "inventario-ventas-c8c69.firebaseapp.com",
-      projectId: "inventario-ventas-c8c69",
-      storageBucket: "inventario-ventas-c8c69.firebasestorage.app",
-      messagingSenderId: "1098853280661",
-      appId: "1:1098853280661:web:994661993e2718785ee49c"
-    };
-
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-
-    const form = document.getElementById("formulario");
-    const lista = document.getElementById("lista");
-
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const nombre = document.getElementById("nombre").value.trim();
-      const cantidad = parseInt(document.getElementById("cantidad").value);
-      if (nombre && cantidad >= 0) {
-        await db.collection("productos").add({ nombre, cantidad });
-        form.reset();
-      }
+  // Agregar producto de ejemplo (puedes conectar con inputs)
+  try {
+    const docRef = await addDoc(collection(db, "productos"), {
+      nombre: "Zapato deportivo",
+      cantidad: 10
     });
+    console.log("Producto agregado con ID:", docRef.id);
+  } catch (e) {
+    console.error("Error al agregar producto:", e);
+  }
 
-    db.collection("productos").onSnapshot((snapshot) => {
-      lista.innerHTML = "";
-      snapshot.forEach((doc) => {
-        const item = doc.data();
-        const id = doc.id;
-
-        const li = document.createElement("li");
-        li.dataset.id = id;
-
-        const contenido = document.createElement("span");
-        contenido.textContent = `${item.nombre} - Cantidad: ${item.cantidad}`;
-
-        const acciones = document.createElement("div");
-        acciones.classList.add("acciones");
-
-        const btnEliminar = document.createElement("button");
-        btnEliminar.textContent = "Eliminar";
-        btnEliminar.onclick = async () => {
-          if (confirm(`¿Eliminar "${item.nombre}"?`)) {
-            await db.collection("productos").doc(id).delete();
-          }
-        };
-
-        acciones.appendChild(btnEliminar);
-        li.appendChild(contenido);
-        li.appendChild(acciones);
-        lista.appendChild(li);
-      });
-    });
-  </script>
-</body>
-</html>
+  // Leer productos existentes
+  const querySnapshot = await getDocs(collection(db, "productos"));
+  querySnapshot.forEach((doc) => {
+    console.log(`${doc.id} =>`, doc.data());
+  });
+</script>
