@@ -1,33 +1,93 @@
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-  import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Inventario con Firebase</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f9f9f9;
+      padding: 20px;
+    }
+    h1 {
+      color: #333;
+    }
+    input, button {
+      padding: 10px;
+      margin: 5px;
+      font-size: 16px;
+    }
+    #productos {
+      margin-top: 20px;
+    }
+    .producto {
+      background: #fff;
+      padding: 10px;
+      margin-bottom: 8px;
+      border: 1px solid #ddd;
+    }
+  </style>
+</head>
+<body>
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyBqjHiWsBnK0AVUpE4arVqHmTI2B1udwaI",
-    authDomain: "inventario-ventas-c8c69.firebaseapp.com",
-    projectId: "inventario-ventas-c8c69",
-    storageBucket: "inventario-ventas-c8c69.appspot.com",
-    messagingSenderId: "1098853280661",
-    appId: "1:1098853280661:web:bb9efdb2bb09244c5ee49c"
-  };
+  <h1>📦 Inventario de Productos</h1>
 
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
+  <input type="text" id="nombre" placeholder="Nombre del producto" />
+  <input type="number" id="cantidad" placeholder="Cantidad" />
+  <button id="agregar">Agregar producto</button>
 
-  // Agregar producto de ejemplo (puedes conectar con inputs)
-  try {
-    const docRef = await addDoc(collection(db, "productos"), {
-      nombre: "Zapato deportivo",
-      cantidad: 10
+  <div id="productos"></div>
+
+  <script type="module">
+    // Importar SDKs desde Firebase CDN
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
+    // Configuración de Firebase (tuya)
+    const firebaseConfig = {
+      apiKey: "AIzaSyBqjHiWsBnK0AVUpE4arVqHmTI2B1udwaI",
+      authDomain: "inventario-ventas-c8c69.firebaseapp.com",
+      projectId: "inventario-ventas-c8c69",
+      storageBucket: "inventario-ventas-c8c69.appspot.com",
+      messagingSenderId: "1098853280661",
+      appId: "1:1098853280661:web:bb9efdb2bb09244c5ee49c"
+    };
+
+    // Inicializar Firebase y Firestore
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const productosRef = collection(db, "productos");
+
+    // Función para agregar productos
+    document.getElementById("agregar").addEventListener("click", async () => {
+      const nombre = document.getElementById("nombre").value.trim();
+      const cantidad = parseInt(document.getElementById("cantidad").value);
+
+      if (nombre && !isNaN(cantidad)) {
+        await addDoc(productosRef, { nombre, cantidad });
+        document.getElementById("nombre").value = "";
+        document.getElementById("cantidad").value = "";
+      } else {
+        alert("Completa ambos campos");
+      }
     });
-    console.log("Producto agregado con ID:", docRef.id);
-  } catch (e) {
-    console.error("Error al agregar producto:", e);
-  }
 
-  // Leer productos existentes
-  const querySnapshot = await getDocs(collection(db, "productos"));
-  querySnapshot.forEach((doc) => {
-    console.log(`${doc.id} =>`, doc.data());
-  });
-</script>
+    // Mostrar productos en tiempo real
+    const productosDiv = document.getElementById("productos");
+    onSnapshot(productosRef, (snapshot) => {
+      productosDiv.innerHTML = "";
+      snapshot.forEach(doc => {
+        const producto = doc.data();
+        productosDiv.innerHTML += `
+          <div class="producto">
+            <strong>${producto.nombre}</strong><br>
+            Cantidad: ${producto.cantidad}
+          </div>
+        `;
+      });
+    });
+  </script>
+
+</body>
+</html>
