@@ -6,10 +6,14 @@
     <title>Mi Inventario PWA</title>
     <meta name="description" content="Aplicación PWA para gestionar tu inventario de venta con Firebase.">
 
+    <!-- Enlace al Manifest -->
     <link rel="manifest" href="manifest.json">
+
+    <!-- Favicon y Apple Touch Icon (recomendado para PWAs) -->
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="favicon.ico">
 
+    <!-- Enlace a la hoja de estilos CSS -->
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -57,6 +61,7 @@
             <h2>Inventario Actual</h2>
             <input type="text" id="buscar-input" placeholder="Buscar en inventario...">
             <ul id="inventario-list">
+                <!-- Los items del inventario se cargarán aquí -->
             </ul>
         </section>
     </main>
@@ -65,10 +70,17 @@
         <p>© 2023 Tu Nombre / Nombre de tu Proyecto</p>
     </footer>
 
+    <!--
+        Script principal de la aplicación.
+        'type="module"' es crucial para que las sentencias 'import' funcionen.
+    -->
     <script type="module" src="js/app.js"></script>
 
+    <!-- Script para registrar el Service Worker -->
     <script>
         if ('serviceWorker' in navigator) {
+            // La ruta aquí es crucial para el registro correcto del Service Worker.
+            // Al estar en la raíz, /js/sw.js es la ruta correcta para acceder al archivo.
             navigator.serviceWorker.register('/js/sw.js')
                 .then(function(registration) {
                     console.log('Service Worker registrado con éxito:', registration.scope);
