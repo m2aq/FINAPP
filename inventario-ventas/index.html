@@ -1,410 +1,82 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Inventario Compartido iOS Style</title>
-<style>
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
-      Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-    background: #f9fafb;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-  }
-  header {
-    background: #007aff;
-    color: white;
-    padding: 1rem;
-    text-align: center;
-    font-weight: 600;
-    font-size: 1.5rem;
-  }
-  main {
-    flex: 1;
-    max-width: 600px;
-    margin: 1rem auto;
-    width: 90%;
-  }
-  .hidden {
-    display: none;
-  }
-  input, button {
-    font-size: 1rem;
-    padding: 0.7rem;
-    margin: 0.3rem 0;
-    border-radius: 10px;
-    border: 1px solid #ccc;
-    width: 100%;
-    box-sizing: border-box;
-  }
-  button {
-    background: #007aff;
-    color: white;
-    border: none;
-    cursor: pointer;
-  }
-  button:hover {
-    background: #005bb5;
-  }
-  #productos {
-    margin-top: 1rem;
-  }
-  .producto {
-    background: white;
-    padding: 1rem;
-    margin-bottom: 0.8rem;
-    border-radius: 15px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-    position: relative;
-  }
-  .producto strong {
-    font-size: 1.1rem;
-  }
-  .producto .cantidad {
-    margin-top: 0.3rem;
-    color: #555;
-  }
-  .producto .btns {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    display: flex;
-    gap: 0.4rem;
-  }
-  .producto button {
-    background: #ddd;
-    color: #333;
-    width: auto;
-    padding: 0.3rem 0.6rem;
-    font-size: 0.9rem;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
-  }
-  .producto button:hover {
-    background: #bbb;
-  }
-  #buscador {
-    margin-top: 1rem;
-    margin-bottom: 1rem;
-  }
-  #resumen {
-    text-align: center;
-    color: #666;
-    margin-top: 1rem;
-  }
-  /* Modal para editar */
-  #modal-edit {
-    position: fixed;
-    top:0; left:0; right:0; bottom:0;
-    background: rgba(0,0,0,0.3);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  #modal-edit > div {
-    background: white;
-    padding: 1rem 2rem;
-    border-radius: 20px;
-    max-width: 400px;
-    width: 90%;
-  }
-  #modal-edit input {
-    margin-top: 1rem;
-  }
-  #modal-edit .btns {
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 1rem;
-    gap: 1rem;
-  }
-  /* Login */
-  #login-form {
-    max-width: 400px;
-    margin: 3rem auto;
-    background: white;
-    padding: 2rem;
-    border-radius: 15px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  }
-  #login-form input {
-    margin-bottom: 1rem;
-  }
-  #login-form button {
-    margin-top: 0.5rem;
-  }
-  #logout-btn {
-    background: #ff3b30;
-    margin: 1rem auto;
-    max-width: 600px;
-    width: 90%;
-    padding: 1rem;
-    border-radius: 20px;
-    border:none;
-    color: white;
-    cursor: pointer;
-    font-weight: 600;
-  }
-  #logout-btn:hover {
-    background: #c1271f;
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Inventario PWA</title>
+    <meta name="description" content="Aplicación PWA para gestionar tu inventario de venta con Firebase.">
+
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="favicon.ico">
+
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+    <header>
+        <h1>Mi Inventario de Venta</h1>
+    </header>
 
-<header>📦 Inventario Compartido</header>
+    <main>
+        <section id="formulario-agregar">
+            <h2>Agregar Nuevo Artículo</h2>
+            <form id="inventario-form">
+                <div class="form-group">
+                    <label for="sku">SKU:</label>
+                    <input type="text" id="sku" required>
+                </div>
+                <div class="form-group">
+                    <label for="lote">Lote:</label>
+                    <input type="text" id="lote">
+                </div>
+                <div class="form-group">
+                    <label for="nombre">Nombre:</label>
+                    <input type="text" id="nombre" required>
+                </div>
+                <div class="form-group">
+                    <label for="descripcion">Descripción:</label>
+                    <textarea id="descripcion"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="inversion">Inversión ($):</label>
+                    <input type="number" id="inversion" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="precio-retail">Precio Retail ($):</label>
+                    <input type="number" id="precio-retail" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label for="precio-publico">Precio al Público ($):</label>
+                    <input type="number" id="precio-publico" step="0.01" required>
+                </div>
+                <button type="submit">Agregar Artículo</button>
+            </form>
+        </section>
 
-<!-- Login -->
-<div id="login-form">
-  <input id="email" type="email" placeholder="Correo electrónico" />
-  <input id="password" type="password" placeholder="Contraseña" />
-  <button id="btn-login">Iniciar sesión / Registrar</button>
-  <p style="text-align:center; margin-top: 1rem; color:#555;">
-    Ingresa o regístrate con tu correo.
-  </p>
-  <div id="login-error" style="color:red; text-align:center;"></div>
-</div>
+        <section id="lista-inventario">
+            <h2>Inventario Actual</h2>
+            <input type="text" id="buscar-input" placeholder="Buscar en inventario...">
+            <ul id="inventario-list">
+            </ul>
+        </section>
+    </main>
 
-<!-- App -->
-<main class="hidden" id="app">
+    <footer>
+        <p>© 2023 Tu Nombre / Nombre de tu Proyecto</p>
+    </footer>
 
-  <button id="logout-btn">Cerrar sesión</button>
+    <script type="module" src="js/app.js"></script>
 
-  <input id="nombre" placeholder="Nombre del producto" />
-  <input id="cantidad" type="number" min="1" placeholder="Cantidad" />
-  <button id="agregar">Agregar producto</button>
-
-  <input id="buscador" type="search" placeholder="Buscar producto..." />
-
-  <div id="productos"></div>
-
-  <div id="resumen"></div>
-
-</main>
-
-<!-- Modal Editar -->
-<div id="modal-edit" class="hidden" >
-  <div>
-    <h2>Editar producto</h2>
-    <input id="edit-nombre" placeholder="Nombre del producto" />
-    <input id="edit-cantidad" type="number" min="1" />
-    <div class="btns">
-      <button id="btn-cancelar">Cancelar</button>
-      <button id="btn-guardar">Guardar</button>
-    </div>
-  </div>
-</div>
-
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-  import {
-    getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot, updateDoc,
-    query, orderBy, where, getDocs
-  } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
-  import {
-    getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword,
-    onAuthStateChanged, signOut
-  } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
-
-  // Config Firebase
-  const firebaseConfig = {
-    apiKey: "AIzaSyBqjHiWsBnK0AVUpE4arVqHmTI2B1udwaI",
-    authDomain: "inventario-ventas-c8c69.firebaseapp.com",
-    projectId: "inventario-ventas-c8c69",
-    storageBucket: "inventario-ventas-c8c69.appspot.com",
-    messagingSenderId: "1098853280661",
-    appId: "1:1098853280661:web:bb9efdb2bb09244c5ee49c"
-  };
-
-  // Init Firebase
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-  const auth = getAuth(app);
-  const productosRef = collection(db, "productos");
-
-  // DOM
-  const loginForm = document.getElementById("login-form");
-  const appMain = document.getElementById("app");
-  const loginError = document.getElementById("login-error");
-  const btnLogin = document.getElementById("btn-login");
-  const emailInput = document.getElementById("email");
-  const passwordInput = document.getElementById("password");
-  const logoutBtn = document.getElementById("logout-btn");
-  const productosDiv = document.getElementById("productos");
-  const resumenDiv = document.getElementById("resumen");
-  const nombreInput = document.getElementById("nombre");
-  const cantidadInput = document.getElementById("cantidad");
-  const agregarBtn = document.getElementById("agregar");
-  const buscadorInput = document.getElementById("buscador");
-
-  const modalEdit = document.getElementById("modal-edit");
-  const editNombreInput = document.getElementById("edit-nombre");
-  const editCantidadInput = document.getElementById("edit-cantidad");
-  const btnCancelar = document.getElementById("btn-cancelar");
-  const btnGuardar = document.getElementById("btn-guardar");
-
-  // Estado edición
-  let editarId = null;
-  let productosCache = [];
-
-  // Funciones Auth
-
-  btnLogin.onclick = async () => {
-    const email = emailInput.value.trim();
-    const pass = passwordInput.value;
-    loginError.textContent = "";
-
-    if (!email || !pass) {
-      loginError.textContent = "Completa ambos campos.";
-      return;
-    }
-
-    try {
-      // Intenta login
-      await signInWithEmailAndPassword(auth, email, pass);
-    } catch (error) {
-      if (error.code === "auth/user-not-found") {
-        // Si no existe, crea usuario
-        try {
-          await createUserWithEmailAndPassword(auth, email, pass);
-        } catch (err) {
-          loginError.textContent = err.message;
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/js/sw.js')
+                .then(function(registration) {
+                    console.log('Service Worker registrado con éxito:', registration.scope);
+                })
+                .catch(function(err) {
+                    console.log('Fallo al registrar Service Worker:', err);
+                });
         }
-      } else {
-        loginError.textContent = error.message;
-      }
-    }
-  };
-
-  logoutBtn.onclick = () => signOut(auth);
-
-  onAuthStateChanged(auth, user => {
-    if (user) {
-      loginForm.classList.add("hidden");
-      appMain.classList.remove("hidden");
-      empezarApp();
-    } else {
-      loginForm.classList.remove("hidden");
-      appMain.classList.add("hidden");
-      productosDiv.innerHTML = "";
-      resumenDiv.innerText = "";
-      productosCache = [];
-    }
-  });
-
-  // Agregar producto
-  agregarBtn.onclick = async () => {
-    const nombre = nombreInput.value.trim();
-    const cantidad = parseInt(cantidadInput.value);
-    if (!nombre || cantidad < 1) {
-      alert("Completa ambos campos correctamente.");
-      return;
-    }
-    await addDoc(productosRef, { nombre, cantidad });
-    nombreInput.value = "";
-    cantidadInput.value = "";
-  };
-
-  // Mostrar productos y escuchar cambios
-  function empezarApp() {
-    onSnapshot(productosRef, snapshot => {
-      productosCache = [];
-      productosDiv.innerHTML = "";
-      let totalProductos = 0;
-      let totalUnidades = 0;
-
-      snapshot.forEach(docSnap => {
-        const producto = { id: docSnap.id, ...docSnap.data() };
-        productosCache.push(producto);
-      });
-
-      mostrarProductos(productosCache);
-    });
-  }
-
-  // Función mostrar con filtro
-  function mostrarProductos(lista) {
-    productosDiv.innerHTML = "";
-    let totalProductos = lista.length;
-    let totalUnidades = lista.reduce((acc, p) => acc + p.cantidad, 0);
-
-    lista.forEach(({id, nombre, cantidad}) => {
-      const div = document.createElement("div");
-      div.className = "producto";
-      div.innerHTML = `
-        <strong>${nombre}</strong>
-        <div class="cantidad">Cantidad: ${cantidad}</div>
-        <div class="btns">
-          <button class="editar" data-id="${id}">Editar</button>
-          <button class="borrar" data-id="${id}">Borrar</button>
-        </div>
-      `;
-      productosDiv.appendChild(div);
-    });
-
-    resumenDiv.textContent = `📊 Total productos: ${totalProductos} | Total unidades: ${totalUnidades}`;
-
-    // Eventos para botones
-    productosDiv.querySelectorAll(".editar").forEach(btn => {
-      btn.onclick = () => abrirModalEdicion(btn.dataset.id);
-    });
-    productosDiv.querySelectorAll(".borrar").forEach(btn => {
-      btn.onclick = async () => {
-        if (confirm("¿Eliminar este producto?")) {
-          await deleteDoc(doc(db, "productos", btn.dataset.id));
-        }
-      };
-    });
-  }
-
-  // Filtrado con buscador
-  buscadorInput.oninput = () => {
-    const term = buscadorInput.value.toLowerCase();
-    const filtrados = productosCache.filter(p =>
-      p.nombre.toLowerCase().includes(term)
-    );
-    mostrarProductos(filtrados);
-  };
-
-  // Modal editar
-  function abrirModalEdicion(id) {
-    editarId = id;
-    const producto = productosCache.find(p => p.id === id);
-    if (!producto) return alert("Producto no encontrado");
-    editNombreInput.value = producto.nombre;
-    editCantidadInput.value = producto.cantidad;
-    modalEdit.classList.remove("hidden");
-  }
-
-  btnCancelar.onclick = () => {
-    modalEdit.classList.add("hidden");
-    editarId = null;
-  };
-
-  btnGuardar.onclick = async () => {
-    const nuevoNombre = editNombreInput.value.trim();
-    const nuevaCantidad = parseInt(editCantidadInput.value);
-    if (!nuevoNombre || nuevaCantidad < 1) {
-      alert("Completa los campos correctamente.");
-      return;
-    }
-    try {
-      await updateDoc(doc(db, "productos", editarId), {
-        nombre: nuevoNombre,
-        cantidad: nuevaCantidad
-      });
-      modalEdit.classList.add("hidden");
-      editarId = null;
-    } catch (error) {
-      alert("Error al actualizar: " + error.message);
-    }
-  };
-
-</script>
-
+    </script>
 </body>
 </html>
