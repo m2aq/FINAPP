@@ -4,8 +4,8 @@ const CACHE_NAME = 'test-pwa-cache-v1';
 const urlsToCache = [
     '/', // La raíz servida
     'index.html',
-    '/css/style.css',
-    '/js/app.js',
+    'style.css',
+    'app.js',
     'manifest.json'
 ];
 
