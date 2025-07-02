@@ -5,8 +5,8 @@ const urlsToCache = [
     '/index.html', // El archivo principal HTML
     '/css/style.css', // La hoja de estilos
     '/js/app.js', // El script principal de la aplicación
-    // Puedes añadir aquí más recursos estáticos si los necesitas, como fuentes o imágenes que se cargan directamente.
-    // Ejemplo: '/icons/icon-192x192.png', '/icons/icon-512x512.png'
+    '/icons/icon-192x192.png'
+    '/icons/icon-512x512.png'
 ];
 
 // Evento 'install': Se dispara cuando el Service Worker se instala por primera vez.
