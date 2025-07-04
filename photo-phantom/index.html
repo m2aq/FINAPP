@@ -1,48 +1,64 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Foto Fantasma - Cámara Trasera</title>
   <style>
     body {
       font-family: sans-serif;
-      margin: 0;
+      background: #f9f9f9;
       padding: 10px;
-      background: #f2f2f2;
+      margin: 0;
     }
+
     #container {
       position: relative;
       width: 100%;
       max-width: 400px;
       margin: auto;
+      background: black;
+      overflow: hidden;
+      aspect-ratio: 4/3;
     }
-    video, canvas, img {
+
+    video, img, canvas {
       width: 100%;
       position: absolute;
       top: 0;
       left: 0;
-      z-index: 1;
     }
+
     #ghost {
       opacity: 0.3;
       z-index: 2;
     }
+
     canvas {
       z-index: 3;
       display: none;
     }
+
     #photo {
       margin-top: 20px;
       text-align: center;
     }
-    button {
-      padding: 10px 20px;
-      font-size: 16px;
-      background-color: #4CAF50;
+
+    #snapBtn {
+      margin-top: 20px;
+      display: inline-block;
+      padding: 12px 24px;
+      background-color: #28a745;
       color: white;
+      font-size: 16px;
       border: none;
-      border-radius: 6px;
+      border-radius: 8px;
       cursor: pointer;
+    }
+
+    #errorMsg {
+      color: red;
+      text-align: center;
+      margin-top: 10px;
     }
   </style>
 </head>
@@ -54,8 +70,9 @@
     <canvas id="canvas"></canvas>
   </div>
 
-  <div style="text-align:center; margin-top: 20px;">
+  <div style="text-align:center;">
     <button id="snapBtn" onclick="takePhoto()">📸 Tomar Foto</button>
+    <div id="errorMsg"></div>
   </div>
 
   <div id="photo"></div>
@@ -64,39 +81,46 @@
     const video = document.getElementById('video');
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
+    const errorMsg = document.getElementById('errorMsg');
     const snapBtn = document.getElementById('snapBtn');
 
     async function iniciarCamara() {
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: { exact: "environment" } }
-        });
+        const constraints = {
+          video: {
+            facingMode: { ideal: "environment" }
+          },
+          audio: false
+        };
+
+        const stream = await navigator.mediaDevices.getUserMedia(constraints);
         video.srcObject = stream;
 
         video.onloadedmetadata = () => {
           video.play();
-          canvas.width = video.videoWidth;
-          canvas.height = video.videoHeight;
         };
+
       } catch (err) {
-        alert("No se pudo acceder a la cámara trasera: " + err.message);
-        snapBtn.disabled = true;
+        console.error("Error accediendo a la cámara:", err);
+        errorMsg.textContent = "No se pudo acceder a la cámara trasera: " + err.message;
       }
     }
 
     function takePhoto() {
-      if (video.videoWidth && video.videoHeight) {
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-        const photoData = canvas.toDataURL('image/png');
-        document.getElementById('photo').innerHTML = `<img src="${photoData}" width="100%">`;
-      } else {
-        alert('Cámara no lista aún...');
+      if (video.videoWidth === 0 || video.videoHeight === 0) {
+        errorMsg.textContent = "La cámara aún no está lista.";
+        return;
       }
+
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+      const photoData = canvas.toDataURL("image/png");
+      document.getElementById('photo').innerHTML = `<img src="${photoData}" width="100%">`;
     }
 
-    iniciarCamara();
+    window.addEventListener('DOMContentLoaded', iniciarCamara);
   </script>
 </body>
 </html>
