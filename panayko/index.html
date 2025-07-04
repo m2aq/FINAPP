@@ -3,52 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carne Seca by Panayko Foods - Sabor Auténtico</title>
-    <!-- Enlace a tu archivo CSS (recomendado para estilos limpios) -->
+    <title>Carne Seca by Panayko Foods - Sabor Auténtico de Sonora</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Aquí podrías enlazar tu archivo JavaScript si lo tuvieras -->
-    <!-- <script src="script.js"></script> -->
+    <!-- Fuente de ejemplo para dar un toque más estilizado, si lo deseas. Reemplaza 'Merriweather' por otra de tu preferencia. -->
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <style>
-        /* Estilos básicos de ejemplo dentro del HTML para que veas cómo funcionan */
+        /* Estilos inline para el código base de los fuentes si no creas un CSS aparte */
+        /* Estos DEBEN ir en style.css si sigues la recomendación. */
+        /*
+        :root {
+            --color-primary-dark: #5d3f36;
+            --color-secondary-light: #f5efe6;
+            --color-accent-red: #d32f2f;
+            --color-accent-green: #66bb6a;
+            --color-text-dark: #333;
+            --color-text-medium: #555;
+            --color-white-clean: #fff;
+        }
+
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Roboto', sans-serif; // Por ejemplo, una fuente más moderna para el cuerpo
             line-height: 1.6;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
-            color: #333;
+            background-color: var(--color-secondary-light);
+            color: var(--color-text-dark);
+            background-image: url('tu-imagen-textura.jpg'); // Descomentar y adaptar si usas textura
+            background-repeat: repeat;
         }
 
         header {
-            background-color: #d32f2f; /* Rojo para energía y carne */
-            color: #fff;
-            padding: 1rem 0;
+            background-color: var(--color-primary-dark);
+            color: var(--color-secondary-light);
+            padding: 1.5rem 0;
             text-align: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 3px 6px rgba(0,0,0,0.2);
         }
 
         header h1 {
             margin: 0;
-            font-size: 2.5rem;
+            font-size: 3rem;
+            font-family: 'Merriweather', serif; // Fuente con más personalidad para el título principal
         }
 
-        .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: auto;
-            overflow: hidden;
-            padding: 20px 0;
+        header p {
+            font-size: 1.3rem;
+            color: rgba(245, 239, 230, 0.9);
         }
 
         .hero-section {
-            background: url('/imagen-hero-carne-seca.jpg') no-repeat center center/cover; /* Reemplaza con tu imagen de banner */
-            color: #fff;
-            height: 400px;
+            background: url('imagen-hero-carne-seca.jpg') no-repeat center center/cover;
+            color: var(--color-secondary-light);
+            height: 450px;
             display: flex;
             justify-content: center;
             align-items: center;
             text-align: center;
             position: relative;
+            box-shadow: inset 0 5px 10px rgba(0,0,0,0.3);
         }
 
         .hero-section::before {
@@ -58,7 +70,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.5); /* Capa semitransparente para mejor lectura del texto */
+            background: rgba(0, 0, 0, 0.4);
         }
 
         .hero-content {
@@ -67,163 +79,237 @@
         }
 
         .hero-content h2 {
-            font-size: 3rem;
-            margin-bottom: 10px;
-            color: #fff; /* Asegura que el título sea blanco */
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            color: var(--color-secondary-light);
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
+            font-family: 'Merriweather', serif;
         }
 
         .hero-content p {
-            font-size: 1.5rem;
-            color: #eee; /* Un blanco un poco más gris */
+            font-size: 1.6rem;
+            color: rgba(245, 239, 230, 0.9);
         }
 
         #productos, #pedido {
-            padding: 40px 0;
+            padding: 60px 0;
             text-align: center;
         }
 
         #productos h2, #pedido h2 {
-            margin-bottom: 30px;
-            color: #d32f2f; /* Rojo para los títulos de sección */
+            margin-bottom: 40px;
+            color: var(--color-primary-dark);
+            font-size: 2.8rem;
+            font-family: 'Merriweather', serif;
         }
 
         .productos-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
         }
 
         .producto {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
+            background-color: var(--color-white-clean);
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(93, 63, 54, 0.15);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .producto:hover {
-            transform: translateY(-5px);
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(93, 63, 54, 0.25);
         }
 
         .producto img {
             max-width: 100%;
-            height: 200px; /* Altura fija para las imágenes */
-            object-fit: cover; /* Cubrirá el área manteniendo la proporción */
-            border-radius: 5px;
-            margin-bottom: 15px;
+            height: 230px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #e0d8cd;
         }
 
         .producto h3 {
-            margin-bottom: 10px;
-            font-size: 1.3rem;
-            color: #4CAF50; /* Verde para el nombre del producto */
+            margin-bottom: 12px;
+            font-size: 1.5rem;
+            color: var(--color-primary-dark);
+            font-family: 'Merriweather', serif;
         }
 
         .producto p {
             font-size: 0.95rem;
-            color: #555;
+            color: var(--color-text-medium);
+            min-height: 60px;
         }
 
         .producto .precio {
             font-weight: bold;
-            font-size: 1.2rem;
-            color: #d32f2f; /* Rojo para el precio */
-            margin-bottom: 15px;
+            font-size: 1.3rem;
+            color: var(--color-accent-red);
+            margin-top: 15px;
+            margin-bottom: 20px;
         }
 
         .add-to-cart {
-            background-color: #4CAF50; /* Verde para botón de añadir */
-            color: white;
+            background-color: var(--color-accent-green);
+            color: var(--color-white-clean);
             border: none;
-            padding: 10px 20px;
-            font-size: 1rem;
+            padding: 12px 25px;
+            font-size: 1.1rem;
             cursor: pointer;
             border-radius: 5px;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            font-weight: bold;
         }
 
         .add-to-cart:hover {
-            background-color: #45a049;
+            background-color: var(--color-primary-dark);
+            transform: translateY(-2px);
         }
 
-        /* Estilos para el carrito (básico) */
         #cart {
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            margin-top: 30px;
+            background-color: var(--color-white-clean);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(93, 63, 54, 0.15);
+            margin-top: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         #cart h3 {
-            color: #d32f2f;
-            margin-bottom: 20px;
+            color: var(--color-primary-dark);
+            margin-bottom: 25px;
+            font-size: 2rem;
+            font-family: 'Merriweather', serif;
         }
 
         #cart-items ul {
             list-style: none;
             padding: 0;
+            text-align: left;
         }
 
         #cart-items li {
             display: flex;
             justify-content: space-between;
-            padding: 10px 0;
+            padding: 12px 0;
             border-bottom: 1px solid #eee;
+            font-size: 1.1rem;
+            color: var(--color-text-medium);
         }
 
         #cart-items li:last-child {
             border-bottom: none;
         }
 
+        .precio-item {
+            font-weight: bold;
+            color: var(--color-text-dark);
+        }
+
         .total-price {
             font-weight: bold;
-            font-size: 1.4rem;
-            color: #d32f2f;
-            margin-top: 20px;
-        }
-
-        #checkout-form label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-            text-align: left; /* Alinea las etiquetas a la izquierda */
-        }
-
-        #checkout-form input[type="text"],
-        #checkout-form input[type="tel"],
-        #checkout-form input[type="email"] {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-sizing: border-box; /* Importante para que el padding no aumente el ancho */
+            font-size: 1.6rem;
+            color: var(--color-primary-dark);
+            margin-top: 25px;
+            border-top: 2px solid var(--color-primary-dark);
+            padding-top: 15px;
         }
 
         .checkout-button {
-            background-color: #007bff; /* Azul para el botón de finalizar */
-            color: white;
+            background-color: var(--color-primary-dark);
+            color: var(--color-secondary-light);
             border: none;
             padding: 15px 30px;
             font-size: 1.2rem;
             cursor: pointer;
             border-radius: 5px;
-            transition: background-color 0.3s ease;
-            width: 100%; /* Ocupa todo el ancho del formulario */
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            width: 100%;
+            margin-top: 25px;
+            font-weight: bold;
         }
 
         .checkout-button:hover {
-            background-color: #0056b3;
+            background-color: var(--color-accent-green);
+            transform: translateY(-2px);
+        }
+
+        #checkout-form {
+            display: none; /* Importante: Mantener oculto por defecto */
+            margin-top: 40px;
+            background-color: var(--color-white-clean);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(93, 63, 54, 0.15);
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: left;
+        }
+
+        #checkout-form h3 {
+            text-align: center;
+            color: var(--color-primary-dark);
+            margin-bottom: 30px;
+            font-size: 2rem;
+            font-family: 'Merriweather', serif;
+        }
+
+        #checkout-form label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: var(--color-primary-dark);
+        }
+
+        #checkout-form input[type="text"],
+        #checkout-form input[type="tel"],
+        #checkout-form input[type="email"] {
+            width: calc(100% - 20px);
+            padding: 12px 10px;
+            margin-bottom: 20px;
+            border: 1px solid #e0d8cd;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 1rem;
+            color: var(--color-text-dark);
+            transition: border-color 0.3s ease;
+        }
+
+        #checkout-form input[type="text"]:focus,
+        #checkout-form input[type="tel"]:focus,
+        #checkout-form input[type="email"]:focus {
+            border-color: var(--color-primary-dark);
+            outline: none;
+        }
+
+        .checkout-button[type="submit"] {
+            background-color: var(--color-primary-dark);
+            color: var(--color-secondary-light);
+            margin-top: 20px;
+        }
+        .checkout-button[type="submit"]:hover {
+            background-color: var(--color-accent-green);
         }
 
         footer {
             text-align: center;
-            padding: 20px;
-            margin-top: 40px;
-            background-color: #333;
-            color: #fff;
+            padding: 30px 0;
+            margin-top: 60px;
+            background-color: var(--color-primary-dark);
+            color: var(--color-secondary-light);
+            font-size: 1.1rem;
         }
+
+        footer p {
+            margin-bottom: 10px;
+        }
+        */
     </style>
 </head>
 <body>
@@ -231,84 +317,79 @@
     <header>
         <div class="container">
             <h1>Carne Seca by Panayko Foods</h1>
-            <p>¡El sabor auténtico que te transporta!</p>
+            <p>¡El sabor auténtico de Sonora!</p>
         </div>
     </header>
 
     <section class="hero-section">
         <div class="hero-content">
-            <h2>Disfruta de la</h2>
-            <h2>Mejor Carne Seca Artesanal</h2>
-            <p>Elaborada con ingredientes de primera calidad.</p>
+            <h2>Descubre la</h2>
+            <h2>Auténtica Carne Seca Sonorense</h2>
+            <p>Elaborada con pasión y los mejores ingredientes.</p>
         </div>
     </section>
 
     <section id="productos" class="container">
-        <h2>Nuestros Productos</h2>
+        <h2>Nuestros Productos Premium</h2>
         <div class="productos-grid">
             <!-- Producto 1 -->
-            <div class="producto" id="producto-ternera">
-                <img src="carne-seca-ternera.jpg" alt="Carne Seca de Ternera"> <!-- Reemplaza con la imagen real -->
+            <div class="producto">
+                <img src="carne-seca-ternera.jpg" alt="Carne Seca de Ternera Panayko Foods">
                 <h3>Carne Seca de Ternera</h3>
-                <p>Hecha con la mejor ternera maridada con especias seleccionadas.</p>
+                <p>Finamente marinada y curada, un sabor inigualable que recuerda las tradiciones.</p>
                 <p class="precio">$15.00</p>
-                <!-- Aquí un botón simple para simular añadir al carrito -->
-                <!-- En un sistema real, este botón tendría JavaScript -->
                 <button class="add-to-cart" onclick="agregarAlCarrito('Carne Seca de Ternera', 15.00)">Añadir al Carrito</button>
             </div>
 
             <!-- Producto 2 -->
-            <div class="producto" id="producto-cerdo">
-                <img src="carne-seca-cerdo.jpg" alt="Carne Seca de Cerdo"> <!-- Reemplaza con la imagen real -->
-                <h3>Carne Seca de Cerdo</h3>
-                <p>Un toque ahumado y un sabor intenso en cada bocado.</p>
+            <div class="producto">
+                <img src="carne-seca-cerdo.jpg" alt="Carne Seca de Cerdo Panayko Foods">
+                <h3>Carne Seca de Cerdo Ahumado</h3>
+                <p>Un toque ahumado irresistible y un sabor profundo, perfecto para cualquier ocasión.</p>
                 <p class="precio">$13.50</p>
-                <button class="add-to-cart" onclick="agregarAlCarrito('Carne Seca de Cerdo', 13.50)">Añadir al Carrito</button>
+                <button class="add-to-cart" onclick="agregarAlCarrito('Carne Seca de Cerdo Ahumado', 13.50)">Añadir al Carrito</button>
             </div>
 
             <!-- Producto 3 -->
-            <div class="producto" id="producto-mezcla">
-                <img src="carne-seca-mezcla.jpg" alt="Mezcla Especial Carne Seca"> <!-- Reemplaza con la imagen real -->
-                <h3>Mezcla Especial Carne Seca</h3>
-                <p>La combinación perfecta de sabores para los más aventureros.</p>
+            <div class="producto">
+                <img src="carne-seca-mezcla.jpg" alt="Mezcla Especial Carne Seca Panayko Foods">
+                <h3>Mezcla Tradicional Panayko</h3>
+                <p>Una selección especial de nuestros cortes curados, para los paladares más exigentes.</p>
                 <p class="precio">$16.00</p>
-                <button class="add-to-cart" onclick="agregarAlCarrito('Mezcla Especial Carne Seca', 16.00)">Añadir al Carrito</button>
+                <button class="add-to-cart" onclick="agregarAlCarrito('Mezcla Tradicional Panayko', 16.00)">Añadir al Carrito</button>
             </div>
-            <!-- Puedes añadir más productos aquí -->
+            <!-- Puedes añadir más productos aquí siguiendo la misma estructura -->
         </div>
     </section>
 
     <section id="pedido" class="container">
-        <h2>Tu Pedido</h2>
         <div id="cart">
-            <h3>Carrito DE COMPRAS</h3>
+            <h3>TU SELECCIÓN</h3>
             <div id="cart-items">
                 <ul>
-                    <!-- Aquí se agregarán los items del carrito dinámicamente -->
-                    <!-- Ejemplo de cómo podría verse un item: -->
-                    <!-- <li>Carne Seca de Ternera x1 <span class="precio-item">$15.00</span></li> -->
+                    <!-- Los items del carrito se agregarán aquí dinámicamente -->
                 </ul>
             </div>
             <p class="total-price">Total: $0.00</p>
-            <button class="checkout-button" onclick="mostrarFormulario()">Proceder al Pago</button>
+            <button class="checkout-button" onclick="mostrarFormulario()">Completar Mi Pedido</button>
         </div>
 
-        <div id="checkout-form" style="display: none; margin-top: 30px; background-color: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-            <h3>Completa tus datos para concretar tu pedido</h3>
+        <div id="checkout-form">
+            <h3>Completa tus datos</h3>
             <form id="orderForm">
                 <label for="nombre">Nombre Completo:</label>
-                <input type="text" id="nombre" name="nombre" required>
+                <input type="text" id="nombre" name="nombre" required placeholder="Ej: Juan Pérez">
 
                 <label for="telefono">Teléfono de Contacto:</label>
-                <input type="tel" id="telefono" name="telefono" required placeholder="Ej: +57 312 345 6789">
+                <input type="tel" id="telefono" name="telefono" required placeholder="Ej: +52 55 1234 5678">
 
                 <label for="email">Correo Electrónico (Opcional):</label>
-                <input type="email" id="email" name="email" placeholder="Ej: tuemail@ejemplo.com">
+                <input type="email" id="email" name="email" placeholder="Ej: juan.perez@email.com">
 
                 <label for="direccion">Dirección de Entrega (Opcional):</label>
-                <input type="text" id="direccion" name="direccion" placeholder="Calle 123 #45-67, Ciudad">
+                <input type="text" id="direccion" name="direccion" placeholder="Ej: Calle Falsa 123, Col. Centro, CDMX">
 
-                <button type="submit" class="checkout-button">Confirmar Pedido</button>
+                <button type="submit" class="checkout-button">Enviar Pedido</button>
             </form>
         </div>
     </section>
@@ -316,17 +397,17 @@
     <footer>
         <div class="container">
             <p>© 2023 Carne Seca by Panayko Foods. Todos los derechos reservados.</p>
-            <p>Síguenos en redes sociales:</p>
-            <!-- Aquí irían enlaces a redes sociales -->
+            <p>Síguenos en nuestras redes sociales:</p>
+            <!-- Aquí irían enlaces a tus redes sociales -->
+            <!-- <a href="#"><img src="icon-facebook.png" alt="Facebook"></a> -->
+            <!-- <a href="#"><img src="icon-instagram.png" alt="Instagram"></a> -->
         </div>
     </footer>
 
-    <!-- JavaScript Simulado para el Carrito -->
     <script>
         let carrito = []; // Array para almacenar los items del carrito
 
         function agregarAlCarrito(nombreProducto, precioProducto) {
-            // Buscar si el producto ya existe en el carrito
             const itemExistente = carrito.find(item => item.nombre === nombreProducto);
 
             if (itemExistente) {
@@ -355,8 +436,7 @@
             const totalPriceElement = document.querySelector('.total-price');
             totalPriceElement.textContent = `Total: $${total.toFixed(2)}`;
 
-            // Habilitar el botón de checkout si hay items
-            const checkoutButton = document.querySelector('.checkout-button');
+            const checkoutButton = document.querySelector('#cart .checkout-button'); // Selecciona el botón dentro del #cart
             if (carrito.length > 0) {
                 checkoutButton.disabled = false;
             } else {
@@ -367,28 +447,35 @@
         function mostrarFormulario() {
             const checkoutForm = document.getElementById('checkout-form');
             checkoutForm.style.display = 'block';
-            // Opcional: Desplazar a la sección del formulario
             checkoutForm.scrollIntoView({ behavior: 'smooth' });
         }
 
-        // Event listener para el formulario (simula envío)
         document.getElementById('orderForm').addEventListener('submit', function(event) {
-            event.preventDefault(); // Evitar que el formulario se envíe de forma tradicional
+            event.preventDefault();
 
             const nombre = document.getElementById('nombre').value;
             const telefono = document.getElementById('telefono').value;
             const email = document.getElementById('email').value;
             const direccion = document.getElementById('direccion').value;
 
-            // En una aplicación real, aquí enviarías estos datos a un servidor
-            // Por ahora, solo mostraremos un mensaje.
-            alert(`¡Gracias, ${nombre}!\nTu pedido ha sido recibido.\nPronto te contactaremos al teléfono ${telefono} para confirmar los detalles.\n\nDetalles del carrito:\n${generarResumenPedido()}\n\n¡Disfruta de tu carne seca!`);
+            const resumenPedido = generarResumenPedido();
 
-            // Resetear el carrito y el formulario después del "envío"
+            // Simulación de envío a un servicio de mensajería (WhatsApp/SMS) o email
+            // En un sistema real, harías una petición a tu backend aquí.
+            const mensaje = `Nuevo Pedido - Panayko Foods:\n\n` +
+                            `Cliente: ${nombre}\n` +
+                            `Teléfono: ${telefono}\n` +
+                            `Email: ${email || 'No proporcionado'}\n` +
+                            `Dirección: ${direccion || 'No proporcionada'}\n\n` +
+                            `Detalles del pedido:\n${resumenPedido}`;
+
+            alert("¡Gracias, " + nombre + "!\nTu pedido ha sido recibido. Nos pondremos en contacto pronto.\n\n" + resumenPedido);
+
+            // Limpiar el carrito y reiniciar la interfaz
             carrito = [];
             actualizarVistaCarrito();
             document.getElementById('orderForm').reset();
-            document.getElementById('checkout-form').style.display = 'none';
+            document.getElementById('checkout-form').style.display = 'none'; // Ocultar el formulario de nuevo
         });
 
         function generarResumenPedido() {
@@ -401,14 +488,10 @@
             return resumen;
         }
 
-        // Inicializar vista del carrito al cargar la página
+        // Inicializar la vista del carrito y deshabilitar el botón de pago al inicio
         window.onload = function() {
-            actualizarVistaCarrito(); // Para que el total muestre $0.00 inicialmente
-            const checkoutButton = document.querySelector('.checkout-button');
-            checkoutButton.disabled = true; // Deshabilitar al inicio si no hay items
+            actualizarVistaCarrito();
         };
-
     </script>
-
 </body>
 </html>
