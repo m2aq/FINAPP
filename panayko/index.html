@@ -5,321 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Carne Seca by Panayko Foods - Sabor Auténtico de Sonora</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Fuente de ejemplo para dar un toque más estilizado, si lo deseas. Reemplaza 'Merriweather' por otra de tu preferencia. -->
     <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <style>
-        /* Estilos inline para el código base de los fuentes si no creas un CSS aparte */
-        /* Estos DEBEN ir en style.css si sigues la recomendación. */
-        /*
-        :root {
-            --color-primary-dark: #5d3f36;
-            --color-secondary-light: #f5efe6;
-            --color-accent-red: #d32f2f;
-            --color-accent-green: #66bb6a;
-            --color-text-dark: #333;
-            --color-text-medium: #555;
-            --color-white-clean: #fff;
-        }
+        /* ... (todo el resto del CSS que ya tenías, incluido el de las variables :root y los demás estilos) ... */
 
-        body {
-            font-family: 'Roboto', sans-serif; // Por ejemplo, una fuente más moderna para el cuerpo
-            line-height: 1.6;
-            margin: 0;
-            padding: 0;
-            background-color: var(--color-secondary-light);
-            color: var(--color-text-dark);
-            background-image: url('tu-imagen-textura.jpg'); // Descomentar y adaptar si usas textura
-            background-repeat: repeat;
+        /* ESTILOS DE EJEMPLO PARA EL LOGO (si no creas un CSS aparte) */
+        .site-logo {
+            max-width: 250px; /* Ajusta este valor al tamaño de tu logo */
+            height: auto;     /* Mantiene la proporción del logo */
+            display: block;   /* Para que sea un bloque y podamos centrarlo */
+            margin: 0 auto 15px auto; /* Centra el logo y añade espacio debajo */
+            transition: transform 0.3s ease;
         }
-
-        header {
-            background-color: var(--color-primary-dark);
-            color: var(--color-secondary-light);
-            padding: 1.5rem 0;
-            text-align: center;
-            box-shadow: 0 3px 6px rgba(0,0,0,0.2);
-        }
-
-        header h1 {
-            margin: 0;
-            font-size: 3rem;
-            font-family: 'Merriweather', serif; // Fuente con más personalidad para el título principal
-        }
-
         header p {
-            font-size: 1.3rem;
-            color: rgba(245, 239, 230, 0.9);
-        }
-
-        .hero-section {
-            background: url('imagen-hero-carne-seca.jpg') no-repeat center center/cover;
-            color: var(--color-secondary-light);
-            height: 450px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            position: relative;
-            box-shadow: inset 0 5px 10px rgba(0,0,0,0.3);
-        }
-
-        .hero-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.4);
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 1;
-        }
-
-        .hero-content h2 {
-            font-size: 3.5rem;
-            margin-bottom: 15px;
-            color: var(--color-secondary-light);
-            text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
-            font-family: 'Merriweather', serif;
-        }
-
-        .hero-content p {
-            font-size: 1.6rem;
-            color: rgba(245, 239, 230, 0.9);
-        }
-
-        #productos, #pedido {
-            padding: 60px 0;
-            text-align: center;
-        }
-
-        #productos h2, #pedido h2 {
-            margin-bottom: 40px;
-            color: var(--color-primary-dark);
-            font-size: 2.8rem;
-            font-family: 'Merriweather', serif;
-        }
-
-        .productos-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
-        }
-
-        .producto {
-            background-color: var(--color-white-clean);
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(93, 63, 54, 0.15);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .producto:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(93, 63, 54, 0.25);
-        }
-
-        .producto img {
-            max-width: 100%;
-            height: 230px;
-            object-fit: cover;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            border: 1px solid #e0d8cd;
-        }
-
-        .producto h3 {
-            margin-bottom: 12px;
-            font-size: 1.5rem;
-            color: var(--color-primary-dark);
-            font-family: 'Merriweather', serif;
-        }
-
-        .producto p {
-            font-size: 0.95rem;
-            color: var(--color-text-medium);
-            min-height: 60px;
-        }
-
-        .producto .precio {
-            font-weight: bold;
-            font-size: 1.3rem;
-            color: var(--color-accent-red);
-            margin-top: 15px;
-            margin-bottom: 20px;
-        }
-
-        .add-to-cart {
-            background-color: var(--color-accent-green);
-            color: var(--color-white-clean);
-            border: none;
-            padding: 12px 25px;
-            font-size: 1.1rem;
-            cursor: pointer;
-            border-radius: 5px;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            font-weight: bold;
-        }
-
-        .add-to-cart:hover {
-            background-color: var(--color-primary-dark);
-            transform: translateY(-2px);
-        }
-
-        #cart {
-            background-color: var(--color-white-clean);
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(93, 63, 54, 0.15);
-            margin-top: 40px;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        #cart h3 {
-            color: var(--color-primary-dark);
-            margin-bottom: 25px;
-            font-size: 2rem;
-            font-family: 'Merriweather', serif;
-        }
-
-        #cart-items ul {
-            list-style: none;
-            padding: 0;
-            text-align: left;
-        }
-
-        #cart-items li {
-            display: flex;
-            justify-content: space-between;
-            padding: 12px 0;
-            border-bottom: 1px solid #eee;
-            font-size: 1.1rem;
-            color: var(--color-text-medium);
-        }
-
-        #cart-items li:last-child {
-            border-bottom: none;
-        }
-
-        .precio-item {
-            font-weight: bold;
-            color: var(--color-text-dark);
-        }
-
-        .total-price {
-            font-weight: bold;
-            font-size: 1.6rem;
-            color: var(--color-primary-dark);
-            margin-top: 25px;
-            border-top: 2px solid var(--color-primary-dark);
-            padding-top: 15px;
-        }
-
-        .checkout-button {
-            background-color: var(--color-primary-dark);
-            color: var(--color-secondary-light);
-            border: none;
-            padding: 15px 30px;
-            font-size: 1.2rem;
-            cursor: pointer;
-            border-radius: 5px;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            width: 100%;
-            margin-top: 25px;
-            font-weight: bold;
-        }
-
-        .checkout-button:hover {
-            background-color: var(--color-accent-green);
-            transform: translateY(-2px);
-        }
-
-        #checkout-form {
-            display: none; /* Importante: Mantener oculto por defecto */
-            margin-top: 40px;
-            background-color: var(--color-white-clean);
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(93, 63, 54, 0.15);
-            max-width: 500px;
-            margin-left: auto;
-            margin-right: auto;
-            text-align: left;
-        }
-
-        #checkout-form h3 {
-            text-align: center;
-            color: var(--color-primary-dark);
-            margin-bottom: 30px;
-            font-size: 2rem;
-            font-family: 'Merriweather', serif;
-        }
-
-        #checkout-form label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-            color: var(--color-primary-dark);
-        }
-
-        #checkout-form input[type="text"],
-        #checkout-form input[type="tel"],
-        #checkout-form input[type="email"] {
-            width: calc(100% - 20px);
-            padding: 12px 10px;
-            margin-bottom: 20px;
-            border: 1px solid #e0d8cd;
-            border-radius: 5px;
-            box-sizing: border-box;
-            font-size: 1rem;
-            color: var(--color-text-dark);
-            transition: border-color 0.3s ease;
-        }
-
-        #checkout-form input[type="text"]:focus,
-        #checkout-form input[type="tel"]:focus,
-        #checkout-form input[type="email"]:focus {
-            border-color: var(--color-primary-dark);
-            outline: none;
-        }
-
-        .checkout-button[type="submit"] {
-            background-color: var(--color-primary-dark);
-            color: var(--color-secondary-light);
-            margin-top: 20px;
-        }
-        .checkout-button[type="submit"]:hover {
-            background-color: var(--color-accent-green);
-        }
-
-        footer {
-            text-align: center;
-            padding: 30px 0;
-            margin-top: 60px;
-            background-color: var(--color-primary-dark);
-            color: var(--color-secondary-light);
+            margin-top: 10px;
             font-size: 1.1rem;
         }
-
-        footer p {
-            margin-bottom: 10px;
-        }
-        */
+        /* ... (restos del CSS que podrías tener inline o en style.css) ... */
     </style>
 </head>
 <body>
 
     <header>
         <div class="container">
-            <h1>Carne Seca by Panayko Foods</h1>
+            <!-- Aquí va el logo -->
+            <img src="logo-panayko.png" alt="Logo Panayko Foods" class="site-logo">
             <p>¡El sabor auténtico de Sonora!</p>
         </div>
     </header>
+
+    <!-- ... (Todo el resto del body: hero-section, #productos, #pedido, footer, y el script) ... -->
 
     <section class="hero-section">
         <div class="hero-content">
@@ -358,7 +73,6 @@
                 <p class="precio">$16.00</p>
                 <button class="add-to-cart" onclick="agregarAlCarrito('Mezcla Tradicional Panayko', 16.00)">Añadir al Carrito</button>
             </div>
-            <!-- Puedes añadir más productos aquí siguiendo la misma estructura -->
         </div>
     </section>
 
@@ -460,8 +174,6 @@
 
             const resumenPedido = generarResumenPedido();
 
-            // Simulación de envío a un servicio de mensajería (WhatsApp/SMS) o email
-            // En un sistema real, harías una petición a tu backend aquí.
             const mensaje = `Nuevo Pedido - Panayko Foods:\n\n` +
                             `Cliente: ${nombre}\n` +
                             `Teléfono: ${telefono}\n` +
