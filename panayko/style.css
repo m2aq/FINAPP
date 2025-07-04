@@ -1,61 +1,89 @@
-/* Variables de Color (para facilitar la gestión) */
+/* ===============================================
+   Archivo de Estilos CSS para Carne Seca Panayko
+   =============================================== */
+
+/* Variables de Color (Para facilitar la gestión y la consistencia) */
 :root {
-    --color-primary-dark: #5d3f36; /* Marrón oscuro del logo */
-    --color-secondary-light: #f5efe6; /* Beige suave, fondo texturizado */
-    --color-accent-red: #d32f2f; /* Rojo para llamadas a la acción si fuera necesario, pero para este tema un marrón más integrado podría ser mejor */
-    --color-accent-green: #66bb6a; /* Un verde olivo para botones si queremos un toque natural */
-    --color-text-dark: #333; /* Negro muy suave */
-    --color-text-medium: #555;
-    --color-white-clean: #fff;
+    --color-primary-dark: #5d3f36;        /* Marrón oscuro del logo */
+    --color-secondary-light: #f5efe6;    /* Beige suave, fondo texturizado */
+    --color-accent-red: #d32f2f;         /* Rojo para precios */
+    --color-accent-green: #66bb6a;       /* Verde olivo para botones de acción */
+    --color-text-dark: #333;             /* Texto principal oscuro */
+    --color-text-medium: #555;           /* Texto secundario */
+    --color-white-clean: #fff;           /* Blanco puro */
+    --color-border-sutil: #e0d8cd;       /* Borde de imagen o inputs en tono beige claro */
 }
 
-body {
-    font-family: 'Arial', sans-serif; /* Mantener fuentes legibles */
-    line-height: 1.6;
+/* Reseteo Básico de Margen y Padding */
+* {
     margin: 0;
     padding: 0;
-    background-color: var(--color-secondary-light); /* Fondo beige texturizado */
-    color: var(--color-text-dark);
+    box-sizing: border-box;
 }
 
+/* Fuente del Cuerpo (Roboto es más directo, Merriweather para títulos) */
+body {
+    font-family: 'Roboto', sans-serif;
+    line-height: 1.7; /* Ligeramente más altura de línea para mejor lectura */
+    background-color: var(--color-secondary-light);
+    color: var(--color-text-dark);
+    /* Si quieres la textura, descomenta la siguiente línea y asegúrate que el archivo existe */
+    /* background-image: url('tu-imagen-textura.jpg'); */
+    /* background-repeat: repeat; */
+    /* background-blend-mode: multiply; */ /* Puede ser útil para fusionar texturas */
+}
+
+/* Contenedor Principal */
 .container {
     width: 90%;
-    max-width: 1200px;
-    margin: auto;
-    overflow: hidden;
-    padding: 20px 0;
+    max-width: 1200px; /* Ancho máximo del contenido */
+    margin: 0 auto;    /* Centra el contenido */
+    padding: 0 15px;   /* Espacio lateral para pantallas pequeñas */
 }
 
+/* Sección de Cabecera (Header) */
 header {
-    background-color: var(--color-primary-dark); /* Encabezado en marrón oscuro */
-    color: var(--color-secondary-light); /* Texto claro para contraste */
-    padding: 1.5rem 0; /* Más padding vertical */
-    text-align: center;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.2); /* Sombra más pronunciada */
+    background-color: var(--color-primary-dark); /* Fondo en el color principal del logo */
+    color: var(--color-secondary-light);        /* Texto claro sobre fondo oscuro */
+    padding: 20px 0;                            /* Espacio vertical */
+    text-align: center;                         /* Centra todo el contenido del header */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);      /* Sombra para dar profundidad */
 }
 
-header h1 {
-    margin: 0;
-    font-size: 3rem; /* Título más grande */
+/* Estilos para el Logo en el Header */
+.site-logo {
+    max-width: 200px;     /* Ajusta este valor según el tamaño de tu logo */
+    height: auto;         /* Mantiene la proporción de la imagen */
+    display: block;       /* Para poder centrarla con margin */
+    margin: 0 auto 10px auto; /* Centra el logo y añade espacio debajo */
+    transition: transform 0.3s ease; /* Transición suave si se desea añadir un efecto hover */
 }
 
+.site-logo:hover {
+    transform: scale(1.03); /* Pequeño efecto de zoom al pasar el ratón */
+}
+
+/* Eslogan debajo del Logo */
 header p {
-    font-size: 1.3rem;
-    color: rgba(245, 239, 230, 0.9); /* Un poco de transparencia en el texto del slogan */
+    margin-top: 10px;
+    font-size: 1.2rem; /* Tamaño de fuente para el eslogan */
+    color: rgba(245, 239, 230, 0.9); /* Texto ligeramente translúcido */
 }
 
+/* Sección Principal (Hero Section) */
 .hero-section {
-    background: url('imagen-hero-carne-seca.jpg') no-repeat center center/cover;
-    color: var(--color-secondary-light); /* Texto claro */
-    height: 450px; /* Un poco más alto */
+    background: url('imagen-hero-carne-seca.jpg') no-repeat center center/cover; /* Imagen de fondo principal */
+    color: var(--color-secondary-light);                                      /* Texto claro */
+    height: 450px;                                                           /* Altura fija de la sección */
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
-    position: relative;
-    box-shadow: inset 0 5px 10px rgba(0,0,0,0.3); /* Sombra interior para dar profundidad */
+    position: relative; /* Necesario para el pseudo-elemento ::before */
+    box-shadow: inset 0 5px 15px rgba(0,0,0,0.4); /* Sombra interior para profundidad */
 }
 
+/* Capa Oscura sobre la imagen para mejorar la legibilidad del texto */
 .hero-section::before {
     content: '';
     position: absolute;
@@ -63,244 +91,321 @@ header p {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.4); /* Oscuridad para el texto */
+    background: rgba(0, 0, 0, 0.45); /* Overlay oscuro */
 }
 
+/* Contenido del Hero Section */
 .hero-content {
-    position: relative;
-    z-index: 1;
+    position: relative; /* Asegura que esté por encima del overlay */
+    z-index: 1;         /* Z-index para estar por encima del overlay */
 }
 
 .hero-content h2 {
-    font-size: 3.5rem; /* Títulos grandes */
+    font-size: 3.8rem;  /* Títulos grandes y llamativos */
     margin-bottom: 15px;
-    color: var(--color-secondary-light);
-    text-shadow: 2px 2px 8px rgba(0,0,0,0.5); /* Sombra al texto para legibilidad */
+    color: var(--color-secondary-light); /* Texto del título en color claro */
+    text-shadow: 2px 2px 10px rgba(0,0,0,0.6); /* Sombra para mejor legibilidad */
+    font-family: 'Merriweather', serif; /* Fuente más robusta para títulos */
 }
 
 .hero-content p {
-    font-size: 1.6rem;
-    color: rgba(245, 239, 230, 0.9);
+    font-size: 1.7rem; /* Tamaño de fuente para subtítulo */
+    color: rgba(245, 239, 230, 0.9); /* Subtítulo ligeramente translúcido */
 }
 
-/* Estilos generales para secciones */
+/* Estilos para las secciones de Productos y Pedido */
 #productos, #pedido {
-    padding: 60px 0; /* Más espacio */
+    padding: 60px 0; /* Amplio espacio vertical */
     text-align: center;
 }
 
+/* Títulos de Sección */
 #productos h2, #pedido h2 {
-    margin-bottom: 40px;
-    color: var(--color-primary-dark); /* Títulos de sección en marrón oscuro */
-    font-size: 2.8rem;
+    margin-bottom: 40px;                                /* Espacio debajo del título */
+    color: var(--color-primary-dark);                   /* Título principal en marrón oscuro */
+    font-size: 3rem;                                    /* Tamaño del título */
+    font-family: 'Merriweather', serif;                 /* Fuente robusta */
+    text-transform: uppercase; /* Opcional: para títulos en mayúsculas */
+    letter-spacing: 1px;     /* Opcional: espaciado entre letras */
 }
 
+/* Rejilla para la visualización de productos */
 .productos-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Productos un poco más anchos */
-    gap: 30px; /* Espacio mayor entre productos */
+    grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); /* Columnas responsivas */
+    gap: 30px; /* Espacio entre los productos */
 }
 
+/* Tarjeta de Producto */
 .producto {
-    background-color: var(--color-white-clean); /* Fondo blanco para los productos */
-    padding: 25px;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(93, 63, 54, 0.15); /* Sombra suave con toque del color primario */
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background-color: var(--color-white-clean); /* Fondo blanco */
+    padding: 30px;                              /* Espacio interior */
+    border-radius: 12px;                        /* Bordes redondeados */
+    box-shadow: 0 8px 20px rgba(93, 63, 54, 0.15); /* Sombra suave con toque del color primario */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Transiciones para efectos */
 }
 
 .producto:hover {
-    transform: translateY(-10px); /* Levantar más al hacer hover */
-    box-shadow: 0 15px 30px rgba(93, 63, 54, 0.25); /* Sombra más intensa */
+    transform: translateY(-12px); /* Elevar el producto al pasar el ratón */
+    box-shadow: 0 20px 35px rgba(93, 63, 54, 0.25); /* Sombra más pronunciada */
 }
 
+/* Imagen del Producto */
 .producto img {
-    max-width: 100%;
-    height: 230px; /* Altura fija */
-    object-fit: cover;
-    border-radius: 8px; /* Bordes más redondeados */
-    margin-bottom: 20px;
-    border: 1px solid #e0d8cd; /* Borde sutil para resaltar imagen */
+    max-width: 100%;           /* La imagen ocupa todo el ancho de su contenedor */
+    height: 240px;             /* Altura fija para todas las imágenes */
+    object-fit: cover;         /* Asegura que la imagen cubra el área sin distorsionarse */
+    border-radius: 10px;       /* Bordes redondeados para la imagen */
+    margin-bottom: 25px;       /* Espacio debajo de la imagen */
+    border: 2px solid var(--color-border-sutil); /* Borde sutil en tono beige */
 }
 
+/* Título del Producto */
 .producto h3 {
-    margin-bottom: 12px;
-    font-size: 1.5rem;
-    color: var(--color-primary-dark); /* Título del producto en marrón oscuro */
+    margin-bottom: 15px;
+    font-size: 1.6rem;
+    color: var(--color-primary-dark); /* Título en marrón oscuro */
+    font-family: 'Merriweather', serif;
 }
 
+/* Descripción del Producto */
 .producto p {
-    font-size: 0.95rem;
-    color: var(--color-text-medium);
-    min-height: 60px; /* Para que todos los textos tengan espacio */
+    font-size: 1rem;           /* Tamaño de fuente para descripción */
+    color: var(--color-text-medium); /* Color de texto para descripciones */
+    min-height: 70px;          /* Mantiene un espacio fijo incluso si la descripción es corta */
 }
 
+/* Precio del Producto */
 .producto .precio {
     font-weight: bold;
-    font-size: 1.3rem;
-    color: var(--color-accent-red); /* El rojo sigue siendo bueno para precios */
+    font-size: 1.4rem;
+    color: var(--color-accent-red);   /* Precio destacado en rojo */
     margin-top: 15px;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
 }
 
+/* Botón "Añadir al Carrito" */
 .add-to-cart {
-    background-color: var(--color-accent-green); /* Botón "Añadir" en verde olivo */
-    color: var(--color-white-clean);
+    background-color: var(--color-accent-green); /* Botón principal en verde olivo */
+    color: var(--color-white-clean);              /* Texto del botón blanco */
     border: none;
-    padding: 12px 25px; /* Padding del botón */
+    padding: 14px 30px;                           /* Padding generoso */
     font-size: 1.1rem;
     cursor: pointer;
-    border-radius: 5px;
+    border-radius: 7px;                           /* Bordes un poco más redondeados */
     transition: background-color 0.3s ease, transform 0.2s ease;
-    font-weight: bold;
+    font-weight: 500;                             /* Fuente semi-bold */
+    letter-spacing: 0.5px;
 }
 
 .add-to-cart:hover {
-    background-color: var(--color-primary-dark); /* Al hacer hover, pasa al marrón oscuro */
-    transform: translateY(-2px);
+    background-color: var(--color-primary-dark); /* Cambio a marrón oscuro al pasar el ratón */
+    transform: translateY(-3px);                  /* Levantar un poco el botón */
 }
 
-/* Estilos para el carrito y formulario */
+/* ------------- Sección del Carrito de Compras ------------- */
 #cart {
-    background-color: var(--color-white-clean);
+    background-color: var(--color-white-clean);       /* Fondo blanco */
     padding: 40px;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(93, 63, 54, 0.15);
-    margin-top: 40px;
-    max-width: 600px; /* Centrar el bloque del carrito */
+    border-radius: 12px;                             /* Bordes redondeados */
+    box-shadow: 0 8px 20px rgba(93, 63, 54, 0.15);    /* Sombra */
+    margin-top: 50px;                                /* Espacio sobre la sección del carrito */
+    max-width: 650px;                                /* Ancho máximo del carrito */
     margin-left: auto;
     margin-right: auto;
 }
 
+/* Título del Carrito */
 #cart h3 {
-    color: var(--color-primary-dark);
-    margin-bottom: 25px;
-    font-size: 2rem;
+    color: var(--color-primary-dark);                /* Título en marrón oscuro */
+    margin-bottom: 30px;
+    font-size: 2.2rem;
+    font-family: 'Merriweather', serif;
 }
 
+/* Lista de Items del Carrito */
 #cart-items ul {
-    list-style: none;
+    list-style: none; /* Eliminar los puntos de lista */
     padding: 0;
-    text-align: left; /* Alinea los items a la izquierda */
+    text-align: left; /* Alinear texto a la izquierda */
 }
 
 #cart-items li {
-    display: flex;
-    justify-content: space-between;
-    padding: 12px 0;
-    border-bottom: 1px solid #eee;
-    font-size: 1.1rem;
+    display: flex;                           /* Usar Flexbox para alinear contenido */
+    justify-content: space-between;          /* Espacio entre nombre y precio */
+    align-items: center;                     /* Centrar verticalmente */
+    padding: 14px 0;                         /* Espacio interno */
+    border-bottom: 1px solid #eee;           /* Línea divisoria sutil */
+    font-size: 1.15rem;
     color: var(--color-text-medium);
 }
 
 #cart-items li:last-child {
-    border-bottom: none;
+    border-bottom: none; /* Sin borde en el último item */
 }
 
-.precio-item { /* Estilo para el precio del item específico */
-    font-weight: bold;
-    color: var(--color-text-dark);
+/* Precio de cada item individual */
+.precio-item {
+    font-weight: 500;
+    color: var(--color-primary-dark);
 }
 
+/* Precio Total */
 .total-price {
     font-weight: bold;
-    font-size: 1.6rem;
-    color: var(--color-primary-dark); /* Total en marrón oscuro */
-    margin-top: 25px;
-    border-top: 2px solid var(--color-primary-dark); /* Línea separadora */
+    font-size: 1.8rem;
+    color: var(--color-primary-dark);        /* Total en marrón oscuro */
+    margin-top: 30px;                        /* Espacio superior */
+    border-top: 2px solid var(--color-primary-dark); /* Línea superior separadora */
     padding-top: 15px;
 }
 
-.checkout-button { /* Botón general para checkout */
+/* Botón "Completar Mi Pedido" */
+.checkout-button {
     background-color: var(--color-primary-dark); /* Botón principal en marrón oscuro */
-    color: var(--color-secondary-light);
+    color: var(--color-secondary-light);       /* Texto blanco */
     border: none;
-    padding: 15px 30px;
-    font-size: 1.2rem;
+    padding: 18px 35px;                         /* Padding generoso */
+    font-size: 1.25rem;
     cursor: pointer;
-    border-radius: 5px;
+    border-radius: 7px;
     transition: background-color 0.3s ease, transform 0.2s ease;
-    width: 100%;
-    margin-top: 25px;
-    font-weight: bold;
+    width: 100%;                                /* Botón a todo lo ancho */
+    margin-top: 30px;                           /* Espacio superior */
+    font-weight: 500;
 }
 
 .checkout-button:hover {
-    background-color: var(--color-accent-green); /* Cambia a verde olivo al hacer hover */
-    transform: translateY(-2px);
+    background-color: var(--color-accent-green); /* Cambio a verde olivo al pasar el ratón */
+    transform: translateY(-3px);
 }
 
+/* Deshabilitar botón si el carrito está vacío */
+.checkout-button:disabled {
+    background-color: var(--color-text-medium); /* Color más apagado */
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* ------------- Sección del Formulario de Pago ------------- */
 #checkout-form {
-    margin-top: 40px;
+    display: none;                               /* OCULTO POR DEFECTO */
+    margin-top: 50px;                           /* Espacio superior */
     background-color: var(--color-white-clean);
     padding: 40px;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(93, 63, 54, 0.15);
-    max-width: 500px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(93, 63, 54, 0.15);
+    max-width: 550px;
     margin-left: auto;
     margin-right: auto;
-    text-align: left; /* Alinea el contenido del formulario a la izquierda */
+    text-align: left;                           /* Alineación del texto dentro del form */
 }
 
+/* Título del Formulario */
 #checkout-form h3 {
     text-align: center;
     color: var(--color-primary-dark);
-    margin-bottom: 30px;
-    font-size: 2rem;
+    margin-bottom: 35px;
+    font-size: 2.3rem;
+    font-family: 'Merriweather', serif;
 }
 
+/* Etiquetas de los campos del formulario */
 #checkout-form label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: bold;
+    display: block;          /* Cada label en su propia línea */
+    margin-bottom: 10px;
+    font-weight: 600;        /* Negrita */
     color: var(--color-primary-dark);
 }
 
+/* Campos de entrada del formulario */
 #checkout-form input[type="text"],
 #checkout-form input[type="tel"],
 #checkout-form input[type="email"] {
-    width: calc(100% - 20px); /* Ajuste para calc con padding */
-    padding: 12px 10px; /* Padding con ajuste */
-    margin-bottom: 20px;
-    border: 1px solid #e0d8cd; /* Borde suave en tono beige */
-    border-radius: 5px;
+    width: 100%;             /* Ocupa todo el ancho disponible */
+    padding: 14px 15px;      /* Padding interno */
+    margin-bottom: 25px;     /* Espacio debajo de cada campo */
+    border: 1px solid var(--color-border-sutil); /* Borde en tono beige */
+    border-radius: 7px;
     box-sizing: border-box;
-    font-size: 1rem;
+    font-size: 1.1rem;
     color: var(--color-text-dark);
-    transition: border-color 0.3s ease;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
+/* Estilo al enfocar los campos */
 #checkout-form input[type="text"]:focus,
 #checkout-form input[type="tel"]:focus,
 #checkout-form input[type="email"]:focus {
     border-color: var(--color-primary-dark); /* Borde principal al enfocar */
-    outline: none;
+    box-shadow: 0 0 8px rgba(93, 63, 54, 0.3); /* Sombra al enfocar */
+    outline: none; /* Quita el outline por defecto del navegador */
 }
 
-.checkout-button[type="submit"] { /* Específico para el botón de envío */
-    background-color: var(--color-primary-dark); /* Botón de confirmar en marrón oscuro */
-    color: var(--color-secondary-light);
-    margin-top: 20px; /* Más espacio antes de confirmar */
+/* Botón de Envío del Formulario */
+#checkout-form .checkout-button[type="submit"] {
+    background-color: var(--color-primary-dark); /* Botón en marrón oscuro */
+    color: var(--color-secondary-light);       /* Texto claro */
+    margin-top: 25px;                         /* Más espacio antes de confirmar */
+    font-weight: 600;
 }
-.checkout-button[type="submit"]:hover {
+#checkout-form .checkout-button[type="submit"]:hover {
     background-color: var(--color-accent-green); /* Cambia a verde olivo */
 }
 
-
+/* ------------- Sección de Pie de Página (Footer) ------------- */
 footer {
     text-align: center;
-    padding: 30px 0;
-    margin-top: 60px; /* Más espacio al final */
-    background-color: var(--color-primary-dark); /* Footer en marrón oscuro */
-    color: var(--color-secondary-light);
+    padding: 40px 0;          /* Amplio espacio */
+    margin-top: 70px;         /* Mucho espacio antes del footer */
+    background-color: var(--color-primary-dark); /* Fondo marrón oscuro */
+    color: var(--color-secondary-light);        /* Texto claro */
     font-size: 1.1rem;
 }
 
 footer p {
-    margin-bottom: 10px;
+    margin-bottom: 15px; /* Espacio entre párrafos en el footer */
 }
 
-/* Para ocultar temporalmente el formulario de pago */
-#checkout-form {
-    display: none; /* Asegúrate que está oculto hasta que se active el botón */
+/* Estilos para enlaces de redes sociales (ejemplo si los añades) */
+/*
+footer a {
+    display: inline-block;
+    margin: 0 10px;
+    transition: transform 0.2s ease;
+}
+
+footer a:hover {
+    transform: scale(1.1);
+}
+
+footer img {
+    width: 30px;
+    height: 30px;
+    vertical-align: middle;
+}
+*/
+
+/* Media Queries para Responsive Design Adicional */
+@media (max-width: 768px) {
+    header h1 { font-size: 2.5rem; }
+    .hero-content h2 { font-size: 3rem; }
+    .hero-content p { font-size: 1.4rem; }
+    #productos h2, #pedido h2 { font-size: 2.5rem; }
+    .producto h3 { font-size: 1.4rem; }
+    .total-price { font-size: 1.6rem; }
+    .checkout-button { font-size: 1.1rem; padding: 15px 30px; }
+    #checkout-form h3 { font-size: 2rem; }
+    #checkout-form input { padding: 12px 10px; }
+}
+
+@media (max-width: 480px) {
+    .hero-section { height: 350px; }
+    .hero-content h2 { font-size: 2.5rem; }
+    .hero-content p { font-size: 1.2rem; }
+    .productos-grid { grid-template-columns: 1fr; } /* Una columna en pantallas pequeñas */
+    .producto { padding: 20px; }
+    .producto img { height: 200px; }
+    #cart, #checkout-form { padding: 30px; }
+    .add-to-cart, .checkout-button { padding: 12px 20px; font-size: 1rem; }
 }
