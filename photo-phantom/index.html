@@ -7,11 +7,10 @@
   <style>
     body {
       font-family: sans-serif;
-      background: #f9f9f9;
+      background: #f0f0f0;
       padding: 10px;
       margin: 0;
     }
-
     #container {
       position: relative;
       width: 100%;
@@ -21,32 +20,17 @@
       aspect-ratio: 4/3;
       overflow: hidden;
     }
-
     video, img, canvas {
       width: 100%;
       position: absolute;
       top: 0;
       left: 0;
     }
-
-    #ghost {
-      opacity: 0.3;
-      z-index: 2;
-    }
-
-    canvas {
-      z-index: 3;
-      display: none;
-    }
-
-    #photo {
-      margin-top: 20px;
-      text-align: center;
-    }
-
+    #ghost { opacity: 0.3; z-index: 2; }
+    canvas { z-index: 3; display: none; }
+    #photo { margin-top: 20px; text-align: center; }
     #snapBtn {
       margin-top: 20px;
-      display: inline-block;
       padding: 12px 24px;
       background-color: #28a745;
       color: white;
@@ -55,7 +39,6 @@
       border-radius: 8px;
       cursor: pointer;
     }
-
     #errorMsg {
       color: red;
       text-align: center;
@@ -79,12 +62,13 @@
 
   <div id="photo"></div>
 
-  <!-- Firebase SDKs -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getAnalytics, logEvent } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
-    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+  <!-- Firebase SDKs (clásico) -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics-compat.js"></script>
 
+  <script>
+    // Tu configuración de Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyCqWuTQXxjXsyAQPlD9eHcS0IWXJRplkoA",
       authDomain: "photo-phantom.firebaseapp.com",
@@ -94,29 +78,30 @@
       appId: "1:453937427876:web:4ff0df29beeca224dabd31"
     };
 
-    const app = initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app);
-    const storage = getStorage(app);
+    firebase.initializeApp(firebaseConfig);
+    const analytics = firebase.analytics();
+    const storage = firebase.storage();
 
     const video = document.getElementById('video');
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
     const errorMsg = document.getElementById('errorMsg');
 
-    async function iniciarCamara() {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: { ideal: "environment" } },
-          audio: false
-        });
+    function iniciarCamara() {
+      navigator.mediaDevices.getUserMedia({
+        video: { facingMode: { ideal: "environment" } },
+        audio: false
+      })
+      .then(stream => {
         video.srcObject = stream;
         video.onloadedmetadata = () => {
           video.play();
         };
-      } catch (err) {
-        console.error("Error al acceder a la cámara:", err);
-        errorMsg.textContent = "No se pudo acceder a la cámara: " + err.message;
-      }
+      })
+      .catch(err => {
+        console.error("Error cámara:", err);
+        errorMsg.textContent = "Error al acceder a la cámara: " + err.message;
+      });
     }
 
     function dataURLtoBlob(dataurl) {
@@ -125,14 +110,14 @@
       const bstr = atob(arr[1]);
       let n = bstr.length;
       const u8arr = new Uint8Array(n);
-      while (n--) {
+      while(n--) {
         u8arr[n] = bstr.charCodeAt(n);
       }
-      return new Blob([u8arr], { type: mime });
+      return new Blob([u8arr], {type:mime});
     }
 
-    async function takePhoto() {
-      if (video.videoWidth === 0 || video.videoHeight === 0) {
+    function takePhoto() {
+      if (!video.videoWidth || !video.videoHeight) {
         errorMsg.textContent = "La cámara aún no está lista.";
         return;
       }
@@ -142,37 +127,30 @@
       ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
       const photoData = canvas.toDataURL("image/png");
-      const blob = dataURLtoBlob(photoData);
-      const filename = 'foto_' + Date.now() + '.png';
-
-      // Mostrar la foto
       document.getElementById('photo').innerHTML = `<img src="${photoData}" width="100%">`;
 
-      // Subir a Firebase
-      try {
-        const storageRef = ref(storage, 'fotos/' + filename);
-        await uploadBytes(storageRef, blob);
-        const url = await getDownloadURL(storageRef);
+      const blob = dataURLtoBlob(photoData);
+      const filename = 'foto_' + Date.now() + '.png';
+      const storageRef = storage.ref().child('fotos/' + filename);
 
-        // Mostrar link de descarga
-        const link = document.createElement('a');
-        link.href = url;
-        link.target = "_blank";
-        link.textContent = "📤 Ver imagen subida";
-        link.style.display = "inline-block";
-        link.style.marginTop = "10px";
-        link.style.textDecoration = "none";
-        document.getElementById('photo').appendChild(link);
+      storageRef.put(blob)
+        .then(snapshot => snapshot.ref.getDownloadURL())
+        .then(url => {
+          const link = document.createElement('a');
+          link.href = url;
+          link.textContent = "📤 Ver imagen subida";
+          link.target = "_blank";
+          link.style.display = "block";
+          link.style.marginTop = "10px";
+          document.getElementById('photo').appendChild(link);
 
-        // Usar como nueva imagen fantasma
-        document.getElementById('ghost').src = url;
-
-        // Analytics
-        logEvent(analytics, 'foto_subida', { nombre_archivo: filename });
-      } catch (e) {
-        console.error("Error al subir a Firebase:", e);
-        alert("Ocurrió un error al subir la imagen.");
-      }
+          document.getElementById('ghost').src = url;
+          analytics.logEvent('foto_subida', { nombre_archivo: filename });
+        })
+        .catch(err => {
+          console.error("Error al subir:", err);
+          errorMsg.textContent = "Error al subir la imagen.";
+        });
     }
 
     window.addEventListener('DOMContentLoaded', iniciarCamara);
