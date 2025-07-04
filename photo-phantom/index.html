@@ -2,34 +2,53 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Photo Phantom</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Photo Phantom - Local</title>
   <style>
     body {
       font-family: sans-serif;
-      background: #f0f0f0;
+      background: #f9f9f9;
       padding: 10px;
       margin: 0;
     }
+
     #container {
       position: relative;
       width: 100%;
       max-width: 400px;
       margin: auto;
       background: black;
-      aspect-ratio: 4/3;
+      aspect-ratio: 4 / 3;
       overflow: hidden;
     }
-    video, img, canvas {
+
+    video,
+    img,
+    canvas {
       width: 100%;
       position: absolute;
       top: 0;
       left: 0;
     }
-    #ghost { opacity: 0.3; z-index: 2; }
-    canvas { z-index: 3; display: none; }
-    #photo { margin-top: 20px; text-align: center; }
-    #snapBtn {
+
+    #ghost {
+      opacity: 0.3;
+      z-index: 2;
+      object-fit: contain;
+    }
+
+    canvas {
+      z-index: 3;
+      display: none;
+    }
+
+    #photo {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    #snapBtn,
+    #selectGhostBtn {
       margin-top: 20px;
       padding: 12px 24px;
       background-color: #28a745;
@@ -38,7 +57,9 @@
       border: none;
       border-radius: 8px;
       cursor: pointer;
+      margin-right: 10px;
     }
+
     #errorMsg {
       color: red;
       text-align: center;
@@ -47,73 +68,52 @@
   </style>
 </head>
 <body>
-  <h2 style="text-align:center;">📷 Photo Phantom</h2>
+  <h2 style="text-align: center">📷 Photo Phantom - Local</h2>
 
   <div id="container">
     <video id="video" autoplay muted playsinline></video>
-    <img id="ghost" src="https://via.placeholder.com/400x300.png?text=Fantasma" alt="Fantasma" />
+    <img
+      id="ghost"
+      src="https://via.placeholder.com/400x300.png?text=Foto+Fantasma"
+      alt="Fantasma"
+    />
     <canvas id="canvas"></canvas>
   </div>
 
-  <div style="text-align:center;">
-    <button id="snapBtn" onclick="takePhoto()">📸 Tomar Foto</button>
+  <div style="text-align: center">
+    <button id="snapBtn">📸 Tomar Foto</button>
+    <button id="selectGhostBtn">🖼️ Seleccionar foto fantasma</button>
+    <input type="file" id="ghostInput" accept="image/*" style="display: none" />
     <div id="errorMsg"></div>
   </div>
 
   <div id="photo"></div>
 
-  <!-- Firebase SDKs (clásico) -->
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics-compat.js"></script>
-
   <script>
-    // Tu configuración de Firebase
-    const firebaseConfig = {
-      apiKey: "AIzaSyCqWuTQXxjXsyAQPlD9eHcS0IWXJRplkoA",
-      authDomain: "photo-phantom.firebaseapp.com",
-      projectId: "photo-phantom",
-      storageBucket: "photo-phantom.appspot.com",
-      messagingSenderId: "453937427876",
-      appId: "1:453937427876:web:4ff0df29beeca224dabd31"
-    };
+    const video = document.getElementById("video");
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+    const errorMsg = document.getElementById("errorMsg");
+    const snapBtn = document.getElementById("snapBtn");
+    const selectGhostBtn = document.getElementById("selectGhostBtn");
+    const ghostInput = document.getElementById("ghostInput");
+    const ghostImg = document.getElementById("ghost");
+    const photoContainer = document.getElementById("photo");
 
-    firebase.initializeApp(firebaseConfig);
-    const analytics = firebase.analytics();
-    const storage = firebase.storage();
-
-    const video = document.getElementById('video');
-    const canvas = document.getElementById('canvas');
-    const ctx = canvas.getContext('2d');
-    const errorMsg = document.getElementById('errorMsg');
-
-    function iniciarCamara() {
-      navigator.mediaDevices.getUserMedia({
-        video: { facingMode: { ideal: "environment" } },
-        audio: false
-      })
-      .then(stream => {
+    async function iniciarCamara() {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: { ideal: "environment" } },
+          audio: false,
+        });
         video.srcObject = stream;
         video.onloadedmetadata = () => {
           video.play();
         };
-      })
-      .catch(err => {
-        console.error("Error cámara:", err);
-        errorMsg.textContent = "Error al acceder a la cámara: " + err.message;
-      });
-    }
-
-    function dataURLtoBlob(dataurl) {
-      const arr = dataurl.split(',');
-      const mime = arr[0].match(/:(.*?);/)[1];
-      const bstr = atob(arr[1]);
-      let n = bstr.length;
-      const u8arr = new Uint8Array(n);
-      while(n--) {
-        u8arr[n] = bstr.charCodeAt(n);
+      } catch (err) {
+        console.error("Error al acceder a la cámara:", err);
+        errorMsg.textContent = "No se pudo acceder a la cámara: " + err.message;
       }
-      return new Blob([u8arr], {type:mime});
     }
 
     function takePhoto() {
@@ -127,33 +127,37 @@
       ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
       const photoData = canvas.toDataURL("image/png");
-      document.getElementById('photo').innerHTML = `<img src="${photoData}" width="100%">`;
 
-      const blob = dataURLtoBlob(photoData);
-      const filename = 'foto_' + Date.now() + '.png';
-      const storageRef = storage.ref().child('fotos/' + filename);
+      photoContainer.innerHTML = `<img src="${photoData}" width="100%" alt="Foto tomada" />`;
 
-      storageRef.put(blob)
-        .then(snapshot => snapshot.ref.getDownloadURL())
-        .then(url => {
-          const link = document.createElement('a');
-          link.href = url;
-          link.textContent = "📤 Ver imagen subida";
-          link.target = "_blank";
-          link.style.display = "block";
-          link.style.marginTop = "10px";
-          document.getElementById('photo').appendChild(link);
-
-          document.getElementById('ghost').src = url;
-          analytics.logEvent('foto_subida', { nombre_archivo: filename });
-        })
-        .catch(err => {
-          console.error("Error al subir:", err);
-          errorMsg.textContent = "Error al subir la imagen.";
-        });
+      // Limpia errores
+      errorMsg.textContent = "";
     }
 
-    window.addEventListener('DOMContentLoaded', iniciarCamara);
+    snapBtn.addEventListener("click", takePhoto);
+
+    selectGhostBtn.addEventListener("click", () => {
+      ghostInput.click();
+    });
+
+    ghostInput.addEventListener("change", (event) => {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      if (!file.type.startsWith("image/")) {
+        errorMsg.textContent = "Por favor, selecciona un archivo de imagen válido.";
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        ghostImg.src = e.target.result;
+        errorMsg.textContent = "";
+      };
+      reader.readAsDataURL(file);
+    });
+
+    window.addEventListener("DOMContentLoaded", iniciarCamara);
   </script>
 </body>
 </html>
