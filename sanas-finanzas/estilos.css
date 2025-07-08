@@ -18,49 +18,52 @@
   --transition-speed: 0.25s; /* Velocidad de las transiciones */
 }
 
-/* Estilos base para el body, sin flexbox para centrado general de un bloque */
+/* Estilos base para el body */
 body {
   font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   background: var(--background-light);
   margin: 0;
-  padding: 20px; /* Padding inicial */
+  padding: 20px;
   color: var(--text-dark);
-  box-sizing: border-box; /* Asegura que padding se incluya en el tamaño total */
-  min-height: 100vh; /* Asegura que el body ocupa toda la altura para que el centrado funcione bien */
+  box-sizing: border-box;
+  min-height: 100vh;
+  overflow-x: hidden; /* <-- SE AÑADIÓ: Previene el scroll horizontal */
 }
 
 .contenedor {
   background: var(--card-background);
-  padding: 35px 40px; /* Espaciado interior mayor */
-  border-radius: 18px; /* Bordes más redondeados */
+  padding: 35px 40px;
+  border-radius: 18px;
   max-width: 500px;
-  width: 100%; /* Permite que el contenedor ocupe el máximo ancho posible */
-  box-shadow: 0 12px 25px var(--shadow-strong); /* Sombra más profunda y notable */
-  text-align: center; /* Centra elementos de texto/botones dentro del contenedor */
+  width: 100%;
+  box-shadow: 0 12px 25px var(--shadow-strong);
+  text-align: center;
   transition: opacity var(--transition-speed) ease-in-out,
               transform var(--transition-speed) ease-in-out,
               box-shadow var(--transition-speed) ease-in-out;
 
-  /* Asegura el centrado horizontal usando márgenes automáticos */
   margin-left: auto;
   margin-right: auto;
-  margin-top: 30px; /* Espacio desde la parte superior */
+  margin-top: 30px;
+  position: relative; /* <-- SE AÑADIÓ: Necesario para que z-index funcione */
+  z-index: 5; /* <-- SE AÑADIÓ: Capa base, se eleva para la pantalla visible */
 }
 
 /* Estado para ocultar elementos de forma animada */
 .oculto {
   opacity: 0;
   visibility: hidden; /* Oculta el elemento y lo quita del flujo de clics */
-  transform: translateY(-20px); /* Efecto sutil de mover hacia arriba al ocultar */
   pointer-events: none; /* Impide que se interactúe con él */
+  transform: translateY(-20px); /* Efecto sutil de mover hacia arriba al ocultar */
 }
 
 /* Estado para mostrar elementos de forma animada */
 .visible {
   opacity: 1;
   visibility: visible;
-  transform: translateY(0); /* Vuelve a su posición normal */
   pointer-events: auto; /* Permite la interacción */
+  transform: translateY(0); /* Vuelve a su posición normal */
+  z-index: 10; /* <-- SE AÑADIÓ: Capa superior para la pantalla visible */
 }
 
 
@@ -340,12 +343,8 @@ button:hover {
   }
   .contenedor {
     padding: 25px 30px; /* Menos padding interno en móvil */
-    /* Añadimos márgenes específicos para asegurar el centrado */
     margin-top: 10px; /* Reducimos el margen superior */
-    margin-left: auto;
-    margin-right: auto;
-    /* En móvil, es posible que necesitemos limitar el ancho de forma relativa */
-    width: 100%; /* Asegura que ocupe todo el ancho posible dentro del body padding */
+    width: 100%; /* Asegura que ocupe todo el ancho posible */
   }
   h1 {
     font-size: 1.9em; /* Título un poco más pequeño en móvil */
