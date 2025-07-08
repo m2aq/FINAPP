@@ -1,260 +1,362 @@
+/* Definición de variables CSS para una gestión más limpia y consistente de colores */
 :root {
-  --primary-color: #007aff; /* Azul de sistema iOS */
-  --secondary-color: #34c759; /* Verde de éxito iOS */
-  --accent-color: #ff3b30; /* Rojo de error iOS */
-  --background-color: #f2f2f7; /* Fondo de sistema iOS */
-  --card-background: #ffffff; /* Fondo de las tarjetas/contenedores */
-  --text-color-primary: #1c1c1e; /* Texto oscuro principal */
-  --color-gray-500: #8e8e93; /* Gris medio para texto secundario */
-  --border-color: #e5e5ea; /* Borde sutil */
-  --border-radius: 12px; /* Radios de esquinas más suaves */
-  --box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08); /* Sombra más sutil */
-  --font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', Helvetica, Arial, sans-serif; /* Fuentes de sistema iOS */
+  --primary-color: #28a745; /* Verde principal */
+  --primary-hover: #218838; /* Verde más oscuro para efectos hover */
+  --danger-color: #dc3545;  /* Rojo para gastos/errores */
+  --danger-hover: #c82333;  /* Rojo más oscuro para efectos hover */
 
-  /* Para que los colores RGB sean accesibles para rgba() */
-  --primary-color-rgb: 0, 122, 255;
-  --secondary-color-rgb: 52, 199, 89;
-  --accent-color-rgb: 255, 59, 48;
+  --background-light: #f8f9fa; /* Fondo principal claro */
+  --card-background: #ffffff;  /* Fondo de contenedores/tarjetas */
+  --border-color: #ced4da;     /* Color de bordes suave */
+  --text-dark: #212529;        /* Texto principal oscuro */
+  --text-light: #6c757d;       /* Texto secundario o descripciones */
+
+  --shadow-light: rgba(0, 0, 0, 0.05); /* Sombra muy suave */
+  --shadow-medium: rgba(0, 0, 0, 0.08);/* Sombra media */
+  --shadow-strong: rgba(0, 0, 0, 0.15);/* Sombra fuerte para contenedores principales */
+
+  --transition-speed: 0.25s; /* Velocidad de las transiciones */
 }
 
 body {
-  font-family: var(--font-family);
-  background-color: var(--background-color);
+  font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  background: var(--background-light);
   margin: 0;
-  padding: 0; /* padding 0 para que el contenedor lo maneje */
+  padding: 20px;
+  color: var(--text-dark);
   display: flex;
-  justify-content: center;
-  align-items: flex-start; /* Alinea al inicio verticalmente para evitar mucho espacio arriba */
-  min-height: 100vh;
-  box-sizing: border-box; /* Asegura que padding y border estén incluidos en el width/height */
-  padding-top: 40px; /* Un poco de espacio desde arriba */
-  padding-bottom: 40px; /* Un poco de espacio desde abajo */
+  justify-content: center; /* Centra el contenido principal */
+  align-items: flex-start; /* Alinea el contenido en la parte superior */
+  min-height: 100vh; /* Asegura que el body ocupe al menos el alto de la ventana */
+  box-sizing: border-box; /* Incluye padding en el cálculo del alto total */
 }
 
 .contenedor {
-  background-color: var(--card-background);
-  padding: 30px;
-  border-radius: var(--border-radius);
-  max-width: 550px;
-  width: calc(100% - 40px); /* Ocupa casi todo el ancho con un margen a los lados */
-  box-shadow: var(--box-shadow);
-  box-sizing: border-box;
+  background: var(--card-background);
+  padding: 35px 40px; /* Espaciado interior mayor */
+  border-radius: 18px; /* Bordes más redondeados */
+  max-width: 500px;
+  width: 100%; /* Ocupa todo el ancho posible hasta max-width */
+  box-shadow: 0 12px 25px var(--shadow-strong); /* Sombra más profunda y notable */
+  text-align: center; /* Centra elementos como títulos y botones principales */
+  transition: opacity var(--transition-speed) ease-in-out,
+              transform var(--transition-speed) ease-in-out,
+              box-shadow var(--transition-speed) ease-in-out;
 }
+
+/* Estado para ocultar elementos de forma animada */
+.oculto {
+  opacity: 0;
+  visibility: hidden; /* Oculta el elemento y lo quita del flujo de clics */
+  transform: translateY(-20px); /* Efecto sutil de mover hacia arriba */
+  pointer-events: none; /* Impide que se interactúe con él */
+}
+
+/* Estado para mostrar elementos de forma animada */
+.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0); /* Vuelve a su posición normal */
+  pointer-events: auto; /* Permite la interacción */
+}
+
 
 h1 {
-  color: var(--text-color-primary);
-  text-align: center;
-  margin-bottom: 25px;
-  font-weight: 700; /* Más audaz */
-  font-size: 28px; /* Tamaño de título */
+  color: var(--primary-color); /* Título principal con el color verde */
+  margin-bottom: 30px;
+  font-size: 2.3em; /* Tamaño de título grande */
+  letter-spacing: -0.5px; /* Ajuste fino de espaciado entre letras */
+  font-weight: 700; /* Negrita destacada */
 }
 
-.oculto {
-  display: none;
-}
-
-input,
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
 select {
-  font-family: var(--font-family);
-  font-size: 17px; /* Tamaño de texto de input iOS */
-  font-weight: 400;
-  border-radius: 10px; /* Ligeramente menos redondeado para inputs */
-  border: 1px solid var(--border-color);
-  padding: 14px 15px; /* Más padding vertical */
-  margin-bottom: 15px;
-  box-sizing: border-box;
-  width: 100%;
-  outline: none;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-  color: var(--text-color-primary);
-  -webkit-appearance: none; /* Eliminar estilos por defecto en iOS */
-  -moz-appearance: none;
-  appearance: none;
+  font-size: 1rem; /* Fuente estándar */
+  font-weight: 500;
+  border-radius: 16px; /* Bordes redondeados consistentes */
+  border: 2px solid var(--border-color); /* Borde suave */
+  padding: 15px 18px; /* Espacio interno mayor */
+  margin: 10px 0; /* Margen vertical entre campos */
+  width: calc(100% - 40px); /* Ancho total menos padding interno */
+  box-sizing: border-box; /* Incluye padding en el ancho total */
+  outline-offset: 4px; /* Espacio entre el borde y el focus */
+  transition: border-color var(--transition-speed) ease-in-out,
+              box-shadow var(--transition-speed) ease-in-out;
 }
 
-input::placeholder {
-    color: var(--color-gray-500); /* Color de placeholder más sutil */
-    opacity: 1; /* Asegurar visibilidad */
+/* Estilo para los placeholders */
+input::placeholder,
+select::placeholder {
+  color: var(--text-light); /* Color suave para placeholders */
 }
 
-
+/* Estilo al enfocar (focus) los campos */
 input:focus,
 select:focus {
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px rgba(var(--primary-color-rgb), 0.2); /* Sombra de foco iOS */
+  border-color: var(--primary-color); /* Borde verde al enfocar */
+  box-shadow: 0 0 10px rgba(40, 167, 69, 0.35); /* Sombra de enfoque con un toque verde */
 }
 
+/* Estilo para el selector (select), simulando un input con flecha */
+select {
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%3E%3Cpath%20d%3D%27M7%2010L12%2015L17%2010%27%20stroke%3D%27%236c757d%27%20stroke-width%3D%271.5%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27/%3E%3C/svg%3E'); /* Flecha del selector */
+    background-repeat: no-repeat;
+    background-position: right 15px center; /* Posiciona la flecha */
+    background-size: 1.2em; /* Tamaño de la flecha */
+    -webkit-appearance: none; /* Elimina el aspecto nativo en Chrome/Safari */
+    -moz-appearance: none;    /* Elimina el aspecto nativo en Firefox */
+    appearance: none;         /* Elimina el aspecto nativo estándar */
+}
+
+/* Estilo general de los botones */
 button {
-  font-family: var(--font-family);
-  font-size: 17px;
-  font-weight: 600; /* Más audaz */
   background-color: var(--primary-color);
   color: white;
   border: none;
-  border-radius: 10px; /* Botones también ligeramente menos redondeados */
   cursor: pointer;
-  transition: background-color 0.2s ease, opacity 0.2s ease;
-  padding: 14px 20px;
-  width: 100%; /* Ocupa todo el ancho por defecto */
-  margin-bottom: 10px; /* Espacio entre botones */
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding: 15px 25px; /* Padding para un tamaño agradable */
+  border-radius: 16px; /* Bordes redondeados consistentes */
+  transition: background-color var(--transition-speed) ease-in-out,
+              transform var(--transition-speed) ease-in-out,
+              box-shadow var(--transition-speed) ease-in-out;
+  display: inline-block; /* Necesario para que la transformación funcione */
 }
 
+/* Efecto al pasar el ratón por encima de un botón */
 button:hover {
-  background-color: #006ee6; /* Un tono más oscuro de azul */
+  background-color: var(--primary-hover); /* Verde más oscuro */
+  transform: translateY(-3px); /* Levanta el botón sutilmente */
+  box-shadow: 0 6px 12px rgba(40, 167, 69, 0.3); /* Sombra al pasar el ratón */
 }
 
-button:active {
-  opacity: 0.8; /* Efecto de click */
+/* Estilos específicos para los botones dentro del contenedor de login/registro */
+.contenedor button {
+  width: calc(50% - 12px); /* Hace que los dos botones ocupen la mayor parte del ancho */
+  margin: 15px 6px; /* Margen para separarlos */
+  font-size: 1rem;
+  padding: 15px 20px;
+  vertical-align: middle; /* Alinea botones con otros elementos */
 }
+
+.contenedor button:first-of-type {
+  margin-left: 0; /* Ajuste para el primer botón */
+}
+.contenedor button:last-of-type {
+  margin-right: 0; /* Ajuste para el último botón */
+}
+
 
 .flex-row {
   display: flex;
-  gap: 10px;
-  margin-bottom: 15px;
-  flex-wrap: wrap; /* Para que se ajusten en pantallas pequeñas */
+  gap: 15px; /* Espacio entre elementos flex */
+  flex-wrap: wrap; /* Permite que los elementos pasen a la siguiente línea si no caben */
+  align-items: center;
+  justify-content: center; /* Centra los elementos dentro del contenedor flex */
+  margin-bottom: 15px; /* Margen inferior */
 }
 
 .flex-grow {
-  flex-grow: 1;
+  flex-grow: 1; /* Permite que el elemento ocupe el espacio disponible */
+  min-width: 150px; /* Ancho mínimo para evitar que el input se haga demasiado pequeño */
 }
 
+/* Botón de tipo (Ingreso/Gasto) */
 .tipo-toggle-btn {
-  background-color: var(--secondary-color);
-  color: white;
-  border: none;
-  cursor: pointer;
-  font-weight: 600;
-  border-radius: 10px;
-  padding: 14px 15px;
-  width: auto; /* Ancho ajustado al contenido */
-  transition: background-color 0.2s ease, opacity 0.2s ease;
-  flex-shrink: 0; /* Evita que se encoja en flex-row */
-}
-
-.tipo-toggle-btn.tipo-gasto {
-  background-color: var(--accent-color);
-}
-
-.tipo-toggle-btn:hover {
-  filter: brightness(0.95);
-}
-
-.tipo-toggle-btn:active {
-  opacity: 0.8;
-}
-
-/* Estilos para notificaciones */
-.notification {
-  background-color: var(--card-background); /* Fondo de tarjeta para notificaciones */
-  color: var(--text-color-primary);
-  padding: 15px 20px; /* Más padding para que se vea mejor */
-  border-radius: 10px; /* Bordes suaves */
-  margin: 15px auto; /* Espacio y centrado */
-  max-width: 500px;
-  text-align: center;
-  font-weight: 500;
-  box-shadow: var(--box-shadow);
-  /* Transiciones para que aparezcan y desaparezcan suavemente */
-  transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease, height 0.3s ease, padding 0.3s ease, margin 0.3s ease;
-  overflow: hidden; /* Asegura que el contenido no se desborde al ocultarse */
-}
-
-.notification.error {
-  background-color: rgba(var(--accent-color-rgb), 0.1); /* Fondo muy claro del color de acento */
-  color: var(--accent-color);
-  border: 1px solid rgba(var(--accent-color-rgb), 0.2);
-}
-
-.notification.exito {
-  background-color: rgba(var(--secondary-color-rgb), 0.1);
-  color: var(--secondary-color);
-  border: 1px solid rgba(var(--secondary-color-rgb), 0.2);
-}
-
-.notification.ocultar {
-  opacity: 0;
-  visibility: hidden;
-  height: 0;
-  padding: 0 20px; /* Mantener padding horizontal al ocultar para la transición */
-  margin: 0 auto; /* Mantener el centrado al ocultar */
-  transform: translateY(-20px); /* Desaparece hacia arriba */
-}
-
-.resumen {
-  background-color: var(--card-background);
+  width: 120px; /* Ancho fijo para consistencia */
   padding: 15px;
-  border-radius: var(--border-radius);
-  margin-top: 25px; /* Más espacio */
-  display: flex;
-  justify-content: space-around; /* Distribuir espacio */
-  align-items: center;
+  font-size: 1rem;
   font-weight: 600;
-  color: var(--text-color-primary);
-  box-shadow: var(--box-shadow);
+  border-radius: 16px; /* Bordes redondeados */
+  border: none; /* Sin borde por defecto */
+  cursor: pointer;
+  user-select: none; /* Evita la selección de texto al hacer clic */
+  color: white;
+  transition: background-color var(--transition-speed) ease-in-out,
+              transform var(--transition-speed) ease-in-out,
+              box-shadow var(--transition-speed) ease-in-out;
 }
 
-.resumen-item {
-  text-align: center;
-  flex: 1; /* Permite que los ítems tomen espacio equitativo */
-  padding: 0 5px; /* Pequeño padding interno */
+.tipo-ingreso { background-color: var(--primary-color); }
+.tipo-ingreso:hover { background-color: var(--primary-hover); transform: translateY(-3px); box-shadow: 0 6px 12px rgba(40, 167, 69, 0.3);}
+
+.tipo-gasto { background-color: var(--danger-color); }
+.tipo-gasto:hover { background-color: var(--danger-hover); transform: translateY(-3px); box-shadow: 0 6px 12px rgba(220, 53, 69, 0.3);}
+
+
+.error-msg {
+  color: var(--danger-color); /* Color rojo para mensajes de error */
+  font-weight: 500;
+  margin: 10px 0 0 0;
+  font-size: 0.9em;
+  text-align: left; /* Alinea el mensaje a la izquierda */
+  padding-left: 5px; /* Un pequeño margen izquierdo para indentar */
 }
 
-.resumen-item span {
-  display: block; /* Para que el valor esté en una nueva línea */
-  font-size: 18px; /* Tamaño más grande para los valores */
-  margin-top: 5px;
-}
-
-.resumen-ingresos {
-  color: var(--secondary-color);
-}
-
-.resumen-gastos {
-  color: var(--accent-color);
-}
-
-#lista {
-  list-style: none;
-  padding: 0;
-  margin-top: 25px; /* Más espacio */
-  border-top: 1px solid var(--border-color); /* Borde superior para la lista */
-}
-
+/* Estilo para cada ítem de la lista de movimientos (como tarjetas) */
 .movimiento-item {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px 0;
-  border-bottom: 1px solid var(--border-color);
-  color: var(--text-color-primary);
+  justify-content: space-between; /* Distribuye espacio entre texto y botón */
+  align-items: center; /* Alinea verticalmente los elementos */
+  padding: 15px 20px; /* Espaciado interno */
+  margin-bottom: 12px; /* Margen entre cada movimiento */
+  border: 1px solid var(--border-color); /* Borde sutil */
+  border-radius: 14px; /* Bordes redondeados */
+  background: var(--card-background); /* Fondo blanco propio */
+  box-shadow: 0 4px 15px var(--shadow-light); /* Sombra muy ligera para dar profundidad */
+  transition: transform var(--transition-speed) ease-in-out,
+              box-shadow var(--transition-speed) ease-in-out;
+  text-align: left; /* Alinea el texto dentro del ítem a la izquierda */
 }
 
-.movimiento-item:last-child {
-  border-bottom: none;
+/* Efecto al pasar el ratón sobre un ítem de la lista */
+.movimiento-item:hover {
+  transform: translateX(8px); /* Desplazamiento ligero hacia la derecha */
+  box-shadow: 0 8px 20px var(--shadow-medium); /* Sombra más marcada */
 }
 
 .movimiento-text {
-  flex-grow: 1;
-  font-size: 17px;
-  line-height: 1.4; /* Mejor legibilidad */
+  flex-grow: 1; /* Permite que el texto ocupe el espacio disponible */
+  font-size: 1rem; /* 16px */
+  margin-right: 15px; /* Espacio entre el texto y el botón de eliminar */
+  line-height: 1.4; /* Espaciado entre líneas */
+}
+/* Estilo para el monto dentro del texto, para que resalte */
+.movimiento-text span {
+  font-weight: 600; /* Monto en negrita */
 }
 
+/* Colores específicos para mostrar el tipo de movimiento en el texto */
+.ingreso-val { color: var(--primary-color); }
+.gasto-val { color: var(--danger-color); }
+
+/* Botón de eliminar (la 'x') */
 .eliminar-btn {
   background-color: transparent;
   border: none;
-  color: var(--accent-color);
+  color: var(--danger-color); /* Color rojo para el botón */
   cursor: pointer;
-  font-weight: bold;
-  font-size: 20px; /* Más grande para que sea fácil de tocar */
-  padding: 5px 10px;
-  opacity: 0.8;
-  transition: opacity 0.2s ease, transform 0.1s ease;
+  font-weight: 700;
+  font-size: 1.4rem; /* Icono más grande */
+  padding: 0 10px; /* Espaciado alrededor del icono */
+  user-select: none;
+  opacity: 0.7; /* Opacidad por defecto */
+  transition: opacity var(--transition-speed) ease-in-out,
+              transform 0.15s ease-in-out; /* Transición suave */
 }
-
+/* Al pasar el ratón sobre el ítem, el botón de eliminar se hace más visible */
+.movimiento-item:hover .eliminar-btn {
+    opacity: 1; /* Completamente visible */
+}
+/* Efecto al pasar el ratón directamente sobre el botón de eliminar */
 .eliminar-btn:hover {
-  opacity: 1;
+  transform: scale(1.1); /* Pequeño aumento de tamaño */
 }
 
-.eliminar-btn:active {
-  transform: scale(0.95); /* Pequeño efecto de "presión" */
+/* Sección del resumen (ingresos, gastos, balance) */
+.resumen {
+  margin-top: 30px;
+  padding: 20px 25px;
+  border-radius: 16px; /* Bordes redondeados */
+  background: linear-gradient(to right, #e9f7ef, #f0fff4); /* Fondo degradado sutil */
+  display: flex;
+  justify-content: space-around; /* Distribuye los ítems de manera uniforme */
+  flex-wrap: wrap; /* Permite que los ítems pasen a la siguiente línea */
+  gap: 15px; /* Espacio entre los ítems del resumen */
+  text-align: center;
+}
+
+.resumen-item {
+  flex: 1; /* Cada ítem ocupa espacio proporcionalmente */
+  min-width: 120px; /* Ancho mínimo para asegurar la correcta visualización */
+  color: var(--text-dark);
+  font-weight: 600;
+  font-size: 1.1em; /* Fuente ligeramente mayor */
+}
+
+.resumen-ingresos {
+  color: var(--primary-color); /* Verde para ingresos */
+}
+
+.resumen-gastos {
+  color: var(--danger-color); /* Rojo para gastos */
+}
+
+/* Estilo para los números del resumen */
+.resumen-item span {
+    display: block; /* Asegura que el valor esté en su propia línea */
+    font-weight: 700; /* Números en negrita */
+    font-size: 1.3em; /* Fuente más grande para los totales */
+}
+
+/* Contenedor para el gráfico */
+.resumen-graficos {
+    margin-top: 40px;
+    background: var(--card-background);
+    padding: 25px;
+    border-radius: 18px;
+    box-shadow: 0 6px 15px var(--shadow-light); /* Sombra ligera */
+    text-align: center; /* Centra el título */
+}
+
+.resumen-graficos h2 {
+    color: var(--text-dark);
+    font-size: 1.6em; /* Tamaño del título del gráfico */
+    margin-bottom: 20px; /* Espacio debajo del título */
+    font-weight: 600;
+}
+
+/* Media Query para ajustar estilos en pantallas más pequeñas */
+@media (max-width: 600px) {
+  body {
+    padding: 10px; /* Menos padding en el body */
+  }
+  .contenedor {
+    padding: 25px 30px; /* Menos padding interno */
+  }
+  h1 {
+    font-size: 1.9em; /* Título un poco más pequeño */
+  }
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="number"],
+  select,
+  .tipo-toggle-btn {
+    font-size: 0.95rem;
+    padding: 12px 15px;
+  }
+  .contenedor button {
+    width: calc(100% - 12px); /* Botones login/registro ocupan todo el ancho */
+    margin: 8px auto; /* Centra los botones y da margen */
+    display: block; /* Asegura que se apilen verticalmente */
+  }
+  .flex-row {
+    flex-direction: column; /* Apila los elementos del formulario */
+    align-items: stretch; /* Extiende los elementos para ocupar todo el ancho */
+  }
+  .flex-grow {
+    min-width: auto; /* Permite que el flex-grow funcione mejor */
+    width: 100%;
+  }
+  .resumen {
+    flex-direction: column; /* Apila los resúmenes */
+    align-items: stretch;
+  }
+  .resumen-item {
+    margin-bottom: 10px; /* Espacio entre resúmenes apilados */
+  }
+  .resumen-item span {
+    font-size: 1.1em; /* Mantiene los totales legibles */
+  }
+  .resumen-graficos {
+    padding: 15px;
+  }
+  .resumen-graficos h2 {
+    font-size: 1.3em;
+  }
 }
