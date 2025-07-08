@@ -2,32 +2,41 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" /> <title>Sanas Finanzas</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sanas Finanzas</title>
   <link rel="manifest" href="manifest.json" />
-  <meta name="theme-color" content="#3498db" />
+  <meta name="theme-color" content="#28a745" />
   <link rel="icon" type="image/png" href="icono192.png" />
   <link rel="stylesheet" href="estilos.css" />
+  <!-- Firebase SDKs Compatibles -->
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  <div id="notification" class="notification ocultar"></div>
-
-  <div class="contenedor" id="login-container">
+  <div class="contenedor visible" id="login-container"> <!-- Inicialmente visible -->
     <h1>Sanas Finanzas</h1>
     <input type="email" id="email" placeholder="Correo electrónico" />
     <input type="password" id="password" placeholder="Contraseña" />
-    <button onclick="login()">Iniciar sesión</button>
-    <button onclick="register()">Registrarse</button>
+    <div class="flex-row" style="margin-top: 25px; justify-content: center;"> <!-- Para organizar botones login/registro -->
+      <button class="flex-grow" onclick="login()">Iniciar sesión</button>
+      <button class="flex-grow" onclick="register()">Registrarse</button>
+    </div>
+    <p id="error-login" class="error-msg"></p>
   </div>
 
-  <div class="contenedor oculto" id="app-container">
-    <h1>Balance: <span id="balance">$0</span></h1>
-    <button onclick="logout()">Cerrar sesión</button>
-    <div class="flex-row" style="align-items:center; margin-top: 15px;">
+  <div class="contenedor oculto" id="app-container"> <!-- Inicialmente oculto -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+      <h1 style="margin: 0;">Tu Balance</h1>
+      <button onclick="logout()">Cerrar sesión</button>
+    </div>
+    <h1 style="margin-top: 5px; font-size: 2.0em;"><span id="balance">$0.00</span></h1>
+
+    <div class="flex-row" style="align-items:center; margin-top: 20px;">
       <input type="text" id="descripcion" placeholder="Descripción" class="flex-grow" />
-      <input type="number" id="monto" placeholder="Monto" min="0" />
+      <input type="number" id="monto" placeholder="Monto" min="0" step="0.01" /> <!-- step para decimales -->
       <button id="tipoToggleBtn" class="tipo-toggle-btn tipo-ingreso" onclick="toggleTipo()">Ingreso</button>
     </div>
     <select id="categoria">
@@ -35,23 +44,39 @@
       <option value="Comida">Comida</option>
       <option value="Transporte">Transporte</option>
       <option value="Salud">Salud</option>
+      <option value="Ocio">Ocio</option>
+      <option value="Hogar">Hogar</option>
       <option value="Otros">Otros</option>
     </select>
-    <button onclick="agregarTransaccion()">Agregar</button>
+    <button onclick="agregarTransaccion()" style="width: 100%; margin-top: 15px;">Agregar Transacción</button>
+    <p id="error-transaccion" class="error-msg"></p>
 
-    <div class="resumen" style="margin-top:20px;">
-      <div class="resumen-item resumen-ingresos">Ingresos: <span id="total-ingresos">$0</span></div>
-      <div class="resumen-item resumen-gastos">Gastos: <span id="total-gastos">$0</span></div>
-      <div class="resumen-item">Balance: <span id="balance-det">$0</span></div>
+    <div class="resumen">
+      <div class="resumen-item">Ingresos: <span id="total-ingresos">$0.00</span></div>
+      <div class="resumen-item">Gastos: <span id="total-gastos">$0.00</span></div>
+      <div class="resumen-item">Balance: <span id="balance-det">$0.00</span></div>
     </div>
 
-    <ul id="lista"></ul>
+    <!-- Sección del Gráfico -->
+    <div class="resumen-graficos">
+      <h2>Análisis de Gastos</h2>
+      <div style="height: 300px; position: relative;"> <!-- Wrapper para controlar el tamaño del canvas -->
+        <canvas id="transaccionChart"></canvas>
+      </div>
+    </div>
+    <!-- Fin Sección del Gráfico -->
+
+    <h3 style="margin-top: 40px; color: var(--text-light);">Historial de Transacciones</h3>
+    <ul id="lista" style="list-style: none; padding: 0;"></ul>
   </div>
 
   <script src="script.js"></script>
   <script>
+    // Registro del Service Worker
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('service-worker.js');
+      navigator.serviceWorker.register('service-worker.js')
+        .then(() => console.log('Service worker registrado con éxito'))
+        .catch(err => console.error('Error al registrar el service worker:', err));
     }
   </script>
 </body>
