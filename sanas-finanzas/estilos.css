@@ -18,17 +18,15 @@
   --transition-speed: 0.25s; /* Velocidad de las transiciones */
 }
 
+/* Estilos base para el body, sin flexbox para centrado general de un bloque */
 body {
   font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   background: var(--background-light);
   margin: 0;
-  padding: 20px;
+  padding: 20px; /* Padding inicial */
   color: var(--text-dark);
-  display: flex;
-  justify-content: center; /* Centra el contenido principal horizontalmente */
-  align-items: flex-start; /* Alinea el contenido en la parte superior verticalmente */
-  min-height: 100vh; /* Asegura que el body ocupe al menos el alto de la ventana */
-  box-sizing: border-box; /* Incluye padding en el cálculo del alto total */
+  box-sizing: border-box; /* Asegura que padding se incluya en el tamaño total */
+  min-height: 100vh; /* Asegura que el body ocupa toda la altura para que el centrado funcione bien */
 }
 
 .contenedor {
@@ -36,19 +34,24 @@ body {
   padding: 35px 40px; /* Espaciado interior mayor */
   border-radius: 18px; /* Bordes más redondeados */
   max-width: 500px;
-  width: 100%; /* Ocupa todo el ancho posible hasta max-width */
+  width: 100%; /* Permite que el contenedor ocupe el máximo ancho posible */
   box-shadow: 0 12px 25px var(--shadow-strong); /* Sombra más profunda y notable */
-  text-align: center; /* Centra elementos como títulos y botones principales */
+  text-align: center; /* Centra elementos de texto/botones dentro del contenedor */
   transition: opacity var(--transition-speed) ease-in-out,
               transform var(--transition-speed) ease-in-out,
               box-shadow var(--transition-speed) ease-in-out;
+
+  /* Asegura el centrado horizontal usando márgenes automáticos */
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 30px; /* Espacio desde la parte superior */
 }
 
 /* Estado para ocultar elementos de forma animada */
 .oculto {
   opacity: 0;
   visibility: hidden; /* Oculta el elemento y lo quita del flujo de clics */
-  transform: translateY(-20px); /* Efecto sutil de mover hacia arriba */
+  transform: translateY(-20px); /* Efecto sutil de mover hacia arriba al ocultar */
   pointer-events: none; /* Impide que se interactúe con él */
 }
 
@@ -337,6 +340,12 @@ button:hover {
   }
   .contenedor {
     padding: 25px 30px; /* Menos padding interno en móvil */
+    /* Añadimos márgenes específicos para asegurar el centrado */
+    margin-top: 10px; /* Reducimos el margen superior */
+    margin-left: auto;
+    margin-right: auto;
+    /* En móvil, es posible que necesitemos limitar el ancho de forma relativa */
+    width: 100%; /* Asegura que ocupe todo el ancho posible dentro del body padding */
   }
   h1 {
     font-size: 1.9em; /* Título un poco más pequeño en móvil */
@@ -372,7 +381,7 @@ button:hover {
     min-width: auto; /* Permite que el flex-grow funcione mejor en columna */
     width: 100%;
   }
-  /* El botón toggle de tipo puede necesitar ajustes si se apila */
+  /* El botón toggle de tipo también se estira */
   .tipo-toggle-btn {
       width: 100%; /* Que también sea de ancho completo si está apilado */
   }
@@ -402,6 +411,4 @@ button:hover {
   .historial-title {
     font-size: 1.1em;
   }
-
-  /* La lista de movimientos individual no requiere cambios drásticos */
 }
