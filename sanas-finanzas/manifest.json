@@ -1,6 +1,6 @@
 {
   "name": "Sanas Finanzas",
-  "short_name": "Finanzas",
+  "short_name": "Sanas Finanzas",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#ffffff",
