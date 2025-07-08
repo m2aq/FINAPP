@@ -27,7 +27,7 @@ body {
   color: var(--text-dark);
   box-sizing: border-box;
   min-height: 100vh;
-  overflow-x: hidden; /* <-- SE AÑADIÓ: Previene el scroll horizontal */
+  overflow-x: hidden; /* <-- IMPEDIR SCROLL HORIZONTAL */
 }
 
 .contenedor {
@@ -45,25 +45,25 @@ body {
   margin-left: auto;
   margin-right: auto;
   margin-top: 30px;
-  position: relative; /* <-- SE AÑADIÓ: Necesario para que z-index funcione */
-  z-index: 5; /* <-- SE AÑADIÓ: Capa base, se eleva para la pantalla visible */
+  position: relative; /* Necesario para que z-index funcione */
+  z-index: 5; /* Capa base */
 }
 
 /* Estado para ocultar elementos de forma animada */
 .oculto {
   opacity: 0;
-  visibility: hidden; /* Oculta el elemento y lo quita del flujo de clics */
-  pointer-events: none; /* Impide que se interactúe con él */
-  transform: translateY(-20px); /* Efecto sutil de mover hacia arriba al ocultar */
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(-20px);
 }
 
 /* Estado para mostrar elementos de forma animada */
 .visible {
   opacity: 1;
   visibility: visible;
-  pointer-events: auto; /* Permite la interacción */
-  transform: translateY(0); /* Vuelve a su posición normal */
-  z-index: 10; /* <-- SE AÑADIÓ: Capa superior para la pantalla visible */
+  pointer-events: auto;
+  transform: translateY(0);
+  z-index: 10; /* Capa superior para la pantalla visible */
 }
 
 
@@ -87,7 +87,7 @@ select {
   border: 2px solid var(--border-color); /* Borde suave */
   padding: 15px 18px; /* Espacio interno mayor */
   margin: 10px 0; /* Margen vertical entre campos */
-  width: calc(100% - 40px); /* Ancho total menos padding interno (padding-left + padding-right) */
+  width: calc(100% - 40px); /* Ancho total menos padding interno */
   box-sizing: border-box; /* Incluye padding en el cálculo del width total */
   outline-offset: 4px; /* Espacio entre el borde y el foco */
   transition: border-color var(--transition-speed) ease-in-out,
@@ -309,6 +309,18 @@ button:hover {
     font-size: 1.3em; /* Fuente más grande para los totales */
 }
 
+/* --- Nuevos Estilos --- */
+
+/* Color para el balance positivo */
+.balance-positivo {
+  color: var(--primary-color); /* Verde */
+}
+
+/* Color para el balance negativo */
+.balance-negativo {
+  color: var(--danger-color); /* Rojo */
+}
+
 /* Contenedor para el gráfico */
 .resumen-graficos {
     margin-top: 40px;
@@ -336,6 +348,17 @@ button:hover {
   padding-left: 5px;
 }
 
+/* Información de Versión */
+.version-info {
+  font-size: 0.75em; /* Tamaño de letra chico */
+  color: var(--text-light);
+  margin-bottom: 20px; /* Espacio debajo de la versión */
+  font-weight: 500;
+  text-align: center; /* Centrado */
+  width: 100%; /* Ocupa todo el ancho para centrar bien */
+  display: block; /* Asegura que ocupe su propia línea */
+}
+
 /* Media Query para ajustar estilos en pantallas más pequeñas (móviles) */
 @media (max-width: 600px) {
   body {
@@ -344,7 +367,8 @@ button:hover {
   .contenedor {
     padding: 25px 30px; /* Menos padding interno en móvil */
     margin-top: 10px; /* Reducimos el margen superior */
-    width: 100%; /* Asegura que ocupe todo el ancho posible */
+    width: 100%;
+    box-sizing: border-box; /* Importante para que el padding del body no afecte al ancho del contenedor */
   }
   h1 {
     font-size: 1.9em; /* Título un poco más pequeño en móvil */
@@ -409,5 +433,10 @@ button:hover {
   /* Título del historial también más pequeño */
   .historial-title {
     font-size: 1.1em;
+  }
+
+  /* El .version-info debe aparecer incluso en móvil */
+  .version-info {
+      margin-bottom: 25px; /* Mas margen si hay varios elementos debajo */
   }
 }
