@@ -16,27 +16,29 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  <div class="contenedor visible" id="login-container"> <!-- Inicialmente visible -->
+  <!-- Contenedor de Login. Inicialmente visible -->
+  <div class="contenedor visible" id="login-container">
     <h1>Sanas Finanzas</h1>
     <input type="email" id="email" placeholder="Correo electrónico" />
     <input type="password" id="password" placeholder="Contraseña" />
-    <div class="flex-row" style="margin-top: 25px; justify-content: center;"> <!-- Para organizar botones login/registro -->
+    <div class="flex-row btn-group-login" style="margin-top: 25px; justify-content: center;">
       <button class="flex-grow" onclick="login()">Iniciar sesión</button>
       <button class="flex-grow" onclick="register()">Registrarse</button>
     </div>
     <p id="error-login" class="error-msg"></p>
   </div>
 
-  <div class="contenedor oculto" id="app-container"> <!-- Inicialmente oculto -->
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+  <!-- Contenedor Principal de la Aplicación. Inicialmente oculto -->
+  <div class="contenedor oculto" id="app-container">
+    <div class="header-app">
       <h1 style="margin: 0;">Tu Balance</h1>
       <button onclick="logout()">Cerrar sesión</button>
     </div>
     <h1 style="margin-top: 5px; font-size: 2.0em;"><span id="balance">$0.00</span></h1>
 
-    <div class="flex-row" style="align-items:center; margin-top: 20px;">
+    <div class="transaction-form-controls">
       <input type="text" id="descripcion" placeholder="Descripción" class="flex-grow" />
-      <input type="number" id="monto" placeholder="Monto" min="0" step="0.01" /> <!-- step para decimales -->
+      <input type="number" id="monto" placeholder="Monto" min="0" step="0.01" />
       <button id="tipoToggleBtn" class="tipo-toggle-btn tipo-ingreso" onclick="toggleTipo()">Ingreso</button>
     </div>
     <select id="categoria">
@@ -60,13 +62,13 @@
     <!-- Sección del Gráfico -->
     <div class="resumen-graficos">
       <h2>Análisis de Gastos</h2>
-      <div style="height: 300px; position: relative;"> <!-- Wrapper para controlar el tamaño del canvas -->
+      <div style="height: 300px; position: relative;">
         <canvas id="transaccionChart"></canvas>
       </div>
     </div>
     <!-- Fin Sección del Gráfico -->
 
-    <h3 style="margin-top: 40px; color: var(--text-light);">Historial de Transacciones</h3>
+    <h3 class="historial-title">Historial de Transacciones</h3>
     <ul id="lista" style="list-style: none; padding: 0;"></ul>
   </div>
 
