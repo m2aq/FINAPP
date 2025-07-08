@@ -30,12 +30,29 @@ const balanceElem = document.getElementById("balance");
 const balanceDetElem = document.getElementById("balance-det");
 const totalIngresosElem = document.getElementById("total-ingresos");
 const totalGastosElem = document.getElementById("total-gastos");
+const versionInfoElements = document.querySelectorAll('.version-info'); // Selector para todos los elementos de versión
 
 // Estado global para el tipo de transacción (Ingreso o Gasto)
 let tipo = "ingreso";
 
 // Variable global para la instancia del gráfico de Chart.js
 let transaccionChart = null;
+
+// --- Formateo de Moneda ---
+function formatCurrency(value) {
+    if (typeof value !== 'number' || isNaN(value)) {
+        return '$0.00'; // Valor por defecto para entradas inválidas
+    }
+    // Utiliza Intl.NumberFormat para formatear según locale español 'es-ES'
+    // 'es-ES' usa '.' para miles y ',' para decimales, que es el formato deseado.
+    const formatted = value.toLocaleString('es-ES', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+        useGrouping: true // Asegura los separadores de miles y decimales correctos
+    });
+    // Añade el símbolo de dólar al principio
+    return `$${formatted}`;
+}
 
 // --- Manejo de Estados de la Aplicación ---
 
@@ -127,14 +144,12 @@ function toggleTipo() {
     tipoToggleBtn.textContent = "Gasto";
     tipoToggleBtn.classList.remove("tipo-ingreso");
     tipoToggleBtn.classList.add("tipo-gasto");
-    // Cambiar color del borde del input de monto a rojo para "gasto"
     montoInput.style.borderColor = getComputedStyle(document.documentElement).getPropertyValue('--danger-color');
   } else {
     tipo = "ingreso";
     tipoToggleBtn.textContent = "Ingreso";
     tipoToggleBtn.classList.remove("tipo-gasto");
     tipoToggleBtn.classList.add("tipo-ingreso");
-    // Cambiar color del borde del input de monto a verde para "ingreso"
     montoInput.style.borderColor = getComputedStyle(document.documentElement).getPropertyValue('--primary-color');
   }
 }
@@ -172,7 +187,6 @@ function agregarTransaccion() {
   db.collection("usuarios").doc(user.uid).collection("movimientos").add(transaccion)
     .then(() => {
       limpiarCamposApp(); // Limpia los campos del formulario después de agregar
-      // Los datos se actualizarán automáticamente gracias al listener 'onSnapshot'
     })
     .catch(e => {
       errorTransaccion.textContent = "Error al guardar la transacción: " + e.message;
@@ -201,12 +215,14 @@ function cargarDatos() {
       const li = document.createElement("li");
       li.className = "movimiento-item";
 
-      // Prepara el texto de la transacción con colores para ingreso/gasto
+      // Prepara el texto de la transacción con colores para ingreso/gasto y formato de moneda
       const valorClase = t.tipo === "ingreso" ? "ingreso-val" : "gasto-val";
-      const textoHTML = `${t.descripcion} - <span class="${valorClase}">$${t.monto.toFixed(2)}</span>`;
+      // Aplica formato de moneda al monto directamente en el span
+      const montoFormateado = formatCurrency(t.monto);
+      const textoHTML = `${t.descripcion} - <span class="${valorClase}">${montoFormateado}</span>`;
       const spanTexto = document.createElement("span");
       spanTexto.className = "movimiento-text";
-      spanTexto.innerHTML = textoHTML;
+      spanTexto.innerHTML = textoHTML; // Usa innerHTML para renderizar el span con la clase
 
       // Crea el botón de eliminar
       const btnEliminar = document.createElement("button");
@@ -230,19 +246,26 @@ function cargarDatos() {
         totalIngresos += t.monto;
       } else {
         totalGastos += t.monto;
-        // Añade el gasto a su categoría para el gráfico
         if (gastosPorCategoria[t.categoria] !== undefined) {
             gastosPorCategoria[t.categoria] += t.monto;
         }
       }
     });
 
-    // Calcula y actualiza los totales
+    // Calcula y actualiza los totales con formato de moneda
     const balance = totalIngresos - totalGastos;
-    balanceElem.textContent = `$${balance.toFixed(2)}`;
-    balanceDetElem.textContent = `$${balance.toFixed(2)}`;
-    totalIngresosElem.textContent = `$${totalIngresos.toFixed(2)}`;
-    totalGastosElem.textContent = `$${totalGastos.toFixed(2)}`;
+    balanceElem.textContent = formatCurrency(balance);
+    balanceDetElem.textContent = formatCurrency(balance);
+    totalIngresosElem.textContent = formatCurrency(totalIngresos);
+    totalGastosElem.textContent = formatCurrency(totalGastos);
+
+    // --- Aplicación de Colores al Balance Principal ---
+    balanceElem.classList.remove("balance-positivo", "balance-negativo"); // Elimina clases anteriores
+    if (balance > 0) {
+        balanceElem.classList.add("balance-positivo"); // Añade clase para color verde
+    } else if (balance < 0) {
+        balanceElem.classList.add("balance-negativo"); // Añade clase para color rojo
+    }
 
     // --- Actualiza el Gráfico ---
     const labels = Object.keys(gastosPorCategoria).filter(cat => gastosPorCategoria[cat] > 0);
@@ -290,8 +313,8 @@ function cargarDatos() {
                   let label = context.label || '';
                   if (label) label += ': ';
                   if (context.raw !== null) {
-                    // Formato de moneda (ejemplo: EUR, ajusta según necesites)
-                    label += new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR', minimumFractionDigits: 2 }).format(context.raw);
+                    // Formato de moneda para tooltip del gráfico
+                    label += formatCurrency(context.raw);
                   }
                   return label;
                 }
@@ -325,3 +348,15 @@ function limpiarCamposLogin() {
   document.getElementById("email").value = "";
   document.getElementById("password").value = "";
 }
+
+// --- Inicialización de Versión ---
+document.addEventListener('DOMContentLoaded', () => {
+    const version = "2.0.2"; // <-- ÚLTIMA VERSIÓN
+
+    versionInfoElements.forEach(el => {
+        el.textContent = `Version ${version}`;
+    });
+
+    // La lógica de onAuthStateChanged ya está fuera para que se ejecute una vez al cargar.
+    // No es necesario llamar `toggleAppViews` aquí explícitamente si `onAuthStateChanged` lo maneja.
+});
