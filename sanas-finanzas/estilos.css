@@ -25,8 +25,8 @@ body {
   padding: 20px;
   color: var(--text-dark);
   display: flex;
-  justify-content: center; /* Centra el contenido principal */
-  align-items: flex-start; /* Alinea el contenido en la parte superior */
+  justify-content: center; /* Centra el contenido principal horizontalmente */
+  align-items: flex-start; /* Alinea el contenido en la parte superior verticalmente */
   min-height: 100vh; /* Asegura que el body ocupe al menos el alto de la ventana */
   box-sizing: border-box; /* Incluye padding en el cálculo del alto total */
 }
@@ -69,6 +69,7 @@ h1 {
   font-weight: 700; /* Negrita destacada */
 }
 
+/* Estilos para los campos de entrada (inputs, selects) */
 input[type="text"],
 input[type="email"],
 input[type="password"],
@@ -80,9 +81,9 @@ select {
   border: 2px solid var(--border-color); /* Borde suave */
   padding: 15px 18px; /* Espacio interno mayor */
   margin: 10px 0; /* Margen vertical entre campos */
-  width: calc(100% - 40px); /* Ancho total menos padding interno */
-  box-sizing: border-box; /* Incluye padding en el ancho total */
-  outline-offset: 4px; /* Espacio entre el borde y el focus */
+  width: calc(100% - 40px); /* Ancho total menos padding interno (padding-left + padding-right) */
+  box-sizing: border-box; /* Incluye padding en el cálculo del width total */
+  outline-offset: 4px; /* Espacio entre el borde y el foco */
   transition: border-color var(--transition-speed) ease-in-out,
               box-shadow var(--transition-speed) ease-in-out;
 }
@@ -100,13 +101,13 @@ select:focus {
   box-shadow: 0 0 10px rgba(40, 167, 69, 0.35); /* Sombra de enfoque con un toque verde */
 }
 
-/* Estilo para el selector (select), simulando un input con flecha */
+/* Estilo para el selector (select), añadiendo una flecha personalizada */
 select {
     background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%3E%3Cpath%20d%3D%27M7%2010L12%2015L17%2010%27%20stroke%3D%27%236c757d%27%20stroke-width%3D%271.5%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27/%3E%3C/svg%3E'); /* Flecha del selector */
     background-repeat: no-repeat;
     background-position: right 15px center; /* Posiciona la flecha */
     background-size: 1.2em; /* Tamaño de la flecha */
-    -webkit-appearance: none; /* Elimina el aspecto nativo en Chrome/Safari */
+    -webkit-appearance: none; /* Elimina el aspecto nativo en navegadores WebKit */
     -moz-appearance: none;    /* Elimina el aspecto nativo en Firefox */
     appearance: none;         /* Elimina el aspecto nativo estándar */
 }
@@ -125,6 +126,7 @@ button {
               transform var(--transition-speed) ease-in-out,
               box-shadow var(--transition-speed) ease-in-out;
   display: inline-block; /* Necesario para que la transformación funcione */
+  vertical-align: middle; /* Ayuda en la alineación */
 }
 
 /* Efecto al pasar el ratón por encima de un botón */
@@ -134,29 +136,30 @@ button:hover {
   box-shadow: 0 6px 12px rgba(40, 167, 69, 0.3); /* Sombra al pasar el ratón */
 }
 
-/* Estilos específicos para los botones dentro del contenedor de login/registro */
-.contenedor button {
-  width: calc(50% - 12px); /* Hace que los dos botones ocupen la mayor parte del ancho */
-  margin: 15px 6px; /* Margen para separarlos */
+/* Contenedor para los botones de login/registro, aplica layout flex */
+.btn-group-login {
+  display: flex;
+  gap: 15px; /* Espacio entre botones */
+  margin-top: 25px;
+  justify-content: center; /* Centra los botones horizontalmente */
+}
+
+/* Estilos para los botones de login/registro, para que ocupen espacio y se separen */
+.btn-group-login button {
+  flex-grow: 1; /* Cada botón toma el espacio disponible */
+  flex-basis: 0; /* Permite que el espacio se distribuya equitativamente */
+  min-width: 150px; /* Ancho mínimo para que los botones sean legibles */
   font-size: 1rem;
   padding: 15px 20px;
-  vertical-align: middle; /* Alinea botones con otros elementos */
 }
 
-.contenedor button:first-of-type {
-  margin-left: 0; /* Ajuste para el primer botón */
-}
-.contenedor button:last-of-type {
-  margin-right: 0; /* Ajuste para el último botón */
-}
-
-
-.flex-row {
+/* Controles del formulario de transacción (input descripción, monto, y botón tipo) */
+.transaction-form-controls {
   display: flex;
-  gap: 15px; /* Espacio entre elementos flex */
+  gap: 15px;
   flex-wrap: wrap; /* Permite que los elementos pasen a la siguiente línea si no caben */
   align-items: center;
-  justify-content: center; /* Centra los elementos dentro del contenedor flex */
+  justify-content: center; /* Centra los elementos dentro del contenedor */
   margin-bottom: 15px; /* Margen inferior */
 }
 
@@ -186,7 +189,6 @@ button:hover {
 
 .tipo-gasto { background-color: var(--danger-color); }
 .tipo-gasto:hover { background-color: var(--danger-hover); transform: translateY(-3px); box-shadow: 0 6px 12px rgba(220, 53, 69, 0.3);}
-
 
 .error-msg {
   color: var(--danger-color); /* Color rojo para mensajes de error */
@@ -257,6 +259,14 @@ button:hover {
   transform: scale(1.1); /* Pequeño aumento de tamaño */
 }
 
+/* Encabezado de la sección de la app (Título y botón de logout) */
+.header-app {
+  display: flex;
+  justify-content: space-between; /* Mueve los elementos a los extremos */
+  align-items: center; /* Alinea verticalmente */
+  margin-bottom: 20px;
+}
+
 /* Sección del resumen (ingresos, gastos, balance) */
 .resumen {
   margin-top: 30px;
@@ -310,17 +320,28 @@ button:hover {
     font-weight: 600;
 }
 
-/* Media Query para ajustar estilos en pantallas más pequeñas */
+/* Título del historial */
+.historial-title {
+  margin-top: 40px;
+  color: var(--text-light);
+  font-size: 1.3em; /* Tamaño más sutil */
+  font-weight: 600;
+  text-align: left;
+  padding-left: 5px;
+}
+
+/* Media Query para ajustar estilos en pantallas más pequeñas (móviles) */
 @media (max-width: 600px) {
   body {
-    padding: 10px; /* Menos padding en el body */
+    padding: 10px; /* Menos padding en el body en móvil */
   }
   .contenedor {
-    padding: 25px 30px; /* Menos padding interno */
+    padding: 25px 30px; /* Menos padding interno en móvil */
   }
   h1 {
-    font-size: 1.9em; /* Título un poco más pequeño */
+    font-size: 1.9em; /* Título un poco más pequeño en móvil */
   }
+  /* Ajustes para inputs, selects y botones toggles en móvil */
   input[type="text"],
   input[type="email"],
   input[type="password"],
@@ -330,33 +351,57 @@ button:hover {
     font-size: 0.95rem;
     padding: 12px 15px;
   }
-  .contenedor button {
-    width: calc(100% - 12px); /* Botones login/registro ocupan todo el ancho */
-    margin: 8px auto; /* Centra los botones y da margen */
-    display: block; /* Asegura que se apilen verticalmente */
+
+  /* Los botones de login/registro en móvil se apilan verticalmente */
+  .btn-group-login {
+    flex-direction: column;
+    align-items: stretch; /* Ocupan todo el ancho disponible */
   }
-  .flex-row {
-    flex-direction: column; /* Apila los elementos del formulario */
-    align-items: stretch; /* Extiende los elementos para ocupar todo el ancho */
+  .btn-group-login button {
+    width: 100%; /* Cada botón ocupa el ancho total */
+    margin: 8px auto; /* Margen para separarlos */
+    display: block;
+  }
+
+  /* Controles del formulario de transacción en móvil */
+  .transaction-form-controls {
+    flex-direction: column; /* Apila los elementos verticalmente */
+    align-items: stretch; /* Extiende para ocupar todo el ancho */
   }
   .flex-grow {
-    min-width: auto; /* Permite que el flex-grow funcione mejor */
+    min-width: auto; /* Permite que el flex-grow funcione mejor en columna */
     width: 100%;
   }
+  /* El botón toggle de tipo puede necesitar ajustes si se apila */
+  .tipo-toggle-btn {
+      width: 100%; /* Que también sea de ancho completo si está apilado */
+  }
+
+  /* Los ítems del resumen se apilan verticalmente en móvil */
   .resumen {
-    flex-direction: column; /* Apila los resúmenes */
+    flex-direction: column;
     align-items: stretch;
   }
   .resumen-item {
     margin-bottom: 10px; /* Espacio entre resúmenes apilados */
+    padding: 10px 0; /* Ajuste de padding vertical */
   }
   .resumen-item span {
     font-size: 1.1em; /* Mantiene los totales legibles */
   }
+
+  /* Ajustes generales para la sección de gráfico en móvil */
   .resumen-graficos {
     padding: 15px;
   }
   .resumen-graficos h2 {
-    font-size: 1.3em;
+    font-size: 1.3em; /* Título del gráfico más pequeño */
   }
+
+  /* Título del historial también más pequeño */
+  .historial-title {
+    font-size: 1.1em;
+  }
+
+  /* La lista de movimientos individual no requiere cambios drásticos */
 }
