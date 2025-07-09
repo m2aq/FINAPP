@@ -27,7 +27,7 @@ body {
   color: var(--text-dark);
   box-sizing: border-box;
   min-height: 100vh;
-  overflow-x: hidden; /* <-- IMPEDIR SCROLL HORIZONTAL */
+  overflow-x: hidden; /* IMPEDIR SCROLL HORIZONTAL */
 }
 
 .contenedor {
@@ -52,17 +52,17 @@ body {
 /* Estado para ocultar elementos de forma animada */
 .oculto {
   opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transform: translateY(-20px);
+  visibility: hidden; /* Oculta el elemento y lo quita del flujo de clics */
+  pointer-events: none; /* Impide que se interactúe con él */
+  transform: translateY(-20px); /* Efecto sutil de mover hacia arriba al ocultar */
 }
 
 /* Estado para mostrar elementos de forma animada */
 .visible {
   opacity: 1;
   visibility: visible;
-  pointer-events: auto;
-  transform: translateY(0);
+  pointer-events: auto; /* Permite la interacción */
+  transform: translateY(0); /* Vuelve a su posición normal */
   z-index: 10; /* Capa superior para la pantalla visible */
 }
 
@@ -294,6 +294,15 @@ button:hover {
   font-size: 1.1em; /* Fuente ligeramente mayor */
 }
 
+/* Color específico para el balance principal (lo que está justo debajo del header) */
+#balance {
+    display: inline-block; /* Necesario para aplicar transform/transition y asegurar su posicionamiento */
+    font-size: 2.5em; /* Más grande para destacar el balance general */
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+
 .resumen-ingresos {
   color: var(--primary-color); /* Verde para ingresos */
 }
@@ -309,14 +318,14 @@ button:hover {
     font-size: 1.3em; /* Fuente más grande para los totales */
 }
 
-/* --- Nuevos Estilos --- */
+/* --- Nuevos Estilos para Balance y Versión --- */
 
-/* Color para el balance positivo */
+/* Clase para balance positivo */
 .balance-positivo {
   color: var(--primary-color); /* Verde */
 }
 
-/* Color para el balance negativo */
+/* Clase para balance negativo */
 .balance-negativo {
   color: var(--danger-color); /* Rojo */
 }
@@ -355,9 +364,10 @@ button:hover {
   margin-bottom: 20px; /* Espacio debajo de la versión */
   font-weight: 500;
   text-align: center; /* Centrado */
-  width: 100%; /* Ocupa todo el ancho para centrar bien */
   display: block; /* Asegura que ocupe su propia línea */
+  width: 100%;
 }
+
 
 /* Media Query para ajustar estilos en pantallas más pequeñas (móviles) */
 @media (max-width: 600px) {
@@ -368,7 +378,7 @@ button:hover {
     padding: 25px 30px; /* Menos padding interno en móvil */
     margin-top: 10px; /* Reducimos el margen superior */
     width: 100%;
-    box-sizing: border-box; /* Importante para que el padding del body no afecte al ancho del contenedor */
+    box-sizing: border-box;
   }
   h1 {
     font-size: 1.9em; /* Título un poco más pequeño en móvil */
