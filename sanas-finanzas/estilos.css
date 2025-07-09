@@ -1,24 +1,22 @@
-/* Definición de variables CSS para una gestión más limpia y consistente de colores */
 :root {
-  --primary-color: #28a745; /* Verde principal */
-  --primary-hover: #218838; /* Verde más oscuro para efectos hover */
-  --danger-color: #dc3545;  /* Rojo para gastos/errores */
-  --danger-hover: #c82333;  /* Rojo más oscuro para efectos hover */
+  --primary-color: #28a745;
+  --primary-hover: #218838;
+  --danger-color: #dc3545;
+  --danger-hover: #c82333;
 
-  --background-light: #f8f9fa; /* Fondo principal claro */
-  --card-background: #ffffff;  /* Fondo de contenedores/tarjetas */
-  --border-color: #ced4da;     /* Color de bordes suave */
-  --text-dark: #212529;        /* Texto principal oscuro */
-  --text-light: #6c757d;       /* Texto secundario o descripciones */
+  --background-light: #f8f9fa;
+  --card-background: #ffffff;
+  --border-color: #ced4da;
+  --text-dark: #212529;
+  --text-light: #6c757d;
 
-  --shadow-light: rgba(0, 0, 0, 0.05); /* Sombra muy suave */
-  --shadow-medium: rgba(0, 0, 0, 0.08);/* Sombra media */
-  --shadow-strong: rgba(0, 0, 0, 0.15);/* Sombra fuerte para contenedores principales */
+  --shadow-light: rgba(0, 0, 0, 0.05);
+  --shadow-medium: rgba(0, 0, 0, 0.08);
+  --shadow-strong: rgba(0, 0, 0, 0.15);
 
-  --transition-speed: 0.25s; /* Velocidad de las transiciones */
+  --transition-speed: 0.25s;
 }
 
-/* Estilos base para el body */
 body {
   font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   background: var(--background-light);
@@ -27,9 +25,10 @@ body {
   color: var(--text-dark);
   box-sizing: border-box;
   min-height: 100vh;
-  overflow-x: hidden; /* IMPEDIR SCROLL HORIZONTAL */
+  overflow-x: hidden;
 }
 
+/* Contenedor base */
 .contenedor {
   background: var(--card-background);
   padding: 35px 40px;
@@ -41,84 +40,84 @@ body {
   transition: opacity var(--transition-speed) ease-in-out,
               transform var(--transition-speed) ease-in-out,
               box-shadow var(--transition-speed) ease-in-out;
-
   margin-left: auto;
   margin-right: auto;
-  margin-top: 30px;
-  position: relative; /* Necesario para que z-index funcione */
-  z-index: 5; /* Capa base */
+  position: relative;
+  z-index: 5;
 }
 
-/* Estado para ocultar elementos de forma animada */
+/* MÁRGENES ESPECÍFICOS */
+#login-container {
+  margin-top: 30px;
+}
+
+#app-container {
+  margin-top: 0;
+}
+
+/* Animaciones de visibilidad */
 .oculto {
   opacity: 0;
-  visibility: hidden; /* Oculta el elemento y lo quita del flujo de clics */
-  pointer-events: none; /* Impide que se interactúe con él */
-  transform: translateY(-20px); /* Efecto sutil de mover hacia arriba al ocultar */
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(-20px);
 }
 
-/* Estado para mostrar elementos de forma animada */
 .visible {
   opacity: 1;
   visibility: visible;
-  pointer-events: auto; /* Permite la interacción */
-  transform: translateY(0); /* Vuelve a su posición normal */
-  z-index: 10; /* Capa superior para la pantalla visible */
+  pointer-events: auto;
+  transform: translateY(0);
+  z-index: 10;
 }
-
 
 h1 {
-  color: var(--primary-color); /* Título principal con el color verde */
+  color: var(--primary-color);
   margin-bottom: 30px;
-  font-size: 2.3em; /* Tamaño de título grande */
-  letter-spacing: -0.5px; /* Ajuste fino de espaciado entre letras */
-  font-weight: 700; /* Negrita destacada */
+  font-size: 2.3em;
+  letter-spacing: -0.5px;
+  font-weight: 700;
 }
 
-/* Estilos para los campos de entrada (inputs, selects) */
 input[type="text"],
 input[type="email"],
 input[type="password"],
 input[type="number"],
 select {
-  font-size: 1rem; /* Fuente estándar */
+  font-size: 1rem;
   font-weight: 500;
-  border-radius: 16px; /* Bordes redondeados consistentes */
-  border: 2px solid var(--border-color); /* Borde suave */
-  padding: 15px 18px; /* Espacio interno mayor */
-  margin: 10px 0; /* Margen vertical entre campos */
-  width: calc(100% - 40px); /* Ancho total menos padding interno */
-  box-sizing: border-box; /* Incluye padding en el cálculo del width total */
-  outline-offset: 4px; /* Espacio entre el borde y el foco */
+  border-radius: 16px;
+  border: 2px solid var(--border-color);
+  padding: 15px 18px;
+  margin: 10px 0;
+  width: calc(100% - 40px);
+  box-sizing: border-box;
+  outline-offset: 4px;
   transition: border-color var(--transition-speed) ease-in-out,
               box-shadow var(--transition-speed) ease-in-out;
 }
 
-/* Estilo para los placeholders */
 input::placeholder,
 select::placeholder {
-  color: var(--text-light); /* Color suave para placeholders */
+  color: var(--text-light);
 }
 
-/* Estilo al enfocar (focus) los campos */
 input:focus,
 select:focus {
-  border-color: var(--primary-color); /* Borde verde al enfocar */
-  box-shadow: 0 0 10px rgba(40, 167, 69, 0.35); /* Sombra de enfoque con un toque verde */
+  border-color: var(--primary-color);
+  box-shadow: 0 0 10px rgba(40, 167, 69, 0.35);
 }
 
-/* Estilo para el selector (select), añadiendo una flecha personalizada */
 select {
-    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%3E%3Cpath%20d%3D%27M7%2010L12%2015L17%2010%27%20stroke%3D%27%236c757d%27%20stroke-width%3D%271.5%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27/%3E%3C/svg%3E'); /* Flecha del selector */
-    background-repeat: no-repeat;
-    background-position: right 15px center; /* Posiciona la flecha */
-    background-size: 1.2em; /* Tamaño de la flecha */
-    -webkit-appearance: none; /* Elimina el aspecto nativo en navegadores WebKit */
-    -moz-appearance: none;    /* Elimina el aspecto nativo en Firefox */
-    appearance: none;         /* Elimina el aspecto nativo estándar */
+  background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%3E%3Cpath%20d%3D%27M7%2010L12%2015L17%2010%27%20stroke%3D%27%236c757d%27%20stroke-width%3D%271.5%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27/%3E%3C/svg%3E');
+  background-repeat: no-repeat;
+  background-position: right 15px center;
+  background-size: 1.2em;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
 }
 
-/* Estilo general de los botones */
 button {
   background-color: var(--primary-color);
   color: white;
@@ -126,375 +125,357 @@ button {
   cursor: pointer;
   font-weight: 600;
   letter-spacing: 0.04em;
-  padding: 15px 25px; /* Padding para un tamaño agradable */
-  border-radius: 16px; /* Bordes redondeados consistentes */
+  padding: 15px 25px;
+  border-radius: 16px;
   transition: background-color var(--transition-speed) ease-in-out,
               transform var(--transition-speed) ease-in-out,
               box-shadow var(--transition-speed) ease-in-out;
-  display: inline-block; /* Necesario para que la transformación funcione */
-  vertical-align: middle; /* Ayuda en la alineación */
+  display: inline-block;
+  vertical-align: middle;
 }
 
-/* Efecto al pasar el ratón por encima de un botón */
 button:hover {
-  background-color: var(--primary-hover); /* Verde más oscuro */
-  transform: translateY(-3px); /* Levanta el botón sutilmente */
-  box-shadow: 0 6px 12px rgba(40, 167, 69, 0.3); /* Sombra al pasar el ratón */
+  background-color: var(--primary-hover);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(40, 167, 69, 0.3);
 }
 
-/* Contenedor para los botones de login/registro, aplica layout flex */
 .btn-group-login {
   display: flex;
-  gap: 15px; /* Espacio entre botones */
+  gap: 15px;
   margin-top: 25px;
-  justify-content: center; /* Centra los botones horizontalmente */
+  justify-content: center;
 }
 
-/* Estilos para los botones de login/registro, para que ocupen espacio y se separen */
 .btn-group-login button {
-  flex-grow: 1; /* Cada botón toma el espacio disponible */
-  flex-basis: 0; /* Permite que el espacio se distribuya equitativamente */
-  min-width: 150px; /* Ancho mínimo para que los botones sean legibles */
+  flex-grow: 1;
+  flex-basis: 0;
+  min-width: 150px;
   font-size: 1rem;
   padding: 15px 20px;
 }
 
-/* Controles del formulario de transacción (input descripción, monto, y botones de tipo) */
 .transaction-form-controls {
   display: flex;
   gap: 15px;
-  flex-wrap: wrap; /* Permite que los elementos pasen a la siguiente línea si no caben */
+  flex-wrap: wrap;
   align-items: center;
-  justify-content: center; /* Centra los elementos dentro del contenedor */
-  margin-bottom: 15px; /* Margen inferior */
+  justify-content: center;
+  margin-bottom: 15px;
 }
 
 .flex-grow {
-  flex-grow: 1; /* Permite que el elemento ocupe el espacio disponible */
-  min-width: 150px; /* Ancho mínimo para evitar que el input se haga demasiado pequeño */
+  flex-grow: 1;
+  min-width: 150px;
 }
 
-/* --- Nuevos Botones de Tipo (Ingreso/Gasto) --- */
 .tipo-buttons-container {
   display: flex;
   gap: 15px;
-  justify-content: center; /* Centra los botones de tipo */
+  justify-content: center;
   margin-top: 15px;
-  margin-bottom: 15px; /* Espacio debajo de estos botones */
+  margin-bottom: 15px;
 }
 
 .tipo-buttons-container button {
-  flex-grow: 1; /* Permiten que los botones ocupen el espacio disponible si caben */
+  flex-grow: 1;
   flex-basis: 0;
-  min-width: 120px; /* Ancho mínimo para legibilidad */
-  padding: 15px 20px; /* Padding generoso */
+  min-width: 120px;
+  padding: 15px 20px;
   font-size: 1rem;
   font-weight: 600;
-  border-radius: 16px; /* Bordes redondeados consistentes */
+  border-radius: 16px;
   border: none;
   cursor: pointer;
   user-select: none;
-  color: white; /* Texto blanco */
+  color: white;
   transition: background-color var(--transition-speed) ease-in-out,
               transform var(--transition-speed) ease-in-out,
               box-shadow var(--transition-speed) ease-in-out,
-              opacity 0.2s ease-in-out; /* Transición para la opacidad del border */
+              opacity 0.2s ease-in-out;
 }
 
-/* Estilos base para ambos botones de tipo */
 .tipo-buttons-container button:not(.activo) {
-  opacity: 0.8; /* Ligeramente atenuados cuando no están activos */
+  opacity: 0.8;
 }
 
 .tipo-buttons-container button:hover:not(.activo) {
-  opacity: 1; /* Vuelven a ser opacos al pasar el ratón si no están activos */
+  opacity: 1;
 }
 
-/* Estilos para el botón "Ingreso" */
-.tipo-ingreso-btn { background-color: var(--primary-color); }
-.tipo-ingreso-btn:hover { background-color: var(--primary-hover); transform: translateY(-3px); box-shadow: 0 6px 12px rgba(40, 167, 69, 0.3);}
-.tipo-ingreso-btn.activo { /* Estilo para cuando está seleccionado */
-  border: 3px solid rgba(40, 167, 69, 0.5); /* Borde verde para indicar selección */
-  transform: translateY(-2px); /* Sutil elevación */
+.tipo-ingreso-btn {
+  background-color: var(--primary-color);
+}
+.tipo-ingreso-btn:hover {
+  background-color: var(--primary-hover);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(40, 167, 69, 0.3);
+}
+.tipo-ingreso-btn.activo {
+  border: 3px solid rgba(40, 167, 69, 0.5);
+  transform: translateY(-2px);
 }
 
-/* Estilos para el botón "Gasto" */
-.tipo-gasto-btn { background-color: var(--danger-color); }
-.tipo-gasto-btn:hover { background-color: var(--danger-hover); transform: translateY(-3px); box-shadow: 0 6px 12px rgba(220, 53, 69, 0.3);}
-.tipo-gasto-btn.activo { /* Estilo para cuando está seleccionado */
-  border: 3px solid rgba(220, 53, 69, 0.5); /* Borde rojo para indicar selección */
-  transform: translateY(-2px); /* Sutil elevación */
+.tipo-gasto-btn {
+  background-color: var(--danger-color);
 }
-
+.tipo-gasto-btn:hover {
+  background-color: var(--danger-hover);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(220, 53, 69, 0.3);
+}
+.tipo-gasto-btn.activo {
+  border: 3px solid rgba(220, 53, 69, 0.5);
+  transform: translateY(-2px);
+}
 
 .error-msg {
-  color: var(--danger-color); /* Color rojo para mensajes de error */
+  color: var(--danger-color);
   font-weight: 500;
   margin: 10px 0 0 0;
   font-size: 0.9em;
-  text-align: left; /* Alinea el mensaje a la izquierda */
-  padding-left: 5px; /* Un pequeño margen izquierdo para indentar */
+  text-align: left;
+  padding-left: 5px;
 }
 
-/* Estilo para cada ítem de la lista de movimientos (como tarjetas) */
 .movimiento-item {
   display: flex;
-  justify-content: space-between; /* Distribuye espacio entre texto y botón */
-  align-items: center; /* Alinea verticalmente los elementos */
-  padding: 15px 20px; /* Espaciado interno */
-  margin-bottom: 12px; /* Margen entre cada movimiento */
-  border: 1px solid var(--border-color); /* Borde sutil */
-  border-radius: 14px; /* Bordes redondeados */
-  background: var(--card-background); /* Fondo blanco propio */
-  box-shadow: 0 4px 15px var(--shadow-light); /* Sombra muy ligera para dar profundidad */
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  margin-bottom: 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  background: var(--card-background);
+  box-shadow: 0 4px 15px var(--shadow-light);
   transition: transform var(--transition-speed) ease-in-out,
               box-shadow var(--transition-speed) ease-in-out;
-  text-align: left; /* Alinea el texto dentro del ítem a la izquierda */
+  text-align: left;
 }
 
-/* Efecto al pasar el ratón sobre un ítem de la lista */
 .movimiento-item:hover {
-  transform: translateX(8px); /* Desplazamiento ligero hacia la derecha */
-  box-shadow: 0 8px 20px var(--shadow-medium); /* Sombra más marcada */
+  transform: translateX(8px);
+  box-shadow: 0 8px 20px var(--shadow-medium);
 }
 
 .movimiento-text {
-  flex-grow: 1; /* Permite que el texto ocupe el espacio disponible */
-  font-size: 1rem; /* 16px */
-  margin-right: 15px; /* Espacio entre el texto y el botón de eliminar */
-  line-height: 1.4; /* Espaciado entre líneas */
+  flex-grow: 1;
+  font-size: 1rem;
+  margin-right: 15px;
+  line-height: 1.4;
 }
-/* Estilo para el monto dentro del texto, para que resalte */
 .movimiento-text span {
-  font-weight: 600; /* Monto en negrita */
+  font-weight: 600;
 }
 
-/* Colores específicos para mostrar el tipo de movimiento en el texto */
-.ingreso-val { color: var(--primary-color); } /* Verde para ingresos */
-.gasto-val { color: var(--danger-color); } /* Rojo para gastos */
+.ingreso-val {
+  color: var(--primary-color);
+}
+.gasto-val {
+  color: var(--danger-color);
+}
 
-/* Botón de eliminar (la 'x') */
 .eliminar-btn {
   background-color: transparent;
   border: none;
-  color: var(--danger-color); /* Color rojo para el botón */
+  color: var(--danger-color);
   cursor: pointer;
   font-weight: 700;
-  font-size: 1.4rem; /* Icono más grande */
-  padding: 0 10px; /* Espaciado alrededor del icono */
+  font-size: 1.4rem;
+  padding: 0 10px;
   user-select: none;
-  opacity: 0.7; /* Opacidad por defecto */
+  opacity: 0.7;
   transition: opacity var(--transition-speed) ease-in-out,
-              transform 0.15s ease-in-out; /* Transición suave */
+              transform 0.15s ease-in-out;
 }
-/* Al pasar el ratón sobre el ítem, el botón de eliminar se hace más visible */
 .movimiento-item:hover .eliminar-btn {
-    opacity: 1; /* Completamente visible */
+  opacity: 1;
 }
-/* Efecto al pasar el ratón directamente sobre el botón de eliminar */
 .eliminar-btn:hover {
-  transform: scale(1.1); /* Pequeño aumento de tamaño */
+  transform: scale(1.1);
 }
 
-/* Encabezado de la sección de la app (Título y botón de logout) */
 .header-app {
   display: flex;
-  justify-content: space-between; /* Mueve los elementos a los extremos */
-  align-items: center; /* Alinea verticalmente */
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 20px;
 }
 
-/* Sección del resumen (ingresos, gastos, balance) */
 .resumen {
   margin-top: 30px;
   padding: 20px 25px;
-  border-radius: 16px; /* Bordes redondeados */
-  background: linear-gradient(to right, #e9f7ef, #f0fff4); /* Fondo degradado sutil */
+  border-radius: 16px;
+  background: linear-gradient(to right, #e9f7ef, #f0fff4);
   display: flex;
-  justify-content: space-around; /* Distribuye los ítems de manera uniforme */
-  flex-wrap: wrap; /* Permite que los ítems pasen a la siguiente línea */
-  gap: 15px; /* Espacio entre los ítems del resumen */
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 15px;
   text-align: center;
 }
 
 .resumen-item {
-  flex: 1; /* Cada ítem ocupa espacio proporcionalmente */
-  min-width: 120px; /* Ancho mínimo para asegurar la correcta visualización */
+  flex: 1;
+  min-width: 120px;
   color: var(--text-dark);
   font-weight: 600;
-  font-size: 1.1em; /* Fuente ligeramente mayor */
+  font-size: 1.1em;
 }
 
-/* Estilo específico para el balance general que se muestra cerca del encabezado */
 #balance {
-    display: inline-block; /* Necesario para aplicar estilos de visualización */
-    font-size: 2.2em; /* <-- CAMBIO: Reducido para mejor ajuste */
-    margin-top: 10px;
-    margin-bottom: 10px;
-    font-weight: 700;
+  display: inline-block;
+  font-size: 2.2em;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-weight: 700;
 }
 
-.resumen-ingresos {
-  color: var(--primary-color); /* Verde para ingresos */
-}
-
-.resumen-gastos {
-  color: var(--danger-color); /* Rojo para gastos */
-}
-
-/* Estilo para los números del resumen */
 .resumen-item span {
-    display: block; /* Asegura que el valor esté en su propia línea */
-    font-weight: 700; /* Números en negrita */
-    font-size: 1.3em; /* Fuente más grande para los totales */
+  display: block;
+  font-weight: 700;
+  font-size: 1.3em;
 }
 
-/* --- Nuevos Estilos para Balance y Versión --- */
-
-/* Clase para balance positivo (usada en #balance y #balance-det) */
 .balance-positivo {
-  color: var(--primary-color); /* Verde */
+  color: var(--primary-color);
 }
-
-/* Clase para balance negativo (usada en #balance y #balance-det) */
 .balance-negativo {
-  color: var(--danger-color); /* Rojo */
+  color: var(--danger-color);
 }
-
-/* Clases para los valores del resumen (Ingresos y Gastos) */
 .resumen-valor-ingreso {
-  color: var(--primary-color); /* Verde */
+  color: var(--primary-color);
 }
-
 .resumen-valor-gasto {
-  color: var(--danger-color); /* Rojo */
+  color: var(--danger-color);
 }
 
-
-/* Contenedor para el gráfico */
 .resumen-graficos {
-    margin-top: 40px;
-    background: var(--card-background);
-    padding: 25px;
-    border-radius: 18px;
-    box-shadow: 0 6px 15px var(--shadow-light); /* Sombra ligera */
-    text-align: center; /* Centra el título */
+  margin-top: 40px;
+  background: var(--card-background);
+  padding: 25px;
+  border-radius: 18px;
+  box-shadow: 0 6px 15px var(--shadow-light);
+  text-align: center;
 }
-
 .resumen-graficos h2 {
-    color: var(--text-dark);
-    font-size: 1.6em; /* Tamaño del título del gráfico */
-    margin-bottom: 20px; /* Espacio debajo del título */
-    font-weight: 600;
+  color: var(--text-dark);
+  font-size: 1.6em;
+  margin-bottom: 20px;
+  font-weight: 600;
 }
 
-/* Título del historial */
 .historial-title {
   margin-top: 40px;
   color: var(--text-light);
-  font-size: 1.3em; /* Tamaño más sutil */
+  font-size: 1.3em;
   font-weight: 600;
   text-align: left;
   padding-left: 5px;
 }
 
-/* Información de Versión */
 .version-info {
-  font-size: 0.75em; /* Tamaño de letra chico */
+  font-size: 0.75em;
   color: var(--text-light);
-  margin-bottom: 20px; /* Espacio debajo de la versión */
+  margin-bottom: 20px;
   font-weight: 500;
-  text-align: center; /* Centrado */
-  display: block; /* Asegura que ocupe su propia línea */
+  text-align: center;
+  display: block;
   width: 100%;
 }
 
-
-/* Media Query para ajustar estilos en pantallas más pequeñas (móviles) */
+/* Media query móvil */
 @media (max-width: 600px) {
   body {
-    padding: 10px; /* Menos padding en el body en móvil */
+    padding: 10px;
   }
+
   .contenedor {
-    padding: 25px 30px; /* Menos padding interno en móvil */
-    margin-top: 10px; /* Reducimos el margen superior */
+    padding: 25px 30px;
     width: 100%;
     box-sizing: border-box;
   }
-  h1 {
-    font-size: 1.9em; /* Título un poco más pequeño en móvil */
+
+  #login-container {
+    margin-top: 15px;
   }
-  /* Ajustes para inputs, selects y botones toggles en móvil */
+
+  #app-container {
+    margin-top: 0;
+  }
+
+  h1 {
+    font-size: 1.9em;
+  }
+
   input[type="text"],
   input[type="email"],
   input[type="password"],
   input[type="number"],
   select,
-  .tipo-buttons-container button { /* Aplicar a ambos tipos de botones */
+  .tipo-buttons-container button {
     font-size: 0.95rem;
     padding: 12px 15px;
   }
 
-  /* Los botones de login/registro en móvil se apilan verticalmente */
   .btn-group-login {
     flex-direction: column;
-    align-items: stretch; /* Ocupan todo el ancho disponible */
+    align-items: stretch;
   }
+
   .btn-group-login button {
-    width: 100%; /* Cada botón ocupa el ancho total */
-    margin: 8px auto; /* Margen para separarlos */
+    width: 100%;
+    margin: 8px auto;
     display: block;
   }
 
-  /* Controles del formulario de transacción en móvil */
   .transaction-form-controls {
-    flex-direction: column; /* Apila los elementos verticalmente */
-    align-items: stretch; /* Extiende para ocupar todo el ancho */
+    flex-direction: column;
+    align-items: stretch;
   }
+
   .flex-grow {
-    min-width: auto; /* Permite que el flex-grow funcione mejor en columna */
+    min-width: auto;
     width: 100%;
   }
-  /* Los botones de tipo también se estiran si están apilados */
+
   .tipo-buttons-container {
     flex-direction: column;
     align-items: stretch;
   }
+
   .tipo-buttons-container button {
     width: 100%;
     margin: 8px auto;
     display: block;
   }
 
-
-  /* Los ítems del resumen se apilan verticalmente en móvil */
   .resumen {
     flex-direction: column;
     align-items: stretch;
   }
+
   .resumen-item {
-    margin-bottom: 10px; /* Espacio entre resúmenes apilados */
-    padding: 10px 0; /* Ajuste de padding vertical */
-  }
-  .resumen-item span {
-    font-size: 1.1em; /* Mantiene los totales legibles */
+    margin-bottom: 10px;
+    padding: 10px 0;
   }
 
-  /* Ajustes generales para la sección de gráfico en móvil */
+  .resumen-item span {
+    font-size: 1.1em;
+  }
+
   .resumen-graficos {
     padding: 15px;
   }
+
   .resumen-graficos h2 {
-    font-size: 1.3em; /* Título del gráfico más pequeño */
+    font-size: 1.3em;
   }
 
-  /* Título del historial también más pequeño */
   .historial-title {
     font-size: 1.1em;
   }
 
-  /* El .version-info debe aparecer incluso en móvil */
   .version-info {
-      margin-bottom: 25px; /* Mas margen si hay varios elementos debajo */
+    margin-bottom: 25px;
   }
 }
