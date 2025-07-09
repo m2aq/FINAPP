@@ -54,6 +54,14 @@ function formatCurrency(value) {
     return `$${formatted}`;
 }
 
+// --- Utilidades de Scroll ---
+function scrollToTopSmoothly() {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth' // Hace el scroll suave y animado
+    });
+}
+
 // --- Manejo de Estados de la Aplicación ---
 
 // Cambia entre la vista de Login y la vista de la App
@@ -64,6 +72,7 @@ function toggleAppViews(showApp) {
     appContainer.classList.remove("oculto");
     appContainer.classList.add("visible");
     errorLogin.textContent = ""; // Limpia cualquier mensaje de login
+    scrollToTopSmoothly(); // <-- SE AÑADIÓ: Asegura que la vista suba al topear
   } else {
     appContainer.classList.add("oculto");
     appContainer.classList.remove("visible");
@@ -78,12 +87,10 @@ function toggleAppViews(showApp) {
 // Escucha el cambio de estado de autenticación del usuario
 auth.onAuthStateChanged(user => {
   if (user) {
-    // Si el usuario está logueado, muestra la app
-    toggleAppViews(true);
+    toggleAppViews(true); // Muestra la app si el usuario está logueado
     cargarDatos(); // Carga los datos de transacciones
   } else {
-    // Si no hay usuario, muestra la vista de login
-    toggleAppViews(false);
+    toggleAppViews(false); // Muestra el login si no hay usuario
   }
 });
 
@@ -100,7 +107,7 @@ function login() {
   }
 
   auth.signInWithEmailAndPassword(email, password)
-    .then(() => { /* onAuthStateChanged se encargará del resto */ })
+    .then(() => { /* onAuthStateChanged se encargará de cambiar la vista */ })
     .catch(e => {
       errorLogin.textContent = e.message;
     });
@@ -121,7 +128,7 @@ function register() {
   }
 
   auth.createUserWithEmailAndPassword(email, password)
-    .then(() => { /* onAuthStateChanged se encargará del resto */ })
+    .then(() => { /* onAuthStateChanged se encargará de cambiar la vista */ })
     .catch(e => {
       errorLogin.textContent = e.message;
     });
@@ -130,7 +137,7 @@ function register() {
 function logout() {
   auth.signOut()
     .then(() => {
-      // Al cerrar sesión, toggleAppViews se llamará vía onAuthStateChanged
+      // onAuthStateChanged se encargará de mostrar la vista de login.
     })
     .catch(e => console.error("Error al cerrar sesión:", e));
 }
@@ -158,7 +165,7 @@ function toggleTipo() {
 function agregarTransaccion() {
   errorTransaccion.textContent = "";
   const descripcion = descripcionInput.value.trim();
-  const monto = parseFloat(montoInput.value);
+  const monto = parseFloat(montoInput.value); // Mantenemos parseFloat normal, el formato se aplica al mostrar
   const categoria = categoriaSelect.value;
 
   if (!descripcion) {
@@ -178,7 +185,7 @@ function agregarTransaccion() {
 
   const transaccion = {
     descripcion,
-    monto,
+    monto, // Se guarda el número puro en la BD
     tipo,
     categoria,
     fecha: new Date().toISOString() // Guarda la fecha actual como string ISO
@@ -198,14 +205,12 @@ function cargarDatos() {
   const user = auth.currentUser;
   if (!user) return;
 
-  // Escucha cambios en tiempo real en la colección de movimientos del usuario
   db.collection("usuarios").doc(user.uid).collection("movimientos").orderBy("fecha", "desc").onSnapshot(snapshot => {
-    lista.innerHTML = ""; // Limpia la lista existente antes de renderizar de nuevo
+    lista.innerHTML = "";
     let totalIngresos = 0;
     let totalGastos = 0;
-    const gastosPorCategoria = {}; // Objeto para almacenar gastos por categoría
+    const gastosPorCategoria = {};
 
-    // Inicializa el contador para cada categoría del select
     Array.from(categoriaSelect.children).forEach(option => {
         gastosPorCategoria[option.value] = 0;
     });
@@ -215,14 +220,13 @@ function cargarDatos() {
       const li = document.createElement("li");
       li.className = "movimiento-item";
 
-      // Prepara el texto de la transacción con colores para ingreso/gasto y formato de moneda
+      // Prepara el texto de la transacción, formateando el monto y aplicando colores
       const valorClase = t.tipo === "ingreso" ? "ingreso-val" : "gasto-val";
-      // Aplica formato de moneda al monto directamente en el span
-      const montoFormateado = formatCurrency(t.monto);
+      const montoFormateado = formatCurrency(t.monto); // Aplica formato de moneda
       const textoHTML = `${t.descripcion} - <span class="${valorClase}">${montoFormateado}</span>`;
       const spanTexto = document.createElement("span");
       spanTexto.className = "movimiento-text";
-      spanTexto.innerHTML = textoHTML; // Usa innerHTML para renderizar el span con la clase
+      spanTexto.innerHTML = textoHTML;
 
       // Crea el botón de eliminar
       const btnEliminar = document.createElement("button");
@@ -260,11 +264,11 @@ function cargarDatos() {
     totalGastosElem.textContent = formatCurrency(totalGastos);
 
     // --- Aplicación de Colores al Balance Principal ---
-    balanceElem.classList.remove("balance-positivo", "balance-negativo"); // Elimina clases anteriores
+    balanceElem.classList.remove("balance-positivo", "balance-negativo"); // Limpia clases anteriores
     if (balance > 0) {
-        balanceElem.classList.add("balance-positivo"); // Añade clase para color verde
+        balanceElem.classList.add("balance-positivo"); // Color verde si es positivo
     } else if (balance < 0) {
-        balanceElem.classList.add("balance-negativo"); // Añade clase para color rojo
+        balanceElem.classList.add("balance-negativo"); // Color rojo si es negativo
     }
 
     // --- Actualiza el Gráfico ---
@@ -282,13 +286,11 @@ function cargarDatos() {
 
     const ctx = document.getElementById('transaccionChart');
 
-    // Destruye el gráfico anterior si existe
     if (transaccionChart) {
-      transaccionChart.destroy();
+      transaccionChart.destroy(); // Destruye el gráfico anterior
     }
 
-    // Crea el nuevo gráfico si hay datos para mostrar
-    if (labels.length > 0) {
+    if (labels.length > 0) { // Crea el gráfico solo si hay datos
       transaccionChart = new Chart(ctx, {
         type: 'pie',
         data: {
@@ -313,8 +315,7 @@ function cargarDatos() {
                   let label = context.label || '';
                   if (label) label += ': ';
                   if (context.raw !== null) {
-                    // Formato de moneda para tooltip del gráfico
-                    label += formatCurrency(context.raw);
+                    label += formatCurrency(context.raw); // Usa el formato de moneda para el tooltip
                   }
                   return label;
                 }
@@ -351,12 +352,10 @@ function limpiarCamposLogin() {
 
 // --- Inicialización de Versión ---
 document.addEventListener('DOMContentLoaded', () => {
-    const version = "2.0.2"; // <-- ÚLTIMA VERSIÓN
+    const version = "2.0.2"; // <-- ÚLTIMA VERSIÓN MANTENIDA AQUÍ
 
     versionInfoElements.forEach(el => {
         el.textContent = `Version ${version}`;
     });
-
-    // La lógica de onAuthStateChanged ya está fuera para que se ejecute una vez al cargar.
-    // No es necesario llamar `toggleAppViews` aquí explícitamente si `onAuthStateChanged` lo maneja.
+    // No necesitamos llamar a toggleAppViews o cargarDatos aquí porque onAuthStateChanged lo hace
 });
