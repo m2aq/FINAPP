@@ -72,7 +72,7 @@ function toggleAppViews(showApp) {
     appContainer.classList.remove("oculto");
     appContainer.classList.add("visible");
     errorLogin.textContent = ""; // Limpia cualquier mensaje de login
-    scrollToTopSmoothly(); // <-- SE AÑADIÓ: Asegura que la vista suba al topear
+    scrollToTopSmoothly(); // Asegura que la vista suba al tope
   } else {
     appContainer.classList.add("oculto");
     appContainer.classList.remove("visible");
@@ -220,7 +220,6 @@ function cargarDatos() {
       const li = document.createElement("li");
       li.className = "movimiento-item";
 
-      // Prepara el texto de la transacción, formateando el monto y aplicando colores
       const valorClase = t.tipo === "ingreso" ? "ingreso-val" : "gasto-val";
       const montoFormateado = formatCurrency(t.monto); // Aplica formato de moneda
       const textoHTML = `${t.descripcion} - <span class="${valorClase}">${montoFormateado}</span>`;
@@ -228,7 +227,6 @@ function cargarDatos() {
       spanTexto.className = "movimiento-text";
       spanTexto.innerHTML = textoHTML;
 
-      // Crea el botón de eliminar
       const btnEliminar = document.createElement("button");
       btnEliminar.className = "eliminar-btn";
       btnEliminar.textContent = "×";
@@ -245,7 +243,6 @@ function cargarDatos() {
       li.appendChild(btnEliminar);
       lista.appendChild(li);
 
-      // Acumula totales y datos para el gráfico
       if (t.tipo === "ingreso") {
         totalIngresos += t.monto;
       } else {
@@ -352,10 +349,12 @@ function limpiarCamposLogin() {
 
 // --- Inicialización de Versión ---
 document.addEventListener('DOMContentLoaded', () => {
-    const version = "2.0.2"; // <-- ÚLTIMA VERSIÓN MANTENIDA AQUÍ
+    // <-- ACTUALIZADO A LA VERSIÓN CORRECTA -->
+    const version = "2.0.3";
 
     versionInfoElements.forEach(el => {
         el.textContent = `Version ${version}`;
     });
-    // No necesitamos llamar a toggleAppViews o cargarDatos aquí porque onAuthStateChanged lo hace
+    // No es necesario llamar a `toggleAppViews` o `cargarDatos` aquí,
+    // ya que `onAuthStateChanged` se encarga de ello al inicio.
 });
