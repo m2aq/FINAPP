@@ -21,19 +21,19 @@ const loginContainer = document.getElementById("login-container");
 const appContainer = document.getElementById("app-container");
 const errorLogin = document.getElementById("error-login");
 const errorTransaccion = document.getElementById("error-transaccion");
-const tipoToggleBtn = document.getElementById("tipoToggleBtn");
+// El tipoToggleBtn se eliminará y se reemplazará por dos botones, así que no necesitamos su referencia aquí.
 const descripcionInput = document.getElementById("descripcion");
 const montoInput = document.getElementById("monto");
 const categoriaSelect = document.getElementById("categoria");
 const lista = document.getElementById("lista");
 const balanceElem = document.getElementById("balance");
-const balanceDetElem = document.getElementById("balance-det");
+const balanceDetElem = document.getElementById("balance-det"); // Balance en el resumen
 const totalIngresosElem = document.getElementById("total-ingresos");
 const totalGastosElem = document.getElementById("total-gastos");
 const versionInfoElements = document.querySelectorAll('.version-info'); // Selector para todos los elementos de versión
 
-// Estado global para el tipo de transacción (Ingreso o Gasto)
-let tipo = "ingreso";
+// Estado global para el tipo de transacción (Ingreso o Gasto). Inicialmente se setea en HTML.
+// let tipo = "ingreso"; // Se inicializará al cargar el DOM y dependerá del botón seleccionado.
 
 // Variable global para la instancia del gráfico de Chart.js
 let transaccionChart = null;
@@ -72,7 +72,7 @@ function toggleAppViews(showApp) {
     appContainer.classList.remove("oculto");
     appContainer.classList.add("visible");
     errorLogin.textContent = ""; // Limpia cualquier mensaje de login
-    scrollToTopSmoothly(); // Asegura que la vista suba al tope
+    scrollToTopSmoothly(); // Asegura que la vista suba al tope al mostrarse la app
   } else {
     appContainer.classList.add("oculto");
     appContainer.classList.remove("visible");
@@ -144,22 +144,29 @@ function logout() {
 
 // --- Funciones de la App ---
 
-// Cambia entre el tipo de transacción: Ingreso / Gasto
-function toggleTipo() {
-  if (tipo === "ingreso") {
-    tipo = "gasto";
-    tipoToggleBtn.textContent = "Gasto";
-    tipoToggleBtn.classList.remove("tipo-ingreso");
-    tipoToggleBtn.classList.add("tipo-gasto");
-    montoInput.style.borderColor = getComputedStyle(document.documentElement).getPropertyValue('--danger-color');
-  } else {
-    tipo = "ingreso";
-    tipoToggleBtn.textContent = "Ingreso";
-    tipoToggleBtn.classList.remove("tipo-gasto");
-    tipoToggleBtn.classList.add("tipo-ingreso");
-    montoInput.style.borderColor = getComputedStyle(document.documentElement).getPropertyValue('--primary-color');
-  }
+// Establece el tipo de transacción y actualiza el estilo del botón
+function setTransactionType(type) {
+    // Actualiza la variable global 'tipo'
+    globalTipo = type; // Se declara globalmente más abajo
+
+    // Actualiza los estilos de los botones "Ingreso" y "Gasto"
+    const btnIngreso = document.getElementById('btn-tipo-ingreso');
+    const btnGasto = document.getElementById('btn-tipo-gasto');
+
+    btnIngreso.classList.remove('activo');
+    btnGasto.classList.remove('activo');
+
+    if (type === "ingreso") {
+        btnIngreso.classList.add('activo');
+        // Cambiar color del borde del input de monto a verde para "ingreso"
+        montoInput.style.borderColor = getComputedStyle(document.documentElement).getPropertyValue('--primary-color');
+    } else {
+        btnGasto.classList.add('activo');
+        // Cambiar color del borde del input de monto a rojo para "gasto"
+        montoInput.style.borderColor = getComputedStyle(document.documentElement).getPropertyValue('--danger-color');
+    }
 }
+
 
 // Agrega una nueva transacción a la base de datos
 function agregarTransaccion() {
@@ -183,10 +190,16 @@ function agregarTransaccion() {
     return;
   }
 
+  // Asegurarse de que globalTipo esté definida antes de usarla
+  if (typeof globalTipo === 'undefined' || (globalTipo !== "ingreso" && globalTipo !== "gasto")) {
+      // Si no está definida o es inválida, por defecto setear a 'ingreso'
+      setTransactionType("ingreso"); // Inicializa o resetea si no estuviera
+  }
+
   const transaccion = {
     descripcion,
     monto, // Se guarda el número puro en la BD
-    tipo,
+    tipo: globalTipo, // Usar la variable global para el tipo de transacción
     categoria,
     fecha: new Date().toISOString() // Guarda la fecha actual como string ISO
   };
@@ -220,6 +233,7 @@ function cargarDatos() {
       const li = document.createElement("li");
       li.className = "movimiento-item";
 
+      // Prepara el texto de la transacción, formateando el monto y aplicando colores
       const valorClase = t.tipo === "ingreso" ? "ingreso-val" : "gasto-val";
       const montoFormateado = formatCurrency(t.monto); // Aplica formato de moneda
       const textoHTML = `${t.descripcion} - <span class="${valorClase}">${montoFormateado}</span>`;
@@ -227,6 +241,7 @@ function cargarDatos() {
       spanTexto.className = "movimiento-text";
       spanTexto.innerHTML = textoHTML;
 
+      // Crea el botón de eliminar
       const btnEliminar = document.createElement("button");
       btnEliminar.className = "eliminar-btn";
       btnEliminar.textContent = "×";
@@ -243,6 +258,7 @@ function cargarDatos() {
       li.appendChild(btnEliminar);
       lista.appendChild(li);
 
+      // Acumula totales y datos para el gráfico
       if (t.tipo === "ingreso") {
         totalIngresos += t.monto;
       } else {
@@ -255,18 +271,39 @@ function cargarDatos() {
 
     // Calcula y actualiza los totales con formato de moneda
     const balance = totalIngresos - totalGastos;
-    balanceElem.textContent = formatCurrency(balance);
-    balanceDetElem.textContent = formatCurrency(balance);
+    balanceElem.textContent = formatCurrency(balance); // Balance principal
+    balanceDetElem.textContent = formatCurrency(balance); // Balance en el resumen
+
     totalIngresosElem.textContent = formatCurrency(totalIngresos);
     totalGastosElem.textContent = formatCurrency(totalGastos);
 
-    // --- Aplicación de Colores al Balance Principal ---
-    balanceElem.classList.remove("balance-positivo", "balance-negativo"); // Limpia clases anteriores
+    // --- Aplicación de Colores al Balance y Totales del Resumen ---
+    // Limpia clases anteriores en todos los elementos que podrían tenerlas
+    balanceElem.classList.remove("balance-positivo", "balance-negativo");
+    balanceDetElem.classList.remove("balance-positivo", "balance-negativo");
+    totalIngresosElem.classList.remove("resumen-valor-ingreso", "resumen-valor-gasto"); // Clean up for clarity
+    totalGastosElem.classList.remove("resumen-valor-ingreso", "resumen-valor-gasto");   // Clean up for clarity
+
+    // Balance Principal (h1 #balance)
     if (balance > 0) {
-        balanceElem.classList.add("balance-positivo"); // Color verde si es positivo
+        balanceElem.classList.add("balance-positivo");
     } else if (balance < 0) {
-        balanceElem.classList.add("balance-negativo"); // Color rojo si es negativo
+        balanceElem.classList.add("balance-negativo");
     }
+
+    // Balance en el resumen (balanceDetElem)
+    if (balance > 0) {
+        balanceDetElem.classList.add("balance-positivo");
+    } else if (balance < 0) {
+        balanceDetElem.classList.add("balance-negativo");
+    }
+
+    // Ingresos en el resumen
+    totalIngresosElem.classList.add("resumen-valor-ingreso"); // Asume siempre ingreso positivo
+
+    // Gastos en el resumen
+    totalGastosElem.classList.add("resumen-valor-gasto"); // Asume siempre gasto positivo
+
 
     // --- Actualiza el Gráfico ---
     const labels = Object.keys(gastosPorCategoria).filter(cat => gastosPorCategoria[cat] > 0);
@@ -331,12 +368,8 @@ function limpiarCamposApp() {
   montoInput.value = "";
   categoriaSelect.value = "General";
 
-  // Resetea el tipo a Ingreso
-  tipo = "ingreso";
-  tipoToggleBtn.textContent = "Ingreso";
-  tipoToggleBtn.classList.remove("tipo-gasto");
-  tipoToggleBtn.classList.add("tipo-ingreso");
-  montoInput.style.borderColor = ""; // Restaura el borde por defecto
+  // Restablece el tipo y los estilos de los botones de tipo al default ("Ingreso")
+  setTransactionType("ingreso"); // Llama a la función que maneja la lógica y el estilo
 
   errorTransaccion.textContent = ""; // Limpia mensajes de error
 }
@@ -347,14 +380,19 @@ function limpiarCamposLogin() {
   document.getElementById("password").value = "";
 }
 
-// --- Inicialización de Versión ---
+// --- Inicialización y Configuración Inicial ---
+// Declarar la variable global para el tipo de transacción al inicio
+let globalTipo = "ingreso";
+
 document.addEventListener('DOMContentLoaded', () => {
-    // <-- ACTUALIZADO A LA VERSIÓN CORRECTA -->
-    const version = "2.0.3";
+    // Configura el tipo de transacción inicial al cargar el DOM
+    // Si no hay usuario logueado, esta llamada no afecta nada ya que las vistas están ocultas.
+    // Cuando la app se carga (tras login), este seteo inicial tendrá el valor correcto.
+    setTransactionType(globalTipo); // Asegura que el estado inicial del tipo sea correcto al cargar.
+
+    const version = "2.0.4"; // <-- ACTUALIZADO A LA VERSIÓN CORRECTA
 
     versionInfoElements.forEach(el => {
         el.textContent = `Version ${version}`;
     });
-    // No es necesario llamar a `toggleAppViews` o `cargarDatos` aquí,
-    // ya que `onAuthStateChanged` se encarga de ello al inicio.
 });
