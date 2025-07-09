@@ -294,10 +294,10 @@ button:hover {
   font-size: 1.1em; /* Fuente ligeramente mayor */
 }
 
-/* Color específico para el balance principal (lo que está justo debajo del header) */
+/* Estilo específico para el balance general que se muestra cerca del encabezado */
 #balance {
-    display: inline-block; /* Necesario para aplicar transform/transition y asegurar su posicionamiento */
-    font-size: 2.5em; /* Más grande para destacar el balance general */
+    display: inline-block; /* Necesario para aplicar estilos de visualización */
+    font-size: 2.5em; /* Tamaño de fuente grande para el balance principal */
     margin-top: 10px;
     margin-bottom: 10px;
     font-weight: 700;
