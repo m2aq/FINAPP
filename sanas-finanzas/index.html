@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" /> <!-- <-- AJUSTADO PARA DESHABILITAR ZOOM -->
   <title>Sanas Finanzas</title>
   <link rel="manifest" href="manifest.json" />
   <meta name="theme-color" content="#28a745" />
@@ -18,7 +18,7 @@
 <body>
   <!-- Contenedor de Login. Inicialmente visible -->
   <div class="contenedor visible" id="login-container">
-    <div class="version-info">Version 2.0.3</div> <!-- <-- VERSIÓN -->
+    <div class="version-info">Version 2.0.4</div> <!-- <-- VERSIÓN ACTUALIZADA -->
     <h1>Sanas Finanzas</h1>
     <input type="email" id="email" placeholder="Correo electrónico" />
     <input type="password" id="password" placeholder="Contraseña" />
@@ -31,17 +31,26 @@
 
   <!-- Contenedor Principal de la Aplicación. Inicialmente oculto -->
   <div class="contenedor oculto" id="app-container">
-    <div class="version-info">Version 2.0.3</div> <!-- <-- VERSIÓN -->
+    <div class="version-info">Version 2.0.4</div> <!-- <-- VERSIÓN ACTUALIZADA -->
     <div class="header-app">
       <h1 style="margin: 0;">Tu Balance</h1>
       <button onclick="logout()">Cerrar sesión</button>
     </div>
-    <h1 style="margin-top: 5px; font-size: 2.0em;"><span id="balance">$0.00</span></h1>
+    <!-- El balance principal con el tamaño ajustado para caber mejor -->
+    <h1 style="margin-top: 5px; font-size: 2.2em;"> <!-- <-- TAMANIO REDUCIDO DEL BALANCE -->
+        <span id="balance">$0.00</span>
+    </h1>
 
+    <!-- Formulario de Transacción con botones Ingreso/Gasto -->
     <div class="transaction-form-controls">
       <input type="text" id="descripcion" placeholder="Descripción" class="flex-grow" />
       <input type="number" id="monto" placeholder="Monto" min="0" step="0.01" />
-      <button id="tipoToggleBtn" class="tipo-toggle-btn tipo-ingreso" onclick="toggleTipo()">Ingreso</button>
+      <!-- BOTONES REEMPLAZAN AL TOGGLE: -->
+      <div class="tipo-buttons-container">
+          <button id="btn-tipo-ingreso" class="tipo-ingreso-btn activo" onclick="setTransactionType('ingreso')">Ingreso</button>
+          <button id="btn-tipo-gasto" class="tipo-gasto-btn" onclick="setTransactionType('gasto')">Gasto</button>
+      </div>
+      <!-- FIN BOTONES REEMPLAZAN AL TOGGLE -->
     </div>
     <select id="categoria">
       <option value="General">General</option>
@@ -55,11 +64,13 @@
     <button onclick="agregarTransaccion()" style="width: 100%; margin-top: 15px;">Agregar Transacción</button>
     <p id="error-transaccion" class="error-msg"></p>
 
+    <!-- Resumen de Ingresos, Gastos y Balance con Colores -->
     <div class="resumen">
       <div class="resumen-item">Ingresos: <span id="total-ingresos">$0.00</span></div>
       <div class="resumen-item">Gastos: <span id="total-gastos">$0.00</span></div>
       <div class="resumen-item">Balance: <span id="balance-det">$0.00</span></div>
     </div>
+    <!-- Fin Resumen -->
 
     <!-- Sección del Gráfico -->
     <div class="resumen-graficos">
