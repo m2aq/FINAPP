@@ -159,7 +159,7 @@ button:hover {
   padding: 15px 20px;
 }
 
-/* Controles del formulario de transacción (input descripción, monto, y botón tipo) */
+/* Controles del formulario de transacción (input descripción, monto, y botones de tipo) */
 .transaction-form-controls {
   display: flex;
   gap: 15px;
@@ -174,27 +174,58 @@ button:hover {
   min-width: 150px; /* Ancho mínimo para evitar que el input se haga demasiado pequeño */
 }
 
-/* Botón de tipo (Ingreso/Gasto) */
-.tipo-toggle-btn {
-  width: 120px; /* Ancho fijo para consistencia */
-  padding: 15px;
-  font-size: 1rem;
-  font-weight: 600;
-  border-radius: 16px; /* Bordes redondeados */
-  border: none; /* Sin borde por defecto */
-  cursor: pointer;
-  user-select: none; /* Evita la selección de texto al hacer clic */
-  color: white;
-  transition: background-color var(--transition-speed) ease-in-out,
-              transform var(--transition-speed) ease-in-out,
-              box-shadow var(--transition-speed) ease-in-out;
+/* --- Nuevos Botones de Tipo (Ingreso/Gasto) --- */
+.tipo-buttons-container {
+  display: flex;
+  gap: 15px;
+  justify-content: center; /* Centra los botones de tipo */
+  margin-top: 15px;
+  margin-bottom: 15px; /* Espacio debajo de estos botones */
 }
 
-.tipo-ingreso { background-color: var(--primary-color); }
-.tipo-ingreso:hover { background-color: var(--primary-hover); transform: translateY(-3px); box-shadow: 0 6px 12px rgba(40, 167, 69, 0.3);}
+.tipo-buttons-container button {
+  flex-grow: 1; /* Permiten que los botones ocupen el espacio disponible si caben */
+  flex-basis: 0;
+  min-width: 120px; /* Ancho mínimo para legibilidad */
+  padding: 15px 20px; /* Padding generoso */
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 16px; /* Bordes redondeados consistentes */
+  border: none;
+  cursor: pointer;
+  user-select: none;
+  color: white; /* Texto blanco */
+  transition: background-color var(--transition-speed) ease-in-out,
+              transform var(--transition-speed) ease-in-out,
+              box-shadow var(--transition-speed) ease-in-out,
+              opacity 0.2s ease-in-out; /* Transición para la opacidad del border */
+}
 
-.tipo-gasto { background-color: var(--danger-color); }
-.tipo-gasto:hover { background-color: var(--danger-hover); transform: translateY(-3px); box-shadow: 0 6px 12px rgba(220, 53, 69, 0.3);}
+/* Estilos base para ambos botones de tipo */
+.tipo-buttons-container button:not(.activo) {
+  opacity: 0.8; /* Ligeramente atenuados cuando no están activos */
+}
+
+.tipo-buttons-container button:hover:not(.activo) {
+  opacity: 1; /* Vuelven a ser opacos al pasar el ratón si no están activos */
+}
+
+/* Estilos para el botón "Ingreso" */
+.tipo-ingreso-btn { background-color: var(--primary-color); }
+.tipo-ingreso-btn:hover { background-color: var(--primary-hover); transform: translateY(-3px); box-shadow: 0 6px 12px rgba(40, 167, 69, 0.3);}
+.tipo-ingreso-btn.activo { /* Estilo para cuando está seleccionado */
+  border: 3px solid rgba(40, 167, 69, 0.5); /* Borde verde para indicar selección */
+  transform: translateY(-2px); /* Sutil elevación */
+}
+
+/* Estilos para el botón "Gasto" */
+.tipo-gasto-btn { background-color: var(--danger-color); }
+.tipo-gasto-btn:hover { background-color: var(--danger-hover); transform: translateY(-3px); box-shadow: 0 6px 12px rgba(220, 53, 69, 0.3);}
+.tipo-gasto-btn.activo { /* Estilo para cuando está seleccionado */
+  border: 3px solid rgba(220, 53, 69, 0.5); /* Borde rojo para indicar selección */
+  transform: translateY(-2px); /* Sutil elevación */
+}
+
 
 .error-msg {
   color: var(--danger-color); /* Color rojo para mensajes de error */
@@ -239,8 +270,8 @@ button:hover {
 }
 
 /* Colores específicos para mostrar el tipo de movimiento en el texto */
-.ingreso-val { color: var(--primary-color); }
-.gasto-val { color: var(--danger-color); }
+.ingreso-val { color: var(--primary-color); } /* Verde para ingresos */
+.gasto-val { color: var(--danger-color); } /* Rojo para gastos */
 
 /* Botón de eliminar (la 'x') */
 .eliminar-btn {
@@ -297,7 +328,7 @@ button:hover {
 /* Estilo específico para el balance general que se muestra cerca del encabezado */
 #balance {
     display: inline-block; /* Necesario para aplicar estilos de visualización */
-    font-size: 2.5em; /* Tamaño de fuente grande para el balance principal */
+    font-size: 2.2em; /* <-- CAMBIO: Reducido para mejor ajuste */
     margin-top: 10px;
     margin-bottom: 10px;
     font-weight: 700;
@@ -320,15 +351,25 @@ button:hover {
 
 /* --- Nuevos Estilos para Balance y Versión --- */
 
-/* Clase para balance positivo */
+/* Clase para balance positivo (usada en #balance y #balance-det) */
 .balance-positivo {
   color: var(--primary-color); /* Verde */
 }
 
-/* Clase para balance negativo */
+/* Clase para balance negativo (usada en #balance y #balance-det) */
 .balance-negativo {
   color: var(--danger-color); /* Rojo */
 }
+
+/* Clases para los valores del resumen (Ingresos y Gastos) */
+.resumen-valor-ingreso {
+  color: var(--primary-color); /* Verde */
+}
+
+.resumen-valor-gasto {
+  color: var(--danger-color); /* Rojo */
+}
+
 
 /* Contenedor para el gráfico */
 .resumen-graficos {
@@ -389,7 +430,7 @@ button:hover {
   input[type="password"],
   input[type="number"],
   select,
-  .tipo-toggle-btn {
+  .tipo-buttons-container button { /* Aplicar a ambos tipos de botones */
     font-size: 0.95rem;
     padding: 12px 15px;
   }
@@ -414,10 +455,17 @@ button:hover {
     min-width: auto; /* Permite que el flex-grow funcione mejor en columna */
     width: 100%;
   }
-  /* El botón toggle de tipo también se estira */
-  .tipo-toggle-btn {
-      width: 100%; /* Que también sea de ancho completo si está apilado */
+  /* Los botones de tipo también se estiran si están apilados */
+  .tipo-buttons-container {
+    flex-direction: column;
+    align-items: stretch;
   }
+  .tipo-buttons-container button {
+    width: 100%;
+    margin: 8px auto;
+    display: block;
+  }
+
 
   /* Los ítems del resumen se apilan verticalmente en móvil */
   .resumen {
